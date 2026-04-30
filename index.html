@@ -793,23 +793,6 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   </div>
   <div class="helper">Symulatory wstawiają fake data. Reset czyści odpowiedzi + zobaczone nagrody. <strong>Konfiguracja nagród (GPS, zdjęcia, opisy) — zostaje.</strong></div>
 
-  <h4>💾 Eksport (dwa profile)</h4>
-  <div class="btn-row">
-    <button class="btn-test" onclick="exportAsPrefill()">📥 Krystian zapisz (.json)</button>
-    <button class="btn-test" onclick="document.getElementById('import-prefill-input').click()">📤 Wgraj prefill (.json)</button>
-    <input type="file" id="import-prefill-input" accept=".json,application/json" style="display:none" onchange="importPrefill(this)">
-  </div>
-  <div class="btn-row">
-    <button class="btn-test" onclick="downloadFilled()">📥 Ivan zapisz (.md)</button>
-    <button class="btn-test" onclick="document.getElementById('import-answers-input').click()">📤 Wgraj odpowiedzi Ivana (.json)</button>
-    <input type="file" id="import-answers-input" accept=".json,application/json" style="display:none" onchange="importIvanAnswers(this)">
-  </div>
-  <div class="helper">
-    Krystian zapisz → <code>prefill.json</code> z Twoimi odpowiedziami.<br>
-    Wgraj prefill → wczytuje <code>prefill.json</code> i wszystkie pasujące pytania pokażą "💬 Odpowiedź Krystiana" + przycisk Potwierdzam.<br>
-    Ivan zapisz → Markdown do mailu.
-  </div>
-
   <h4>⚙ Inne</h4>
   <div class="btn-row">
     <button class="btn-test" onclick="showRewardModal(50)">👁 Pokaż modal 50%</button>
@@ -1032,6 +1015,11 @@ const SECTIONS = [
     { id: 'L.5', label: 'Co Cię NAJBARDZIEJ cieszy w pracy z motron.pl ostatnio?', type: 'textarea' },
     { id: 'L.6', label: 'Czego NAJBARDZIEJ żałujesz w pracy ostatniego roku?', type: 'textarea', hint: 'Bez konsekwencji. Krystian to przeczyta i mu to nie zaszkodzi w niczym.' },
     { id: 'L.7', label: 'Trzy rzeczy ważne dla Ciebie POZA pracą (rodzina, hobby, pasja)', type: 'textarea' },
+  ]},
+  { id: 'freestyle', icon: '🎤', title: 'Wolna wypowiedź', subtitle: 'Cokolwiek jeszcze chcesz dodać — bez moich pytań prowadzących', questions: [
+    { id: 'F.1', label: 'O czym jeszcze powinienem wiedzieć? Cokolwiek — pomysły, obawy, rzeczy o których nie zapytałem, anegdoty, rant na cokolwiek.', type: 'textarea', hint: 'Pisz freestyle. To pole nie ma limitu — możesz wpisać 1 zdanie albo 5 stron. Cokolwiek Ci przyjdzie do głowy że Krystian / AI powinno wiedzieć a nie pasowało do żadnej innej sekcji.' },
+    { id: 'F.2', label: 'Czego mnie nie zapytałem a powinienem? Sformułuj pytanie + Twoja odpowiedź.', type: 'textarea', hint: 'Sytuacja: czytasz pytania, wiesz że jest coś istotnego o czym nikt nie pyta. Tu masz miejsce żeby to wyciągnąć.' },
+    { id: 'F.3', label: 'Co byś chciał powiedzieć Krystianowi prywatnie (nie do AI)?', type: 'textarea', hint: 'Krystian to przeczyta sam — nie idzie do AI. Cokolwiek: feedback, dziwna sytuacja, plan, rant.' },
   ]},
 ];
 
@@ -1335,6 +1323,27 @@ function showAutoSaveTick() {
 }
 
 function manualSave() { toast('💾 Zapisano! Możesz zamknąć i wrócić później — dane są w pamięci przeglądarki.'); }
+
+// 💾 PERIODYCZNY HEARTBEAT — co 2 min sygnał że formularz wciąż żyje + zapis się trzyma.
+// Sam zapis dzieje się on-input (saveValue), ale heartbeat daje Ivanowi pewność że nic
+// nie umarło i co 2 minuty potwierdza wizualnie że dane wciąż są.
+let lastHeartbeatFilled = -1;
+setInterval(() => {
+  const filled = totalFilled();
+  if (filled !== lastHeartbeatFilled) {
+    lastHeartbeatFilled = filled;
+    const info = document.getElementById('autosave-info');
+    if (info) {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      info.textContent = `✓ auto-zapis ${hh}:${mm} (${filled}/${totalQuestions()})`;
+      info.style.color = 'var(--green)';
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => { info.textContent = ''; }, 4000);
+    }
+  }
+}, 120000);  // 2 minuty
 
 // ═══════════════════════════════════════════════════════
 // CONFETTI 🎉
@@ -2204,11 +2213,11 @@ function maybeShowMotivation(pct) {
 // zadziała hash URL (#krystian) albo Ctrl+Shift+T.
 // ═══════════════════════════════════════════════════════
 function showTestPanel() {
+  // CICHO — żeby Ivan przypadkiem nie zobaczył jeśli wciśnie Ctrl+T (zero toastu, zero śladu).
   const btn = document.getElementById('test-panel-btn');
   const panel = document.getElementById('test-panel');
   if (btn) btn.style.display = '';
   if (panel) panel.classList.toggle('show');
-  toast('🧪 Panel testowy');
 }
 // Sposób 1: URL hash #krystian
 if (location.hash === '#krystian' || location.hash === '#test') {
