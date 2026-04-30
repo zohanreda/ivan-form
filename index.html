@@ -141,6 +141,18 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 .intro p:last-child { margin-bottom: 0; }
 .intro strong { color: var(--accent); }
 .intro .signature { margin-top: 1rem; font-style: italic; color: var(--text2); border-top: 1px solid var(--border); padding-top: 1rem; }
+.warning-box {
+  padding: 12px 16px; border-left: 4px solid #f59e0b; border-radius: 6px;
+  font-size: 13px; line-height: 1.65;
+  background: #fef3c7; color: #78350f;
+}
+.warning-box strong { color: #78350f; }
+[data-theme="dark"] .warning-box {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fde68a;
+  border-left-color: #fbbf24;
+}
+[data-theme="dark"] .warning-box strong { color: #fcd34d; }
 
 /* Layout — 3 kolumny: tabs / content / animacja */
 .app {
@@ -502,7 +514,7 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   <p>Stąd ten formularz. Siedziałem nad nim dwa dni. Pytania pod Ciebie — opowiedz mi (i AI z którą pracuję) jak co działa, czego nie ruszać, jak baza musi być odpytywana po kolei. To są te rzeczy o których gadaliśmy na klatce — w głowie masz, ale nigdzie nie zapisane.</p>
   <p>Wypełnij jak masz chwilę — partiami, nie musisz na raz. Auto-zapis działa, możesz zamknąć i wrócić jutro.</p>
   <p>Pisałem to po polsku — wiem że dasz radę, gadamy tak na codzień. Ale jak będzie Ci łatwiej odpowiedzieć po <strong>rosyjsku albo ukraińsku</strong> w którymś trudniejszym pytaniu — śmiało. Sobie potem przetłumaczę. Co 6 pytań dostaniesz też mały kawał — czasem PL, czasem RU, czasem UA. Żeby nie było nudno 😉</p>
-  <p style="background: #fef3c7; padding: 12px 16px; border-left: 4px solid #f59e0b; border-radius: 6px; font-size: 13px;">
+  <p class="warning-box">
     <strong>⚠ Ważne: gdzie są Twoje dane.</strong> Wszystko co tu wpiszesz zapisuje się <strong>TYLKO w Twojej przeglądarce</strong> (localStorage). Nigdzie nie leci automatycznie. Żebym ja to dostał — musisz na końcu kliknąć <strong>„📤 Prześlij Krystianowi"</strong> (skopiuje treść do schowka, wklejasz mi w mail) albo <strong>„⬇ Pobierz"</strong> (ściągasz plik .md i wysyłasz). Załączniki — kliknij każdy i pobierze się, wyślij osobno. <strong>Jeśli wyczyścisz przeglądarkę albo otworzysz plik z innego kompa — dane przepadną.</strong> Pracuj na jednym laptopie i pobierz progress co kilka godzin dla pewności.
   </p>
   <p>Po prawej zobaczysz jak <strong>składa się sterownik ABS</strong> — z każdą Twoją odpowiedzią dolatuje kolejny element. Jak wypełnisz wszystko, dioda zaświeci zielono. Naprawione 🟢</p>
