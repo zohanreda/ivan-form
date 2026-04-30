@@ -243,15 +243,29 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 /* Skip pytania ("bez sensu") */
 .q.skipped { opacity: 0.55; }
 .q.skipped .q-label { text-decoration: line-through; color: var(--text2); }
-.q.prefilled { border-left: 3px solid #fbbf24; padding-left: 12px; background: rgba(251, 191, 36, 0.04); border-radius: 6px; }
-[data-theme="dark"] .q.prefilled { background: rgba(251, 191, 36, 0.08); }
-.prefill-badge {
-  display: inline-block; margin-left: 10px; padding: 2px 8px; border-radius: 12px;
-  background: rgba(251, 191, 36, 0.18); color: #b45309; border: 1px solid rgba(251, 191, 36, 0.4);
-  font-size: 11px; font-weight: 600; vertical-align: middle;
+.q.confirmed { border-left: 3px solid #22c55e; padding-left: 12px; background: rgba(34, 197, 94, 0.05); border-radius: 6px; }
+[data-theme="dark"] .q.confirmed { background: rgba(34, 197, 94, 0.10); }
+
+/* BLOK ODPOWIEDZI KRYSTIANA */
+.answer-block.krystian-block {
+  background: rgba(251, 191, 36, 0.08); border-left: 3px solid #fbbf24;
+  border-radius: 8px; padding: 10px 14px; margin: 8px 0 10px;
 }
-[data-theme="dark"] .prefill-badge { background: rgba(251, 191, 36, 0.18); color: #fcd34d; border-color: rgba(251, 191, 36, 0.5); }
-.q.prefilled.skipped { border-left: 3px solid var(--text3); background: transparent; }
+[data-theme="dark"] .answer-block.krystian-block { background: rgba(251, 191, 36, 0.12); }
+.answer-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text2); font-weight: 700; margin-bottom: 4px;
+}
+.answer-label.ivan-label { color: var(--accent); margin-top: 6px; }
+.answer-text { font-size: 14px; color: var(--text1); line-height: 1.5; margin-bottom: 8px; white-space: pre-wrap; }
+.btn-confirm {
+  font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 6px;
+  background: #22c55e; color: #fff; border: none; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-confirm:hover { background: #16a34a; transform: translateY(-1px); }
+.btn-confirm.confirmed { background: #15803d; }
+.btn-confirm.confirmed:hover { background: #b91c1c; }
 .q.skipped .q-hint { display: none; }
 .q-skip-btn {
   cursor: pointer; padding: 2px 8px; margin-left: 8px;
@@ -749,10 +763,22 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   </div>
   <div class="helper">Symulatory wstawiają fake data. Reset czyści odpowiedzi + zobaczone nagrody. <strong>Konfiguracja nagród (GPS, zdjęcia, opisy) — zostaje.</strong></div>
 
+  <h4>💾 Eksport (dwa profile)</h4>
+  <div class="btn-row">
+    <button class="btn-test" onclick="exportAsPrefill()">📥 Krystian zapisz (jako prefill)</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn-test" onclick="downloadFilled()">📥 Ivan zapisz (.md)</button>
+  </div>
+  <div class="helper">Krystian: pobierze <code>prefill.json</code> z Twoimi odpowiedziami — możesz je wkleić jako prefilly w schemat (lub trzymać jako save). Ivan: pobiera Markdown gotowy do mailu.</div>
+
   <h4>⚙ Inne</h4>
   <div class="btn-row">
     <button class="btn-test" onclick="showRewardModal(50)">👁 Pokaż modal 50%</button>
     <button class="btn-test" onclick="showRewardModal(100)">👁 Pokaż modal 100%</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn-test" onclick="showJokeModal(12)">🎭 Test joke modal</button>
   </div>
   <div class="btn-row">
     <button class="btn-test" onclick="fireConfetti(250, 'rain'); toast('🎉 Confetti rain test')">🎉 Confetti rain test</button>
@@ -1041,10 +1067,9 @@ function renderContent() {
   sec.questions.forEach(q => {
     const val = getValue(q.id);
     const skipped = isSkipped(q.id);
-    const prefillUntouched = isPrefillUntouched(q);
-    html += `<div class="q ${skipped ? 'skipped' : ''} ${prefillUntouched ? 'prefilled' : ''}" data-qid="${q.id}">`;
+    const confirmed = isConfirmed(q.id);
+    html += `<div class="q ${skipped ? 'skipped' : ''} ${confirmed ? 'confirmed' : ''}" data-qid="${q.id}">`;
     html += `<label class="q-label"><span class="num">${q.id}</span>${escapeHtml(q.label)}`;
-    if (prefillUntouched) html += `<span class="prefill-badge" title="Krystian już wpisał — sprawdź, popraw lub zostaw">✏ Krystian wpisał — sprawdź / popraw / zostaw</span>`;
     html += `<button class="q-skip-btn" onclick="toggleSkip('${q.id}')" title="${skipped ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie ma dla mnie sensu'}">${skipped ? '↩ przywróć' : '🚫 bez sensu'}</button>`;
     html += `</label>`;
     if (skipped) {
@@ -1052,9 +1077,20 @@ function renderContent() {
       html += `<textarea class="q-skip-reason" rows="1" placeholder="(opcjonalnie) napisz dlaczego to pytanie jest bez sensu — możesz to też zostawić puste" oninput="setSkipReason('${q.id}', this.value)">${escapeHtml(getSkipReason(q.id))}</textarea>`;
     } else {
       if (q.hint) html += `<div class="q-hint">💡 ${escapeHtml(q.hint)}</div>`;
-      if (q.type === 'text') {
-        html += `<input type="text" id="q-${q.id}" value="${escapeHtml(val || '')}" oninput="saveValue('${q.id}', this.value)">`;
-      } else if (q.type === 'textarea') {
+      // BLOK ODPOWIEDZI KRYSTIANA + przycisk potwierdzenia (tylko gdy q.prefill istnieje)
+      if (q.prefill) {
+        html += `<div class="answer-block krystian-block">
+          <div class="answer-label">💬 Odpowiedź Krystiana:</div>
+          <div class="answer-text">${escapeHtml(q.prefill)}</div>
+          <button class="btn-confirm ${confirmed ? 'confirmed' : ''}" onclick="toggleConfirm('${q.id}')">
+            ${confirmed ? '✅ Potwierdzone — kliknij żeby cofnąć' : '✅ Potwierdzam — wystarczy mi odpowiedź Krystiana'}
+          </button>
+        </div>`;
+        html += `<div class="answer-label ivan-label">✏ Twoja odpowiedź (opcjonalnie — możesz dopisać swoje uwagi / techniczne szczegóły):</div>`;
+      }
+      if (q.type === 'text' || q.type === 'textarea') {
+        // Krystian: WSZYSTKIE pola tekstowe mają się tak samo zachowywać.
+        // type:'text' i type:'textarea' renderowane jako <textarea rows=1> + auto-grow.
         html += `<textarea id="q-${q.id}" rows="1" oninput="saveValue('${q.id}', this.value)">${escapeHtml(val || '')}</textarea>`;
       } else if (q.type === 'radio') {
         // Auto-dodaj opcję "Inne (opisz)" do każdego radio jeśli nie ma już opcji "Inne"/"(opisz)"
@@ -1129,14 +1165,6 @@ document.addEventListener('input', (e) => {
   if (e.target.tagName === 'TEXTAREA' && e.target.closest('.q')) {
     autoGrowTextarea(e.target);
   }
-  // Ivan dotknął prefilled — zdejmij badge "Krystian wpisał" od razu (inline,
-  // bez re-renderu całej zakładki).
-  const qDiv = e.target.closest && e.target.closest('.q.prefilled');
-  if (qDiv) {
-    qDiv.classList.remove('prefilled');
-    const badge = qDiv.querySelector('.prefill-badge');
-    if (badge) badge.remove();
-  }
 });
 
 // ═══════════════════════════════════════════════════════
@@ -1156,40 +1184,41 @@ function saveValue(qid, val) {
 }
 
 // ═══════════════════════════════════════════════════════
-// 📝 PREFILL — Krystian wpisuje co wie z biznesu, Ivan poprawia/dopisuje techniczne szczegóły
-// Po edycji przez Ivana — badge "✏ pre-fill" znika (val !== prefill).
+// 📝 PREFILL = ODPOWIEDŹ KRYSTIANA (pokazana jako osobny blok)
+// Ivan może:
+//   1. Kliknąć "✅ Potwierdzam Krystiana" — zalicza pytanie bez pisania
+//   2. Wpisać WŁASNĄ odpowiedź w polu poniżej (też zalicza)
+//   3. Kliknąć "🚫 bez sensu" — skipped (zalicza jako pominięte)
 // ═══════════════════════════════════════════════════════
-function applyPrefills() {
-  // Wpisuje prefilly do localStorage tylko jeśli pytanie jest puste (idempotentne).
-  const data = getStored();
-  let changed = false;
-  SECTIONS.forEach(sec => sec.questions.forEach(q => {
-    if (q.prefill && !(q.id in data)) {
-      data[q.id] = q.prefill;
-      changed = true;
-    }
-  }));
-  if (changed) localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+const CONFIRMED_KEY = 'ivan_confirmed_v1';
+function getConfirmed() {
+  try { return JSON.parse(localStorage.getItem(CONFIRMED_KEY) || '{}'); } catch { return {}; }
 }
-function isPrefillUntouched(q) {
-  if (!q.prefill) return false;
-  const v = getValue(q.id);
-  return v === q.prefill;
+function isConfirmed(qid) { return qid in getConfirmed(); }
+function toggleConfirm(qid) {
+  const data = getConfirmed();
+  if (qid in data) delete data[qid];
+  else data[qid] = true;
+  localStorage.setItem(CONFIRMED_KEY, JSON.stringify(data));
+  renderContent();
+  updateProgress();
 }
 
 function countFilled(sec) {
   const data = getStored();
   const skipped = getSkipped();
+  const confirmed = getConfirmed();
   return sec.questions.filter(q =>
-    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped)
+    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped) || (q.id in confirmed)
   ).length;
 }
 function totalQuestions() { return SECTIONS.reduce((acc, s) => acc + s.questions.length, 0); }
 function totalFilled() {
   const data = getStored();
   const skipped = getSkipped();
+  const confirmed = getConfirmed();
   return SECTIONS.reduce((acc, s) => acc + s.questions.filter(q =>
-    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped)
+    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped) || (q.id in confirmed)
   ).length, 0);
 }
 
@@ -1403,6 +1432,11 @@ function generateMarkdown() {
         const reason = skippedAll[q.id];
         md += `🚫 _Iwan oznaczył to pytanie jako BEZ SENSU_${reason ? ` — powód: "${reason}"` : ''}\n\n`;
       } else {
+        // Pokaż prefill Krystiana jeśli jest
+        if (q.prefill) {
+          md += `**💬 Krystian:** ${q.prefill.split('\n').join(' ')}\n\n`;
+        }
+        const isConf = isConfirmed(q.id);
         const val = data[q.id];
         const otherVal = data[q.id + '__other'];
         if (val && String(val).trim()) {
@@ -1411,8 +1445,14 @@ function generateMarkdown() {
               (val.toLowerCase().includes('(opisz)') || val.toLowerCase() === 'inne' || val.toLowerCase().startsWith('inne '))) {
             text += ` — ${otherVal}`;
           }
-          md += `> ${text.split('\n').join('\n> ')}\n\n`;
-        } else md += `_(brak odpowiedzi)_\n\n`;
+          md += `**✏ Ivan:**\n> ${text.split('\n').join('\n> ')}\n\n`;
+        } else if (isConf) {
+          md += `**✅ Ivan potwierdził odpowiedź Krystiana** _(bez własnych uwag)_\n\n`;
+        } else if (!q.prefill) {
+          md += `_(brak odpowiedzi)_\n\n`;
+        } else {
+          md += `_(Ivan nie odpisał ani nie potwierdził)_\n\n`;
+        }
       }
       const attach = allAttach[q.id] || [];
       if (attach.length > 0) {
@@ -1425,6 +1465,28 @@ function generateMarkdown() {
     md += `\n## 📎 UWAGA — załączniki\n\nIvan dodał ${totalAttach} plik${totalAttach === 1 ? '' : 'i/ów'} bezpośrednio w formularzu (zapisane w jego przeglądarce). Treść plików NIE jest w tym Markdown — Ivan musi je wysłać osobno (najprostsze: kliknąć każdy załącznik w formularzu → pobierze się → wyślij mailem).\n`;
   }
   return md;
+}
+
+// Krystian: eksport jego odpowiedzi jako PREFILL JSON
+// Plik zawiera mapping qid → answer ze wszystkich pól które Krystian wypełnił.
+// Krystian może go wkleić do schematu SECTIONS jako prefill: '...' albo zachować jako save.
+function exportAsPrefill() {
+  const data = getStored();
+  const out = {};
+  let count = 0;
+  SECTIONS.forEach(s => s.questions.forEach(q => {
+    if (data[q.id] && String(data[q.id]).trim()) {
+      out[q.id] = data[q.id];
+      count++;
+    }
+  }));
+  const json = JSON.stringify(out, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `krystian_prefill_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast(`📥 Pobrano prefill.json (${count} odpowiedzi). Wklej do schematu jako prefill.`);
 }
 
 function downloadFilled() {
@@ -1561,6 +1623,11 @@ function simulateProgress(targetPct) {
   if (targetPct < 1.0) localStorage.removeItem(REWARD_100_KEY);
   if (targetPct < 0.25) localStorage.removeItem(MOTIVATION_25_KEY);
   if (targetPct < 0.75) localStorage.removeItem(MOTIVATION_75_KEY);
+  // Tylko trigger jokes powyżej obecnego targetu — niższe progi traktuj jako "już pokazane" żeby
+  // nie wystrzeliło 8 modali pod rząd przy klik "→ 99%"
+  const targetPctInt = Math.round(targetPct * 100);
+  const shownJokes = JOKE_THRESHOLDS.filter(t => t < targetPctInt);
+  localStorage.setItem(JOKES_SHOWN_KEY, JSON.stringify(shownJokes));
   // Reset visual flags
   document.getElementById('milestone-50').classList.toggle('unlocked', targetPct >= 0.5);
   document.getElementById('milestone-100').classList.toggle('unlocked', targetPct >= 1.0);
@@ -1593,9 +1660,10 @@ function resetEverything() {
   localStorage.removeItem(MOTIVATION_25_KEY);
   localStorage.removeItem(MOTIVATION_75_KEY);
   localStorage.removeItem(SKIPPED_KEY);
+  localStorage.removeItem(JOKES_SHOWN_KEY);
   // REWARDS_OVERRIDE_KEY celowo NIE usuwamy — Krystian skonfigurował, ma zostać
   REWARDS = loadRewards();
-  applyPrefills();  // po resecie prefilly Krystiana wracają (idempotentnie)
+  localStorage.removeItem(CONFIRMED_KEY);  // po resecie potwierdzenia Krystiana też wyczyść
   document.getElementById('milestone-50').classList.remove('unlocked');
   document.getElementById('milestone-100').classList.remove('unlocked');
   document.getElementById('submit-btn').classList.remove('glow');
@@ -1696,20 +1764,49 @@ const JOKES = [
   { lang: 'uk', text: 'Чому програмісти ходять у походи без компасу? Бо мають GPS у голові — Git Push Sync.' },
 ];
 const JOKE_HEADERS = { pl: '🎭 Pauza na kawał', en: '🎭 Joke break', ru: '🎭 Пауза на шутку', uk: '🎭 Пауза на жарт' };
-let jokesShownCount = 0;
-let lastFilledForJoke = 0;
+const JOKE_THRESHOLDS = [12, 24, 36, 48, 60, 72, 84, 96];  // co 12% (50 i 100 to nagrody, 25/75 motywacje)
+const JOKES_SHOWN_KEY = 'ivan_jokes_shown_v1';
+
+function getShownJokes() {
+  try { return JSON.parse(localStorage.getItem(JOKES_SHOWN_KEY) || '[]'); } catch { return []; }
+}
+function markJokeShown(threshold) {
+  const arr = getShownJokes();
+  if (!arr.includes(threshold)) {
+    arr.push(threshold);
+    localStorage.setItem(JOKES_SHOWN_KEY, JSON.stringify(arr));
+  }
+}
 
 function maybeShowJoke(filledCount) {
-  // Co 6 nowych odpowiedzi
-  if (filledCount > 0 && filledCount % 6 === 0 && filledCount > lastFilledForJoke) {
-    lastFilledForJoke = filledCount;
-    const joke = JOKES[Math.floor(Math.random() * JOKES.length)];
-    document.getElementById('joke-header').textContent = JOKE_HEADERS[currentLang] || JOKE_HEADERS.pl;
-    document.getElementById('joke-body').textContent = joke.text;
-    const t = document.getElementById('joke-toast');
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 6000);
-  }
+  // Trigger co 12% (12, 24, 36, 48, 60, 72, 84, 96). 50 i 100 to nagrody, 25/75 to motywacje.
+  const total = totalQuestions();
+  const pct = Math.round((filledCount / total) * 100);
+  const shown = getShownJokes();
+  // Znajdź najwyższy próg który osiągnęliśmy ALE jeszcze nie pokazaliśmy
+  const trigger = JOKE_THRESHOLDS.filter(t => pct >= t && !shown.includes(t)).pop();
+  if (!trigger) return;
+  markJokeShown(trigger);
+  showJokeModal(trigger);
+}
+
+function showJokeModal(triggerPct) {
+  const joke = JOKES[Math.floor(Math.random() * JOKES.length)];
+  const header = JOKE_HEADERS[currentLang] || JOKE_HEADERS.pl;
+  const html = `
+    <div class="badge" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">${header}</div>
+    <h2 style="font-size: 1.5rem; margin: 0.5rem 0;">${triggerPct}% za Tobą 💪</h2>
+    <div style="font-size: 3rem; margin: 1rem 0;">🎭</div>
+    <div class="reward-text" style="font-style: italic; font-size: 1.1rem; line-height: 1.6;">"${escapeHtml(joke.text)}"</div>
+    <div class="signature" style="margin-top: 1rem;">— Krystian · pauza na kawał, wracaj do roboty 😉</div>
+    <div class="modal-actions">
+      <button class="btn modal-close" onclick="closeModal()">Wracam do wypełniania</button>
+    </div>
+  `;
+  const m = document.getElementById('modal-content');
+  m.className = 'modal reward';
+  m.innerHTML = html;
+  document.getElementById('modal-bg').classList.add('show');
 }
 
 // Hook do updateProgress — joke + motywacje
@@ -1937,7 +2034,6 @@ function maybeShowMotivation(pct) {
 // ═══════════════════════════════════════════════════════
 // INIT — render wszystkiego po załadowaniu DOM
 // ═══════════════════════════════════════════════════════
-applyPrefills();  // Krystian wpisał co wie z biznesu — wlej do localStorage (idempotentnie)
 renderTabs();
 renderContent();
 autoGrowAllTextareas();  // pre-fill content z localStorage musi mieć rozwiniętą wysokość
