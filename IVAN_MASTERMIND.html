@@ -971,8 +971,8 @@ const REWARDS_DEFAULT = {
     emoji: '☕',
     text: 'Ivan, to teraz czas na spacerek. Przewietrz się, odpocznij od ekranu. Niedaleko zostawiłem coś dla Ciebie — masz współrzędne. Wróć potem do reszty pytań.',
     coords: '54.605895, 18.356585',
-    place_description: 'Słup z naklejką (klatka zamknięta). 👀 Podpowiedź: przyjrzyj się dobrze tej naklejce — również od spodu 😊',
-    reward_description: 'Mała kasa do ręki — żeby odpoczynek był jeszcze przyjemniejszy.',
+    place_description: 'Przyjrzyj się dobrze tej naklejce — również od spodu. To na kawę 😊',
+    reward_description: '',
     image_url: 'images/reward_50.jpg',
   },
   100: {
@@ -980,8 +980,8 @@ const REWARDS_DEFAULT = {
     emoji: '🏆',
     text: 'Ivan, dziękuję. Wypełniłeś wszystko. Drugi bonus, większy, zostawiłem w terenie. Współrzędne:',
     coords: '54.611605, 18.361319',
-    place_description: 'Niebieska konstrukcja nad ciekiem wody. 👀 Podpowiedź: zajrzyj w konstrukcję i pociągnij biały worek.',
-    reward_description: 'Tam czeka realna nagroda. Idź sam albo weź kogoś — Twój wybór.',
+    place_description: 'Konstrukcja nad śluzą. Bardzo lubię to miejsce. Zajrzyj w konstrukcję i pociągnij biały worek.',
+    reward_description: 'Możesz wziąć tam kogoś ze sobą albo iść sam — Ty wybierasz, jak wolisz.',
     image_url: 'images/reward_100.jpg',
   },
 };
@@ -1300,7 +1300,7 @@ function showRewardModal(milestone, fromCelebration) {
       </div>
       ${imageBlock}
       <div class="reward-text"><strong>${escapeHtml(r.place_description || '')}</strong></div>
-      <div class="reward-text" style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 10px; margin-top: 1rem;">${escapeHtml(r.reward_description || '')}</div>
+      ${r.reward_description ? `<div class="reward-text" style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 10px; margin-top: 1rem;">${escapeHtml(r.reward_description)}</div>` : ''}
     `;
   }
   const badge = r.is_motivational
