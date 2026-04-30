@@ -1273,10 +1273,66 @@ function autoGrowAllTextareas() {
 
 // Globalny listener — łapie input na każdej dynamicznie wygenerowanej textarea
 document.addEventListener('input', (e) => {
-  if (e.target.tagName === 'TEXTAREA' && e.target.closest('.q')) {
+  const qDiv = e.target.closest && e.target.closest('.q');
+  if (e.target.tagName === 'TEXTAREA' && qDiv) {
     autoGrowTextarea(e.target);
   }
+  // Aktualizuj ptaszka przy pytaniu inline (bez re-renderu całej zakładki)
+  // — żeby Ivan widział od razu „✓" jak coś napisze
+  if (qDiv) {
+    updateQuestionCheckmark(qDiv);
+    // Aktualizuj też ptaszka przy całej zakładce (sidebar) jeśli sekcja się skończyła
+    updateSectionTabBadge();
+  }
 });
+
+// Aktualizuje pojedyncze kółko ✓/○ przy pytaniu na podstawie aktualnego stanu
+function updateQuestionCheckmark(qDiv) {
+  const qid = qDiv.getAttribute('data-qid');
+  if (!qid) return;
+  const val = getValue(qid);
+  const skipped = isSkipped(qid);
+  const nfm = isNotForMe(qid);
+  const conf = isConfirmed(qid);
+  const isAnswered = (val && String(val).trim()) || skipped || nfm || conf;
+  const check = qDiv.querySelector('.q-check');
+  if (!check) return;
+  check.classList.toggle('on', !!isAnswered);
+  check.textContent = isAnswered ? '✓' : '○';
+  check.title = isAnswered ? 'Załatwione' : 'Jeszcze nie załatwione — odpowiedz, kliknij „bez sensu" lub „do Krystiana"';
+  qDiv.classList.toggle('answered', !!isAnswered);
+}
+
+// Aktualizuje badge w sidebar po prawej (ptaszek przy ukończonej sekcji + licznik)
+function updateSectionTabBadge() {
+  const sec = SECTIONS.find(s => s.id === activeTab);
+  if (!sec) return;
+  const filled = countFilled(sec);
+  const total = sec.questions.length;
+  // Znajdź odpowiedni przycisk w nav#tabs
+  const tabs = document.getElementById('tabs');
+  if (!tabs) return;
+  const buttons = tabs.querySelectorAll('.tab-link');
+  // Po kolei — który tab odpowiada której sekcji
+  const idx = SECTIONS.findIndex(s => s.id === activeTab);
+  const btn = buttons[idx + 1];  // +1 bo pierwszym dzieckiem jest sidebar-title (ale wewnątrz nav, nie buttons)
+  // Faktycznie querySelectorAll('.tab-link') zwraca tylko tab-linki, więc indeksowanie idx jest dobre
+  const realBtn = buttons[idx];
+  if (!realBtn) return;
+  const oldBadge = realBtn.querySelector('.badge');
+  if (oldBadge) {
+    if (filled === total) {
+      oldBadge.className = 'badge full';
+      oldBadge.textContent = '✓';
+    } else if (filled === 0) {
+      oldBadge.className = 'badge empty';
+      oldBadge.textContent = `${filled}/${total}`;
+    } else {
+      oldBadge.className = 'badge';
+      oldBadge.textContent = `${filled}/${total}`;
+    }
+  }
+}
 
 // ═══════════════════════════════════════════════════════
 // STORAGE
