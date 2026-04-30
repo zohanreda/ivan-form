@@ -717,8 +717,11 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 
 <div class="toast" id="toast"></div>
 
-<!-- 🧪 PANEL TESTOWY (TODO: usunąć przed wysłaniem Ivanowi — zmień DEV_MODE = false) -->
-<button class="test-panel-btn" onclick="document.getElementById('test-panel').classList.toggle('show')">🧪 TEST</button>
+<!-- 🧪 PANEL TESTOWY — domyślnie UKRYTY dla Ivana.
+     Krystian odpala panel jednym z dwóch sposobów:
+       1. URL z hashem: https://zohanreda.github.io/ivan-form/#krystian
+       2. Sekwencja klawiszy: K-K-K (3× K pod rząd) — działa tylko na desktopie -->
+<button class="test-panel-btn" id="test-panel-btn" style="display:none;" onclick="document.getElementById('test-panel').classList.toggle('show')">🧪 TEST</button>
 <div class="test-panel" id="test-panel">
   <div class="test-panel-drag" id="test-panel-drag">
     <span><span class="drag-icon">⋮⋮</span> 🧪 Panel testowy (przeciągnij za ten pasek)</span>
@@ -2030,6 +2033,27 @@ function maybeShowMotivation(pct) {
     }));
   });
 })();
+
+// ═══════════════════════════════════════════════════════
+// 🧪 PANEL TESTOWY — odpalanie tylko dla Krystiana
+// ═══════════════════════════════════════════════════════
+function showTestPanelButton() {
+  const btn = document.getElementById('test-panel-btn');
+  if (btn) { btn.style.display = ''; toast('🧪 Panel testowy odblokowany'); }
+}
+// Sposób 1: URL hash #krystian (lub starsza nazwa #test)
+if (location.hash === '#krystian' || location.hash === '#test') showTestPanelButton();
+// Sposób 2: 3× K pod rząd (na desktopie)
+let _kSeq = 0;
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'K' || e.key === 'k') {
+    _kSeq++;
+    if (_kSeq >= 3) { showTestPanelButton(); _kSeq = 0; }
+    setTimeout(() => { _kSeq = 0; }, 1500);
+  } else {
+    _kSeq = 0;
+  }
+});
 
 // ═══════════════════════════════════════════════════════
 // INIT — render wszystkiego po załadowaniu DOM
