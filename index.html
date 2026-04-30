@@ -736,9 +736,9 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
     <button class="btn-test warn" onclick="simulateProgress(1.0)">→ 100% 🏆 (z confetti)</button>
   </div>
   <div class="btn-row">
-    <button class="btn-test danger" onclick="resetEverything()">🗑 Reset (wszystko)</button>
+    <button class="btn-test danger" onclick="resetEverything()">🗑 Reset progresu</button>
   </div>
-  <div class="helper">Symulatory wstawiają fake data. Reset czyści też zapamiętane "zobaczone nagrody".</div>
+  <div class="helper">Symulatory wstawiają fake data. Reset czyści odpowiedzi + zobaczone nagrody. <strong>Konfiguracja nagród (GPS, zdjęcia, opisy) — zostaje.</strong></div>
 
   <h4>⚙ Inne</h4>
   <div class="btn-row">
@@ -1534,15 +1534,17 @@ function simulateProgress(targetPct) {
 }
 
 function resetEverything() {
-  if (!confirm('Reset WSZYSTKO? Wyczyści: odpowiedzi, załączniki, oznaczenie zobaczonych nagród, override nagród. Theme zostanie.')) return;
+  if (!confirm('Reset progresu testowego? Wyczyści: odpowiedzi, załączniki, skipy, oznaczenie zobaczonych nagród.\n\nNAZWY NAGRÓD, ZDJĘCIA, GPS i theme — ZOSTAJĄ.')) return;
+  // Reset TYLKO progresu — zostawiamy konfigurację nagród (REWARDS_OVERRIDE_KEY),
+  // theme i language. Krystian: "niech nie resetuje nazw nagród zdjęć i danych nawigacyjnych".
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(REWARD_50_KEY);
   localStorage.removeItem(REWARD_100_KEY);
-  localStorage.removeItem(REWARDS_OVERRIDE_KEY);
   localStorage.removeItem(ATTACHMENTS_KEY);
   localStorage.removeItem(MOTIVATION_25_KEY);
   localStorage.removeItem(MOTIVATION_75_KEY);
   localStorage.removeItem(SKIPPED_KEY);
+  // REWARDS_OVERRIDE_KEY celowo NIE usuwamy — Krystian skonfigurował, ma zostać
   REWARDS = loadRewards();
   document.getElementById('milestone-50').classList.remove('unlocked');
   document.getElementById('milestone-100').classList.remove('unlocked');
@@ -1550,7 +1552,7 @@ function resetEverything() {
   renderContent();
   updateProgress();
   loadTestPanelFields();
-  toast('🗑 Reset wykonany');
+  toast('🗑 Progres zresetowany. Konfiguracja nagród zachowana.');
 }
 
 // ═══════════════════════════════════════════════════════
