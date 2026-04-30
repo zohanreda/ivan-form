@@ -200,7 +200,8 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 
 /* Question */
 .q { margin-bottom: 1.75rem; }
-.q-label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 5px; color: var(--text1); }
+.q-label { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; font-weight: 600; font-size: 14px; margin-bottom: 5px; color: var(--text1); }
+.q-label > .num { flex-shrink: 0; }
 .q-label .num { color: var(--accent); font-family: ui-monospace, monospace; font-size: 12px; margin-right: 6px; }
 .q-hint { font-size: 12px; color: var(--text2); margin-bottom: 8px; font-style: italic; }
 .q input[type=text], .q input[type=number], .q input[type=email], .q input[type=url], .q textarea, .q select {
@@ -245,6 +246,22 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 .q.skipped .q-label { text-decoration: line-through; color: var(--text2); }
 .q.confirmed { border-left: 3px solid #22c55e; padding-left: 12px; background: rgba(34, 197, 94, 0.05); border-radius: 6px; }
 [data-theme="dark"] .q.confirmed { background: rgba(34, 197, 94, 0.10); }
+.q.not-for-me { border-left: 3px solid #a855f7; padding-left: 12px; background: rgba(168, 85, 247, 0.05); border-radius: 6px; opacity: 0.92; }
+[data-theme="dark"] .q.not-for-me { background: rgba(168, 85, 247, 0.10); }
+.q.not-for-me .q-label { color: var(--text2); }
+.q-actions { display: inline-flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.q-nfm-btn {
+  font-size: 11px; padding: 3px 10px; border-radius: 6px;
+  background: transparent; color: var(--text3); border: 1px solid var(--border);
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.q-nfm-btn:hover { color: #a855f7; border-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
+.q.not-for-me .q-nfm-btn { color: var(--accent); border-color: var(--accent); background: rgba(13,131,253,0.08); }
+.q-nfm-reason {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 13px; font-family: inherit; background: var(--bg3); color: var(--text1);
+  margin-top: 6px; min-height: 0; height: auto; resize: vertical; line-height: 1.5;
+}
 
 /* BLOK ODPOWIEDZI KRYSTIANA */
 .answer-block.krystian-block {
@@ -538,7 +555,17 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   <p>Plus na tym naszym <strong>nowym levelu współpracy</strong> (z AI w grze) — fajnie byłoby żebym zmieniając Motrona robił to <strong>w Twoją myśl architektoniczną</strong>. Nie po swojemu. Bo Ty wiesz dlaczego coś jest tak a nie inaczej, a ja widzę tylko efekt na ekranie.</p>
   <p>Stąd ten formularz. Siedziałem nad nim dwa dni. Pytania pod Ciebie — opowiedz mi (i AI z którą pracuję) jak co działa, czego nie ruszać, jak baza musi być odpytywana po kolei. To są te rzeczy o których gadaliśmy na klatce — w głowie masz, ale nigdzie nie zapisane.</p>
   <p>Wypełnij jak masz chwilę — partiami, nie musisz na raz. Auto-zapis działa, możesz zamknąć i wrócić jutro.</p>
-  <p>Pisałem to po polsku — wiem że dasz radę, gadamy tak na codzień. Ale jak będzie Ci łatwiej odpowiedzieć po <strong>rosyjsku albo ukraińsku</strong> w którymś trudniejszym pytaniu — śmiało. Sobie potem przetłumaczę. Co 6 pytań dostaniesz też mały kawał — czasem PL, czasem RU, czasem UA. Żeby nie było nudno 😉</p>
+  <p>Pisałem to po polsku — wiem że dasz radę, gadamy tak na codzień. Ale jak będzie Ci łatwiej odpowiedzieć po <strong>rosyjsku albo ukraińsku</strong> w którymś trudniejszym pytaniu — śmiało. Sobie potem przetłumaczę. Co 12% postępu dostaniesz też mały kawał — czasem PL, czasem RU, czasem UA. Żeby nie było nudno 😉</p>
+  <div class="warning-box" style="background: rgba(13,131,253,0.08); border-left-color: var(--accent); color: var(--text1);">
+    <strong>📝 Z każdym pytaniem coś zrób — żeby progres się liczył:</strong><br>
+    Nie musisz wszystkiego wypełniać tekstem. Każde pytanie ma <strong>3 ścieżki</strong>, każda zalicza je jako załatwione:
+    <br><br>
+    <strong>1. ✏ Odpowiedz</strong> — wpisz swoją odpowiedź. Jeśli widzisz blok <em>„💬 Odpowiedź Krystiana"</em> — kliknij <strong>„✅ Potwierdzam"</strong> i nie musisz nic pisać. Jeśli chcesz — dopisz w polu obok własne uwagi techniczne.<br>
+    <strong>2. 🚫 „bez sensu"</strong> — kliknij jeśli pytanie jest źle sformułowane / dziwne / nie pasuje. Możesz krótko napisać czemu (opcjonalnie).<br>
+    <strong>3. ❓ „nie do mnie"</strong> — kliknij jeśli to raczej pytanie do Krystiana (biznes, nie technika). Też możesz krótko uzasadnić.<br>
+    <br>
+    Cokolwiek z tych trzech wybierzesz — pytanie się <strong>zalicza</strong> i ekierka idzie do przodu. Najgorsza opcja to zostawić pytanie puste i przeskoczyć — wtedy nie wiem czy zapomniałeś, czy masz problem, czy temat jest niejasny.
+  </div>
   <p>Po prawej zobaczysz jak <strong>składa się sterownik ABS</strong> — z każdą Twoją odpowiedzią dolatuje kolejny element. Jak wypełnisz wszystko, dioda zaświeci zielono. Naprawione 🟢</p>
   <p>Po drodze są też <strong>niespodzianki</strong> 😉 — nie powiem co. Wypełnij i zobacz.</p>
   <p>BTW — ja też wypełniam swój formularz, z innymi pytaniami. Potem połączymy oba i zrobi się z tego <strong>Krystivan</strong> 😄 — taki wspólny brain dump dla AI. Ty techniczny, ja biznesowy.</p>
@@ -768,12 +795,20 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 
   <h4>💾 Eksport (dwa profile)</h4>
   <div class="btn-row">
-    <button class="btn-test" onclick="exportAsPrefill()">📥 Krystian zapisz (jako prefill)</button>
+    <button class="btn-test" onclick="exportAsPrefill()">📥 Krystian zapisz (.json)</button>
+    <button class="btn-test" onclick="document.getElementById('import-prefill-input').click()">📤 Wgraj prefill (.json)</button>
+    <input type="file" id="import-prefill-input" accept=".json,application/json" style="display:none" onchange="importPrefill(this)">
   </div>
   <div class="btn-row">
     <button class="btn-test" onclick="downloadFilled()">📥 Ivan zapisz (.md)</button>
+    <button class="btn-test" onclick="document.getElementById('import-answers-input').click()">📤 Wgraj odpowiedzi Ivana (.json)</button>
+    <input type="file" id="import-answers-input" accept=".json,application/json" style="display:none" onchange="importIvanAnswers(this)">
   </div>
-  <div class="helper">Krystian: pobierze <code>prefill.json</code> z Twoimi odpowiedziami — możesz je wkleić jako prefilly w schemat (lub trzymać jako save). Ivan: pobiera Markdown gotowy do mailu.</div>
+  <div class="helper">
+    Krystian zapisz → <code>prefill.json</code> z Twoimi odpowiedziami.<br>
+    Wgraj prefill → wczytuje <code>prefill.json</code> i wszystkie pasujące pytania pokażą "💬 Odpowiedź Krystiana" + przycisk Potwierdzam.<br>
+    Ivan zapisz → Markdown do mailu.
+  </div>
 
   <h4>⚙ Inne</h4>
   <div class="btn-row">
@@ -1070,21 +1105,28 @@ function renderContent() {
   sec.questions.forEach(q => {
     const val = getValue(q.id);
     const skipped = isSkipped(q.id);
+    const notForMe = isNotForMe(q.id);
     const confirmed = isConfirmed(q.id);
-    html += `<div class="q ${skipped ? 'skipped' : ''} ${confirmed ? 'confirmed' : ''}" data-qid="${q.id}">`;
+    html += `<div class="q ${skipped ? 'skipped' : ''} ${notForMe ? 'not-for-me' : ''} ${confirmed ? 'confirmed' : ''}" data-qid="${q.id}">`;
     html += `<label class="q-label"><span class="num">${q.id}</span>${escapeHtml(q.label)}`;
+    html += `<span class="q-actions">`;
     html += `<button class="q-skip-btn" onclick="toggleSkip('${q.id}')" title="${skipped ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie ma dla mnie sensu'}">${skipped ? '↩ przywróć' : '🚫 bez sensu'}</button>`;
+    html += `<button class="q-nfm-btn" onclick="toggleNotForMe('${q.id}')" title="${notForMe ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie do mnie — raczej Krystian odpowie'}">${notForMe ? '↩ przywróć' : '❓ nie do mnie'}</button>`;
+    html += `</span>`;
     html += `</label>`;
     if (skipped) {
       // Pole na opcjonalny powód
       html += `<textarea class="q-skip-reason" rows="1" placeholder="(opcjonalnie) napisz dlaczego to pytanie jest bez sensu — możesz to też zostawić puste" oninput="setSkipReason('${q.id}', this.value)">${escapeHtml(getSkipReason(q.id))}</textarea>`;
+    } else if (notForMe) {
+      html += `<textarea class="q-nfm-reason" rows="1" placeholder="(opcjonalnie) napisz czemu to pytanie jest do Krystiana — np. „to biznesowe, nie znam takich szczegółów"" oninput="setNotForMeReason('${q.id}', this.value)">${escapeHtml(getNotForMeReason(q.id))}</textarea>`;
     } else {
       if (q.hint) html += `<div class="q-hint">💡 ${escapeHtml(q.hint)}</div>`;
-      // BLOK ODPOWIEDZI KRYSTIANA + przycisk potwierdzenia (tylko gdy q.prefill istnieje)
-      if (q.prefill) {
+      // BLOK ODPOWIEDZI KRYSTIANA + przycisk potwierdzenia (gdy istnieje prefill — z hardcoded lub z importu)
+      const prefillText = getEffectivePrefill(q);
+      if (prefillText) {
         html += `<div class="answer-block krystian-block">
           <div class="answer-label">💬 Odpowiedź Krystiana:</div>
-          <div class="answer-text">${escapeHtml(q.prefill)}</div>
+          <div class="answer-text">${escapeHtml(prefillText)}</div>
           <button class="btn-confirm ${confirmed ? 'confirmed' : ''}" onclick="toggleConfirm('${q.id}')">
             ${confirmed ? '✅ Potwierdzone — kliknij żeby cofnąć' : '✅ Potwierdzam — wystarczy mi odpowiedź Krystiana'}
           </button>
@@ -1211,8 +1253,9 @@ function countFilled(sec) {
   const data = getStored();
   const skipped = getSkipped();
   const confirmed = getConfirmed();
+  const nfm = getNotForMe();
   return sec.questions.filter(q =>
-    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped) || (q.id in confirmed)
+    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped) || (q.id in confirmed) || (q.id in nfm)
   ).length;
 }
 function totalQuestions() { return SECTIONS.reduce((acc, s) => acc + s.questions.length, 0); }
@@ -1220,8 +1263,9 @@ function totalFilled() {
   const data = getStored();
   const skipped = getSkipped();
   const confirmed = getConfirmed();
+  const nfm = getNotForMe();
   return SECTIONS.reduce((acc, s) => acc + s.questions.filter(q =>
-    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped) || (q.id in confirmed)
+    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped) || (q.id in confirmed) || (q.id in nfm)
   ).length, 0);
 }
 
@@ -1431,13 +1475,18 @@ function generateMarkdown() {
     md += `## ${sec.icon} ${sec.title}\n\n`;
     sec.questions.forEach(q => {
       md += `**${q.id}** ${q.label}\n\n`;
+      const nfmAll = getNotForMe();
       if (q.id in skippedAll) {
         const reason = skippedAll[q.id];
-        md += `🚫 _Iwan oznaczył to pytanie jako BEZ SENSU_${reason ? ` — powód: "${reason}"` : ''}\n\n`;
+        md += `🚫 _Ivan oznaczył to pytanie jako BEZ SENSU_${reason ? ` — powód: "${reason}"` : ''}\n\n`;
+      } else if (q.id in nfmAll) {
+        const reason = nfmAll[q.id];
+        md += `❓ _Ivan: to pytanie nie do mnie (raczej do Krystiana)_${reason ? ` — uzasadnienie: "${reason}"` : ''}\n\n`;
       } else {
-        // Pokaż prefill Krystiana jeśli jest
-        if (q.prefill) {
-          md += `**💬 Krystian:** ${q.prefill.split('\n').join(' ')}\n\n`;
+        // Pokaż prefill Krystiana jeśli jest (z hardcoded lub z importu)
+        const pf = getEffectivePrefill(q);
+        if (pf) {
+          md += `**💬 Krystian:** ${pf.split('\n').join(' ')}\n\n`;
         }
         const isConf = isConfirmed(q.id);
         const val = data[q.id];
@@ -1451,7 +1500,7 @@ function generateMarkdown() {
           md += `**✏ Ivan:**\n> ${text.split('\n').join('\n> ')}\n\n`;
         } else if (isConf) {
           md += `**✅ Ivan potwierdził odpowiedź Krystiana** _(bez własnych uwag)_\n\n`;
-        } else if (!q.prefill) {
+        } else if (!pf) {
           md += `_(brak odpowiedzi)_\n\n`;
         } else {
           md += `_(Ivan nie odpisał ani nie potwierdził)_\n\n`;
@@ -1470,9 +1519,21 @@ function generateMarkdown() {
   return md;
 }
 
+// ═══════════════════════════════════════════════════════
+// 📥 KRYSTIAN PREFILL OVERRIDE — import/export
+// Override z localStorage NADPISUJE q.prefill z hardcoded SECTIONS.
+// Dzięki temu Krystian może wypełnić formularz, exportować, wgrać u Ivana.
+// ═══════════════════════════════════════════════════════
+const KRYSTIAN_PREFILL_KEY = 'krystian_prefill_override_v1';
+function getKrystianPrefillOverride() {
+  try { return JSON.parse(localStorage.getItem(KRYSTIAN_PREFILL_KEY) || '{}'); } catch { return {}; }
+}
+function getEffectivePrefill(q) {
+  const override = getKrystianPrefillOverride();
+  return (q.id in override) ? override[q.id] : (q.prefill || '');
+}
+
 // Krystian: eksport jego odpowiedzi jako PREFILL JSON
-// Plik zawiera mapping qid → answer ze wszystkich pól które Krystian wypełnił.
-// Krystian może go wkleić do schematu SECTIONS jako prefill: '...' albo zachować jako save.
 function exportAsPrefill() {
   const data = getStored();
   const out = {};
@@ -1489,7 +1550,72 @@ function exportAsPrefill() {
   a.href = URL.createObjectURL(blob);
   a.download = `krystian_prefill_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
-  toast(`📥 Pobrano prefill.json (${count} odpowiedzi). Wklej do schematu jako prefill.`);
+  toast(`📥 Pobrano prefill.json (${count} odpowiedzi)`);
+}
+
+// Wgraj prefill JSON — staje się "Odpowiedź Krystiana" dla każdego pasującego qid
+function importPrefill(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const obj = JSON.parse(e.target.result);
+      if (typeof obj !== 'object' || Array.isArray(obj)) throw new Error('Spodziewam się obiektu {qid: answer}');
+      // Walidacja: tylko stringi, max 5KB każdy
+      const validIds = new Set(SECTIONS.flatMap(s => s.questions.map(q => q.id)));
+      const cleaned = {};
+      let count = 0, skipped = 0;
+      Object.entries(obj).forEach(([k, v]) => {
+        if (!validIds.has(k)) { skipped++; return; }
+        if (typeof v !== 'string') { skipped++; return; }
+        cleaned[k] = String(v).slice(0, 5000);
+        count++;
+      });
+      localStorage.setItem(KRYSTIAN_PREFILL_KEY, JSON.stringify(cleaned));
+      renderContent();
+      autoGrowAllTextareas();
+      updateProgress();
+      toast(`📤 Wgrano prefill: ${count} odpowiedzi${skipped > 0 ? ` (${skipped} pominiętych — nieznane qid lub zły typ)` : ''}`);
+    } catch (err) {
+      toast('❌ Błąd parsowania JSON: ' + err.message, true);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';  // pozwala wgrać ten sam plik ponownie
+}
+
+// Wgraj odpowiedzi Ivana — JSON-import wszystkich jego pól (do podglądu / migracji między urządzeniami)
+function importIvanAnswers(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const obj = JSON.parse(e.target.result);
+      if (typeof obj !== 'object' || Array.isArray(obj)) throw new Error('Spodziewam się obiektu {qid: answer}');
+      const validIds = new Set(SECTIONS.flatMap(s => s.questions.map(q => q.id)));
+      const data = getStored();
+      let count = 0;
+      Object.entries(obj).forEach(([k, v]) => {
+        // Akceptuj qid + qid__other (dla "Inne" w radio)
+        const baseId = k.replace(/__other$/, '');
+        if (!validIds.has(baseId)) return;
+        if (typeof v !== 'string') return;
+        data[k] = String(v).slice(0, 50000);
+        count++;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      renderContent();
+      autoGrowAllTextareas();
+      updateProgress();
+      toast(`📤 Wgrano odpowiedzi: ${count} pól`);
+    } catch (err) {
+      toast('❌ Błąd parsowania JSON: ' + err.message, true);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 
 function downloadFilled() {
@@ -1663,6 +1789,7 @@ function resetEverything() {
   localStorage.removeItem(MOTIVATION_25_KEY);
   localStorage.removeItem(MOTIVATION_75_KEY);
   localStorage.removeItem(SKIPPED_KEY);
+  localStorage.removeItem(NOT_FOR_ME_KEY);
   localStorage.removeItem(JOKES_SHOWN_KEY);
   // REWARDS_OVERRIDE_KEY celowo NIE usuwamy — Krystian skonfigurował, ma zostać
   REWARDS = loadRewards();
@@ -1854,7 +1981,12 @@ function getSkipReason(qid) {
 function toggleSkip(qid) {
   const data = getSkipped();
   if (qid in data) delete data[qid];
-  else data[qid] = '';
+  else {
+    data[qid] = '';
+    // Wyklucza się z "nie do mnie" — jedna ścieżka pomijania na raz
+    const nfm = getNotForMe();
+    if (qid in nfm) { delete nfm[qid]; localStorage.setItem(NOT_FOR_ME_KEY, JSON.stringify(nfm)); }
+  }
   localStorage.setItem(SKIPPED_KEY, JSON.stringify(data));
   renderContent();
   autoGrowAllTextareas();
@@ -1865,6 +1997,36 @@ function setSkipReason(qid, reason) {
   data[qid] = (reason || '').slice(0, 500);
   localStorage.setItem(SKIPPED_KEY, JSON.stringify(data));
   // Nie wywołujemy updateProgress — reason zmiana nie zmienia liczby wypełnionych
+}
+
+// ═══════════════════════════════════════════════════════
+// ❓ NIE DO MNIE — Ivan: "to pytanie raczej do Krystiana, nie do mnie"
+// Liczy się jako wypełnione (Ivan się określił).
+// ═══════════════════════════════════════════════════════
+const NOT_FOR_ME_KEY = 'ivan_not_for_me_v1';
+function getNotForMe() {
+  try { return JSON.parse(localStorage.getItem(NOT_FOR_ME_KEY) || '{}'); } catch { return {}; }
+}
+function isNotForMe(qid) { return qid in getNotForMe(); }
+function getNotForMeReason(qid) { return getNotForMe()[qid] || ''; }
+function toggleNotForMe(qid) {
+  const data = getNotForMe();
+  if (qid in data) delete data[qid];
+  else {
+    data[qid] = '';
+    // Wyklucza się ze "skipped" — jedna ścieżka pomijania na raz
+    const sk = getSkipped();
+    if (qid in sk) { delete sk[qid]; localStorage.setItem(SKIPPED_KEY, JSON.stringify(sk)); }
+  }
+  localStorage.setItem(NOT_FOR_ME_KEY, JSON.stringify(data));
+  renderContent();
+  autoGrowAllTextareas();
+  updateProgress();
+}
+function setNotForMeReason(qid, reason) {
+  const data = getNotForMe();
+  data[qid] = (reason || '').slice(0, 500);
+  localStorage.setItem(NOT_FOR_ME_KEY, JSON.stringify(data));
 }
 
 // ═══════════════════════════════════════════════════════
