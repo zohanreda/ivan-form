@@ -1075,6 +1075,10 @@ function renderContent() {
   main.innerHTML = html;
   // Pokaż istniejące załączniki dla wszystkich pytań
   sec.questions.forEach(q => renderAttachmentsList(q.id));
+  // Każde renderowanie auto-skaluje wszystkie textarea (prefilled z localStorage
+  // muszą mieć policzoną wysokość pod treść — w przeciwnym razie startują 1 linią
+  // mimo wpisanej wcześniej zawartości).
+  autoGrowAllTextareas();
 }
 
 function switchTab(id) {
