@@ -311,6 +311,13 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 .btn-finish:hover { background: #16a34a; transform: translateY(-1px); }
 .btn-finish.secondary { background: #475569; box-shadow: 0 2px 6px rgba(71, 85, 105, 0.3); }
 .btn-finish.secondary:hover { background: #334155; }
+.btn-finish.glow {
+  animation: btn-finish-pulse 1.4s ease-in-out infinite;
+}
+@keyframes btn-finish-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6), 0 2px 6px rgba(34, 197, 94, 0.3); transform: scale(1); }
+  50% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0), 0 4px 12px rgba(34, 197, 94, 0.5); transform: scale(1.03); }
+}
 .finish-hint { font-size: 0.8rem; color: var(--text3); font-style: italic; }
 
 /* BLOK ODPOWIEDZI KRYSTIANA */
@@ -869,8 +876,11 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 <script>
 // ═══════════════════════════════════════════════════════
 // SEKCJE I PYTANIA
+// Source of truth: questions.json (zewnętrzny plik fetchowany na starcie).
+// Poniższy embedded `SECTIONS` to FALLBACK gdy fetch zawiedzie (file://, offline, 404).
+// Edycja pytań: edytuj questions.json — embedded będzie nadpisany przy następnym deployu.
 // ═══════════════════════════════════════════════════════
-const SECTIONS = [
+let SECTIONS = [
   { id: 'wizytowka', icon: '📌', title: 'Wizytówka projektu', subtitle: 'Szybka informacja o motron.pl', questions: [
     { id: '0.1', label: 'Co to jest motron.pl jednym zdaniem (z perspektywy systemu, nie biznesu)?', type: 'textarea' },
     { id: '0.2', label: 'Ile linii kodu mniej-więcej?', type: 'text' },
@@ -1272,18 +1282,34 @@ function autoGrowAllTextareas() {
 }
 
 // Globalny listener — łapie input na każdej dynamicznie wygenerowanej textarea
+function _findQDiv(target) {
+  if (!target || !target.closest) return null;
+  return target.closest('.q');
+}
+function _updatePtaszki(qDiv) {
+  if (!qDiv) return;
+  updateQuestionCheckmark(qDiv);
+  updateSectionTabBadge();
+}
 document.addEventListener('input', (e) => {
-  const qDiv = e.target.closest && e.target.closest('.q');
+  const qDiv = _findQDiv(e.target);
   if (e.target.tagName === 'TEXTAREA' && qDiv) {
     autoGrowTextarea(e.target);
   }
   // Aktualizuj ptaszka przy pytaniu inline (bez re-renderu całej zakładki)
-  // — żeby Ivan widział od razu „✓" jak coś napisze
-  if (qDiv) {
-    updateQuestionCheckmark(qDiv);
-    // Aktualizuj też ptaszka przy całej zakładce (sidebar) jeśli sekcja się skończyła
-    updateSectionTabBadge();
-  }
+  _updatePtaszki(qDiv);
+});
+
+// Backup — blur (focusout). Gdyby z jakiegoś powodu input nie odpalił
+// ptaszek-update, blur na pewno odpali jak Ivan przejdzie do następnego pytania
+// albo kliknie gdziekolwiek indziej.
+document.addEventListener('focusout', (e) => {
+  _updatePtaszki(_findQDiv(e.target));
+});
+
+// Onchange dla radio i select — zapis ptaszka po wyborze opcji
+document.addEventListener('change', (e) => {
+  _updatePtaszki(_findQDiv(e.target));
 });
 
 // Aktualizuje pojedyncze kółko ✓/○ przy pytaniu na podstawie aktualnego stanu
@@ -1433,7 +1459,11 @@ function updateProgress() {
     const m100 = document.getElementById('milestone-100');
     if (!m100.classList.contains('unlocked')) {
       m100.classList.add('unlocked');
-      document.getElementById('submit-btn').classList.add('glow');
+      // submit-btn został usunięty z UI — guard żeby uniknąć throw.
+      // W zamian pulsującym glow-em wyróżniamy przyciski Pobierz JSON na dole.
+      const sb = document.getElementById('submit-btn');
+      if (sb) sb.classList.add('glow');
+      document.querySelectorAll('.btn-finish').forEach(b => b.classList.add('glow'));
       if (!localStorage.getItem(REWARD_100_KEY)) {
         localStorage.setItem(REWARD_100_KEY, '1');
         celebrateAndShowReward(100);
@@ -1969,7 +1999,9 @@ function simulateProgress(targetPct) {
   // Reset visual flags
   document.getElementById('milestone-50').classList.toggle('unlocked', targetPct >= 0.5);
   document.getElementById('milestone-100').classList.toggle('unlocked', targetPct >= 1.0);
-  document.getElementById('submit-btn').classList.toggle('glow', targetPct >= 1.0);
+  const _sb1 = document.getElementById('submit-btn');
+  if (_sb1) _sb1.classList.toggle('glow', targetPct >= 1.0);
+  document.querySelectorAll('.btn-finish').forEach(b => b.classList.toggle('glow', targetPct >= 1.0));
   // Update tracker dla joke-trigger (żeby joke nie wystrzelił od razu po simulate)
   lastFilledForJoke = totalFilled();
   renderContent();
@@ -2005,7 +2037,9 @@ function resetEverything() {
   localStorage.removeItem(CONFIRMED_KEY);  // po resecie potwierdzenia Krystiana też wyczyść
   document.getElementById('milestone-50').classList.remove('unlocked');
   document.getElementById('milestone-100').classList.remove('unlocked');
-  document.getElementById('submit-btn').classList.remove('glow');
+  const _sb2 = document.getElementById('submit-btn');
+  if (_sb2) _sb2.classList.remove('glow');
+  document.querySelectorAll('.btn-finish').forEach(b => b.classList.remove('glow'));
   renderContent();
   updateProgress();
   loadTestPanelFields();
@@ -2463,6 +2497,26 @@ function maybeShowMotivation(pct) {
 })();
 
 // ═══════════════════════════════════════════════════════
+// 📥 FETCH SCHEMA Z questions.json — zewnętrzny plik z pytaniami.
+// Cel: AI-friendly source of truth (JSON) plus możliwość edycji bez ruszania HTML.
+// Fallback: jeśli fetch zawiedzie (file://, 404, offline) — używamy embedded SECTIONS.
+// ═══════════════════════════════════════════════════════
+async function fetchSectionsSchema() {
+  try {
+    const res = await fetch('questions.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) throw new Error('Empty/invalid');
+    SECTIONS = data;
+    console.log(`[ivan-form] questions.json loaded: ${SECTIONS.length} sections, ${SECTIONS.reduce((a,s)=>a+s.questions.length,0)} questions`);
+    return true;
+  } catch (e) {
+    console.warn('[ivan-form] questions.json fetch failed, using embedded fallback:', e.message);
+    return false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
 // 🧪 PANEL TESTOWY — odpalanie tylko dla Krystiana
 // Skrót: Ctrl+T (Cmd+T na Mac) toggle panel.
 // Uwaga: Ctrl+T to też domyślny "nowa karta" w przeglądarce — dlatego preventDefault.
@@ -2492,15 +2546,20 @@ document.addEventListener('keydown', (e) => {
 }, true);
 
 // ═══════════════════════════════════════════════════════
-// INIT — render wszystkiego po załadowaniu DOM
+// INIT — najpierw ściągnij questions.json (z fallback do embedded), potem render
 // ═══════════════════════════════════════════════════════
-renderTabs();
-renderContent();
-autoGrowAllTextareas();  // pre-fill content z localStorage musi mieć rozwiniętą wysokość
-updateProgress();
-loadTestPanelFields();
-updateJokesToggleUI();  // ustaw stan przycisku „kawały: ON/OFF" na podstawie localStorage
-lastFilledForJoke = totalFilled();  // żeby przy pierwszym ładowaniu nie wystrzeliwał joke
+(async function init() {
+  await fetchSectionsSchema();  // jeśli się powiedzie, SECTIONS = fetched. Jak zawiedzie, zostaje embedded.
+  // Ustaw default activeTab gdyby nie istniała
+  if (!SECTIONS.find(s => s.id === activeTab)) activeTab = SECTIONS[0]?.id;
+  renderTabs();
+  renderContent();
+  autoGrowAllTextareas();  // pre-fill content z localStorage musi mieć rozwiniętą wysokość
+  updateProgress();
+  loadTestPanelFields();
+  updateJokesToggleUI();  // ustaw stan przycisku „kawały: ON/OFF" na podstawie localStorage
+  lastFilledForJoke = totalFilled();  // żeby przy pierwszym ładowaniu nie wystrzeliwał joke
+})();
 </script>
 </body>
 </html>

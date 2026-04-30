@@ -1,0 +1,1114 @@
+[
+  {
+    "id": "wizytowka",
+    "icon": "📌",
+    "title": "Wizytówka projektu",
+    "subtitle": "Szybka informacja o motron.pl",
+    "questions": [
+      {
+        "id": "0.1",
+        "label": "Co to jest motron.pl jednym zdaniem (z perspektywy systemu, nie biznesu)?",
+        "type": "textarea"
+      },
+      {
+        "id": "0.2",
+        "label": "Ile linii kodu mniej-więcej?",
+        "type": "text"
+      },
+      {
+        "id": "0.3",
+        "label": "Kiedy projekt powstał i ile razy był przepisywany od zera?",
+        "type": "textarea"
+      },
+      {
+        "id": "0.4",
+        "label": "Aktualnie ile aktywnych klientów? Ile zleceń miesięcznie?",
+        "type": "textarea"
+      },
+      {
+        "id": "0.5",
+        "label": "Peak load (najwięcej jednoczesnych użytkowników i kiedy)?",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "id": "stack",
+    "icon": "🛠",
+    "title": "Stack technologiczny",
+    "subtitle": "Czym napisany, jakie biblioteki",
+    "questions": [
+      {
+        "id": "1.1",
+        "label": "Język główny + wersja",
+        "type": "text",
+        "hint": "np. PHP 8.2, Python 3.11, Node 20"
+      },
+      {
+        "id": "1.2",
+        "label": "Framework",
+        "type": "text",
+        "hint": "np. Laravel, Symfony, Flask, Express"
+      },
+      {
+        "id": "1.3",
+        "label": "Baza danych (typ + wersja)",
+        "type": "text"
+      },
+      {
+        "id": "1.4",
+        "label": "ORM (jaki / żaden — raw SQL)",
+        "type": "text"
+      },
+      {
+        "id": "1.5",
+        "label": "Frontend",
+        "type": "text"
+      },
+      {
+        "id": "1.6",
+        "label": "Build pipeline",
+        "type": "text"
+      },
+      {
+        "id": "1.7",
+        "label": "Wklej tu zawartość pliku z dependencies",
+        "type": "textarea"
+      },
+      {
+        "id": "1.8",
+        "label": "Repo (gdzie kod, jakie branche)",
+        "type": "textarea"
+      },
+      {
+        "id": "1.9",
+        "label": "KRYTYCZNE biblioteki (od których wszystko zależy)",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "baza",
+    "icon": "🗄",
+    "title": "Baza danych",
+    "subtitle": "Jak zorganizowana, indeksy, transakcje",
+    "questions": [
+      {
+        "id": "2.1",
+        "label": "Ile tabel mniej-więcej?",
+        "type": "text"
+      },
+      {
+        "id": "2.2",
+        "label": "Top 5 największych tabel (po liczbie wierszy)",
+        "type": "textarea"
+      },
+      {
+        "id": "2.3",
+        "label": "Jakie tabele mają indeksy NIE-PK (na których kolumnach)?",
+        "type": "textarea"
+      },
+      {
+        "id": "2.4",
+        "label": "Czy są foreign keys (FK constraints) włączone?",
+        "type": "radio",
+        "options": [
+          "TAK wszędzie",
+          "TAK ale wybiórczo",
+          "NIE",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "2.5",
+        "label": "Migracje — jaki system?",
+        "type": "text"
+      },
+      {
+        "id": "2.6",
+        "label": "Backup — kto / kiedy / gdzie / czy testowane recovery?",
+        "type": "textarea"
+      },
+      {
+        "id": "2.7",
+        "label": "Krytyczne ścieżki danych (które zapytania uruchamiają się najczęściej)",
+        "type": "textarea"
+      },
+      {
+        "id": "2.8",
+        "label": "Slow query log — czy włączony? Top 3 najwolniejsze zapytania?",
+        "type": "textarea"
+      },
+      {
+        "id": "2.9",
+        "label": "Transakcje — które operacje są w transakcjach?",
+        "type": "textarea"
+      },
+      {
+        "id": "2.10",
+        "label": "Locking strategy",
+        "type": "radio",
+        "options": [
+          "Optymistyczny (version field)",
+          "Pesymistyczny (SELECT FOR UPDATE)",
+          "Brak",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "2.11",
+        "label": "Cleanup starych danych — cron / procedury / nic?",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "arch",
+    "icon": "🏗",
+    "title": "Architektura",
+    "subtitle": "Workers, queue, cache, sesje",
+    "questions": [
+      {
+        "id": "3.1",
+        "label": "Monolith czy microservices?",
+        "type": "radio",
+        "options": [
+          "Monolith",
+          "Microservices",
+          "Hybrid",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "3.2",
+        "label": "Jakie usługi działają w tle (workers / cron / queue)?",
+        "type": "textarea"
+      },
+      {
+        "id": "3.3",
+        "label": "Jaki queue jest używany?",
+        "type": "text",
+        "hint": "np. Redis, RabbitMQ, database queue, Sidekiq, lub brak"
+      },
+      {
+        "id": "3.4",
+        "label": "Jaki cache jest używany?",
+        "type": "text",
+        "hint": "np. Redis, Memcached, file cache, lub brak"
+      },
+      {
+        "id": "3.5",
+        "label": "Co jest cache-owane i jak długo?",
+        "type": "textarea"
+      },
+      {
+        "id": "3.6",
+        "label": "Upload plików — gdzie? Walidacja?",
+        "type": "textarea"
+      },
+      {
+        "id": "3.7",
+        "label": "Sesje użytkownika — gdzie?",
+        "type": "text"
+      },
+      {
+        "id": "3.8",
+        "label": "Rate limiting — jest? Wartości?",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "sec",
+    "icon": "🔒",
+    "title": "Bezpieczeństwo",
+    "subtitle": "Hasła, RODO, audyt",
+    "questions": [
+      {
+        "id": "4.1",
+        "label": "Hasła — jak hashowane?",
+        "type": "radio",
+        "options": [
+          "bcrypt",
+          "argon2",
+          "SHA256",
+          "MD5",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "4.2",
+        "label": "2FA — jest? Jakim mechanizmem?",
+        "type": "text"
+      },
+      {
+        "id": "4.3",
+        "label": "CSRF protection?",
+        "type": "radio",
+        "options": [
+          "Globalne",
+          "Per-form",
+          "Brak",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "4.4",
+        "label": "XSS protection — auto-escape czy ręcznie?",
+        "type": "textarea"
+      },
+      {
+        "id": "4.5",
+        "label": "SQL injection — wszystkie zapytania przez ORM lub prepared statements? Czy są gdzieś raw queries z konkatenacją stringów?",
+        "type": "textarea",
+        "hint": "Jeśli tak — w których plikach/funkcjach? To są typowe miny dla AI."
+      },
+      {
+        "id": "4.6",
+        "label": "Audit log — kto co kiedy zmodyfikował?",
+        "type": "textarea"
+      },
+      {
+        "id": "4.7",
+        "label": "Login attempts — limit, lockout, alerty?",
+        "type": "textarea"
+      },
+      {
+        "id": "4.8",
+        "label": "API keys / secrets — gdzie?",
+        "type": "text"
+      },
+      {
+        "id": "4.9",
+        "label": "HTTPS — wszędzie? HSTS?",
+        "type": "textarea"
+      },
+      {
+        "id": "4.10",
+        "label": "RODO — co konkretnie zrobione?",
+        "type": "textarea"
+      },
+      {
+        "id": "4.11",
+        "label": "Kto ma dostęp do production database? Lista osób + role.",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "integr",
+    "icon": "🔌",
+    "title": "Integracje",
+    "subtitle": "Kuriery, faktury, fiskal, SMS, email — co mamy i jak działa",
+    "questions": [
+      {
+        "id": "5.faktury",
+        "label": "Faktury — system + szczegóły techniczne",
+        "type": "textarea",
+        "prefill": "Wfirma",
+        "hint": "Krystian wpisał system. Ty: gdzie API key, retry przy 5xx, co przy timeout, czy mamy idempotency key, jakie statusy invoice trackujemy"
+      },
+      {
+        "id": "5.kuriery",
+        "label": "Kuriery / przesyłki — których używamy + status każdego",
+        "type": "textarea",
+        "prefill": "EPK (Pocztex), InPost, DPD",
+        "hint": "Krystian wpisał których używamy. Ty: jak każdy działa, gdzie generujemy etykietę, co przy błędzie API, czy webhooki tracking są walidowane (signature)"
+      },
+      {
+        "id": "5.fiskal",
+        "label": "Drukarki fiskalne — model(e) + status",
+        "type": "textarea",
+        "prefill": "Posnet",
+        "hint": "Krystian wpisał. Ty: jak działa? Mockowane czy hardware? Alternatywy (Elzab) używamy? Co gdy drukarka nie odpowiada?"
+      },
+      {
+        "id": "5.sms",
+        "label": "SMS — dostawca + status",
+        "type": "text",
+        "hint": "np. SMSAPI / Twilio / brak. Jeśli mamy — co się dzieje przy fail (kolejka? retry? cisza?)"
+      },
+      {
+        "id": "5.email",
+        "label": "Email (SMTP) — dostawca + status",
+        "type": "text",
+        "prefill": "Gmail Workspace (motron.pl)",
+        "hint": "Krystian wpisał. Ty: czy klasyczne SMTP czy API Gmail? Limity? Bounce handling?"
+      },
+      {
+        "id": "5.oauth",
+        "label": "OAuth / SSO — co mamy + scopy",
+        "type": "textarea",
+        "hint": "Google OAuth, Facebook, SSO firmowe? Jakie scopy żądamy? Refresh token gdzie?"
+      },
+      {
+        "id": "5.api_zewnetrzne",
+        "label": "Inne API zewnętrzne — wymień + status",
+        "type": "textarea",
+        "hint": "Google Places, GUS BIR/REGON, Allegro, dowolne API których nie wymieniłem"
+      },
+      {
+        "id": "5.webhooks",
+        "label": "Webhooks PRZYCHODZĄCE — kto wysyła, walidacja signature, idempotentność",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "perf",
+    "icon": "⚡",
+    "title": "Performance",
+    "subtitle": "Czasy, monitoring, error tracking",
+    "questions": [
+      {
+        "id": "6.1",
+        "label": "Average response time / (homepage)",
+        "type": "text"
+      },
+      {
+        "id": "6.2",
+        "label": "Average response time strony zleceń klienta",
+        "type": "text"
+      },
+      {
+        "id": "6.3",
+        "label": "Najwolniejsza strona w aplikacji",
+        "type": "textarea"
+      },
+      {
+        "id": "6.4",
+        "label": "Największe obciążenie miesiąca: kiedy / czemu",
+        "type": "textarea"
+      },
+      {
+        "id": "6.5",
+        "label": "Monitoring (UptimeRobot / Sentry / Datadog)?",
+        "type": "text"
+      },
+      {
+        "id": "6.6",
+        "label": "Error tracking — gdzie lecą wyjątki?",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "id": "devops",
+    "icon": "🚀",
+    "title": "Deployment",
+    "subtitle": "Hosting, CI/CD, deploy procedure",
+    "questions": [
+      {
+        "id": "7.1",
+        "label": "Hosting — dostawca + tier",
+        "type": "text"
+      },
+      {
+        "id": "7.2",
+        "label": "OS + wersja",
+        "type": "text"
+      },
+      {
+        "id": "7.3",
+        "label": "Web server",
+        "type": "text"
+      },
+      {
+        "id": "7.4",
+        "label": "WSGI / FPM / process manager",
+        "type": "text"
+      },
+      {
+        "id": "7.5",
+        "label": "Deploy procedure — krok po kroku",
+        "type": "textarea"
+      },
+      {
+        "id": "7.6",
+        "label": "CI/CD?",
+        "type": "text"
+      },
+      {
+        "id": "7.7",
+        "label": "Rollback — jak wycofujesz wersję?",
+        "type": "textarea"
+      },
+      {
+        "id": "7.8",
+        "label": "Branche w git — strategia",
+        "type": "text"
+      },
+      {
+        "id": "7.9",
+        "label": "Environment variables — gdzie?",
+        "type": "text"
+      },
+      {
+        "id": "7.10",
+        "label": "Logi aplikacji — gdzie? Rotacja?",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "bugi",
+    "icon": "🐛",
+    "title": "Bugi historyczne",
+    "subtitle": "Top 3 katastrofy i lekcje",
+    "questions": [
+      {
+        "id": "8.1.1",
+        "label": "Top bug #1 — co się stało, co naprawiło",
+        "type": "textarea",
+        "hint": "Najgorszy/najtrudniejszy bug w historii projektu. Krótko: co padło, jaka diagnoza, jak naprawione, co wprowadzono żeby się nie powtórzył."
+      },
+      {
+        "id": "8.1.2",
+        "label": "Top bug #2 — co się stało, co naprawiło",
+        "type": "textarea"
+      },
+      {
+        "id": "8.1.3",
+        "label": "Top bug #3 — co się stało, co naprawiło",
+        "type": "textarea"
+      },
+      {
+        "id": "8.2",
+        "label": "Czy był kiedyś incydent z utratą danych?",
+        "type": "textarea"
+      },
+      {
+        "id": "8.3",
+        "label": "Czy był kiedyś leak danych (RODO)?",
+        "type": "textarea"
+      },
+      {
+        "id": "8.4",
+        "label": "Czy był kiedyś DDoS / spam attack?",
+        "type": "textarea"
+      },
+      {
+        "id": "8.5",
+        "label": "Najgorsza decyzja techniczna której teraz żałujesz",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "safety",
+    "icon": "🛡",
+    "title": "Production safety + RODO",
+    "subtitle": "Wrażliwe dane, deploy procedury, co kiedy klient akurat pisze a my podmieniamy kod",
+    "crit": true,
+    "questions": [
+      {
+        "id": "P.1",
+        "label": "Które TABELE / KOLUMNY zawierają dane wrażliwe (PESEL, NIP, adres, telefon, email, hasła, dane karty, IP)?",
+        "type": "textarea",
+        "hint": "Wymień konkretnie. To te miejsca gdzie AI nie wolno robić export, screenshot, log."
+      },
+      {
+        "id": "P.2",
+        "label": "Czy dane wrażliwe są szyfrowane at-rest? Jeżeli nie — czemu i co chciałbyś zmienić?",
+        "type": "textarea",
+        "hint": "Hasła pewnie tak (bcrypt), ale czy NIP/email/telefon też? Czy DB sama szyfruje?"
+      },
+      {
+        "id": "P.3",
+        "label": "Local dev i staging — jak się dostajesz do realistic data? Production dump anonimizowany? Fake data? Seed skrypty?",
+        "type": "textarea",
+        "hint": "Czy AI pracując na staging dotyka realnych nazwisk klientów? Co możemy a czego nie."
+      },
+      {
+        "id": "P.4",
+        "label": "RODO „right to access\" (art. 15) — kto może wyeksportować wszystkie dane jednego klienta i jak?",
+        "type": "textarea",
+        "hint": "Procedura. Czy jest endpoint? Czy ręcznie z DB?"
+      },
+      {
+        "id": "P.5",
+        "label": "RODO „right to be forgotten\" (art. 17) — jak realizujemy usunięcie konta? CASCADE delete czy soft-delete?",
+        "type": "textarea",
+        "hint": "Co się dzieje z fakturami klienta (które trzeba trzymać 5 lat dla skarbówki)? Konflikt RODO vs prawo podatkowe — jak rozwiązany?"
+      },
+      {
+        "id": "P.6",
+        "label": "Deploy na production — kiedy odpalamy? Tylko w nocy? Jaki dokładnie downtime window?",
+        "type": "textarea",
+        "hint": "np. „tylko 2:00-4:00 wt/czw, bo to godziny najmniejszego ruchu\". Albo „kiedy chcemy\"."
+      },
+      {
+        "id": "P.7",
+        "label": "🚨 KRYTYCZNE: co robimy gdy klient AKURAT wypełnia formularz / tworzy zlecenie / pisze notatkę a my robimy deploy?",
+        "type": "textarea",
+        "hint": "Jak chronimy jego dane od utraty? Czy klient widzi „rzucenie\" formularza? Czy mamy graceful degradation?"
+      },
+      {
+        "id": "P.8",
+        "label": "Migracje bazy danych — kiedy odpalamy, jak długo trwa przerwa, czy są skrypty rollback, w jakiej kolejności wobec deploy kodu?",
+        "type": "textarea",
+        "hint": "Najpierw migration, potem code? Czy odwrotnie? Co gdy migration się sypie w połowie?"
+      },
+      {
+        "id": "P.9",
+        "label": "Mamy blue-green deploy / rolling restart / canary release? Czy zwykły shutdown 30 sek z 502?",
+        "type": "radio",
+        "options": [
+          "Blue-green (zero downtime)",
+          "Rolling restart",
+          "Canary release",
+          "Zwykły shutdown z chwilowym 502",
+          "Inne (opisz w 9.6)"
+        ]
+      },
+      {
+        "id": "P.10",
+        "label": "🤖 PROCEDURA dla AI: w jaki sposób Claude ma się Ciebie zapytać PRZED zmianą na produkcji? (kanał komunikacji, format, jak długo czeka na odpowiedź)",
+        "type": "textarea",
+        "hint": "np. „Slack DM, format: »chcę zrobić X bo Y, ryzyko Z«, czekam minimum 1h\". To MUSI być jasne, inaczej AI kombinuje i może zepsuć."
+      },
+      {
+        "id": "P.11",
+        "label": "Procedura HOT ROLLBACK — co robimy gdy deploy się popsuł i trzeba w 5 min cofnąć?",
+        "type": "textarea",
+        "hint": "Krok po kroku. Kto ma uprawnienia. Skąd wziąć poprzednią wersję."
+      },
+      {
+        "id": "P.12",
+        "label": "Jakie operacje są ABSOLUTNIE TYLKO RĘCZNE (AI nawet z pozwoleniem nie może)? np. DROP TABLE, DELETE bez WHERE, GRANT na tabelach finansowych",
+        "type": "textarea",
+        "hint": "Lista jak najdłuższa. To są CZERWONE LINIE. Im więcej tu wpiszesz, tym mniej AI Cię zaskoczy."
+      }
+    ]
+  },
+  {
+    "id": "backup",
+    "icon": "🔄",
+    "title": "Backup + współpraca + adresy serwerów",
+    "subtitle": "Workflow Krystian/Ivan/AI, adresy staging/prod, backupy bazy i kodu, plan recovery",
+    "crit": true,
+    "questions": [
+      {
+        "id": "W.1",
+        "label": "Jak będzie wyglądać workflow Krystian / Ivan / AI? (jak wprowadzamy zmiany do kodu)",
+        "type": "radio",
+        "options": [
+          "Git PR — AI tworzy branch, Ivan reviewuje, Krystian merge",
+          "AI proponuje plan tekstowo, Krystian implementuje sam",
+          "AI commituje na feature branch, Ivan review przed merge na main",
+          "AI commituje wprost na main po Krystianowym ✓ na Slacku",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "W.2",
+        "label": "Adres serwera TESTOWEGO (URL staging)",
+        "type": "text",
+        "hint": "np. https://staging.motron.pl albo brak — opisz jak wygląda środowisko testowe"
+      },
+      {
+        "id": "W.3",
+        "label": "Adres PRODUCTION (główny URL motron.pl)",
+        "type": "text",
+        "hint": "np. https://motron.pl + lista subdomain jeśli są"
+      },
+      {
+        "id": "W.4",
+        "label": "Zabezpieczenia bazy danych — co chroni przed dostępem zewnętrznym? (firewall, IP whitelist, VPN, MFA na DB user, hash hasła DB, etc.)",
+        "type": "textarea",
+        "hint": "Wymień co MASZ. Plus co byś chciał mieć a nie ma jeszcze."
+      },
+      {
+        "id": "W.5",
+        "label": "Czego ABSOLUTNIE UNIKAĆ żeby nie zepsuć zabezpieczeń bazy? (operacje, kwerendy, zmiany w pg_hba/my.cnf, GRANT/REVOKE)",
+        "type": "textarea",
+        "hint": "AI musi wiedzieć żeby tego nie próbować. Im więcej tu wpiszesz, tym mniej Cię zaskoczę."
+      },
+      {
+        "id": "W.6",
+        "label": "Backupy bazy danych — jak często są robione?",
+        "type": "radio",
+        "options": [
+          "Co godzinę (incremental)",
+          "Co 6 godzin",
+          "Codziennie w nocy",
+          "Raz w tygodniu",
+          "Nie ma backupów albo nie wiem",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "W.7",
+        "label": "Backupy bazy — GDZIE są zapisywane?",
+        "type": "radio",
+        "options": [
+          "Ten sam serwer (lokalnie)",
+          "Inny serwer w tej samej serwerowni (hot-storage)",
+          "Cloud (S3 / Backblaze / GCS)",
+          "External HDD odpinany",
+          "W kilku miejscach jednocześnie",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "W.8",
+        "label": "Backup KODU — gdzie poza GitHubem? (na wypadek gdyby GitHub padł lub konto skradzione)",
+        "type": "radio",
+        "options": [
+          "Nigdzie — tylko GitHub",
+          "Pendrive (jak często aktualizowany)",
+          "External HDD",
+          "Cloud (Dropbox / GDrive / OneDrive)",
+          "Drugi git remote (GitLab / własny serwer)",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "W.9",
+        "label": "Czy są okresowe TESTY RECOVERY? (czy backup faktycznie działa — odtworzenie testowe)",
+        "type": "radio",
+        "options": [
+          "TAK — testowane regularnie",
+          "TAK — ale dawno",
+          "NIE — nigdy nie testowane",
+          "Nie wiem",
+          "Inne (opisz)"
+        ]
+      },
+      {
+        "id": "W.10",
+        "label": "Plan disaster recovery — co robimy gdy serwer DB pada W ŚRODKU DNIA roboczego?",
+        "type": "textarea",
+        "hint": "Krok po kroku. Kto pierwszy widzi alert. Kto reaguje. Ile czasu ma na restore. Czy jest checklist?"
+      }
+    ]
+  },
+  {
+    "id": "nogo",
+    "icon": "🚨",
+    "title": "No-go zones — to o czym gadaliśmy na klatce",
+    "subtitle": "Ivan, wpisz tu wszystko czego mam NIE ruszać żebyś nie musiał potem fixować. Pamiętasz te rozmowy „nie dotykaj X bo się sypnie cała Y\" — tu właśnie to opisz. Im więcej tu napiszesz, tym mniej Twojej pracy i krzyczenia później.",
+    "crit": true,
+    "questions": [
+      {
+        "id": "9.1",
+        "label": "Pliki — które są krytyczne, działają jak chcesz, ale ktoś je łatwo rozjebie",
+        "type": "textarea",
+        "hint": "np. „lib/wfirma.php — moja własna obsługa retry, nie tykać; każda zmiana = upadek faktur\""
+      },
+      {
+        "id": "9.2",
+        "label": "Tabele bazy — te w których są rzeczy historyczne / RODO / zamknięte rozliczenia",
+        "type": "textarea",
+        "hint": "np. „faktury_2018_2023 — frozen, audyt skarbowy może chcieć\""
+      },
+      {
+        "id": "9.3",
+        "label": "Funkcje / klasy — masz takie świetnie napisane, którymi nikt nie powinien dłubać?",
+        "type": "textarea"
+      },
+      {
+        "id": "9.4",
+        "label": "Cron jobs — które działają jak zegarek, ale każda zmiana wybuchu",
+        "type": "textarea"
+      },
+      {
+        "id": "9.5",
+        "label": "Integracje — to o czym rozmawialiśmy „działa od 5 lat, klienci mają zaufanie, nie ruszamy\"",
+        "type": "textarea",
+        "hint": "np. „kod do Wfirma — pisałem w piątek wieczorem 3 lata temu, cuda, nie tykać; jak coś trzeba — tylko ze mną\""
+      },
+      {
+        "id": "9.6",
+        "label": "Inne (config nginx, parę nagłówków HTTP, jakieś .htaccess hacki które tylko Ty znasz)",
+        "type": "textarea"
+      },
+      {
+        "id": "9.7",
+        "label": "STRUKTURA odpytywania bazy danych — które ścieżki MUSZĄ iść po kolei (jedno zapytanie → odpowiedź → kolejne; jak nie ma rekordu → zwracamy → nie próbujemy dalej)",
+        "type": "textarea",
+        "hint": "TO JEST KRYTYCZNE. AI często pisze „wszystko naraz, błędy później\" — Ty wiesz że tak się nie da. Wpisz konkretnie: „przy logowaniu MUSI być najpierw X, potem Y, jak X zwróci null → STOP, nie idź do Y\""
+      }
+    ]
+  },
+  {
+    "id": "dataflow",
+    "icon": "🔀",
+    "title": "Data flow — krytyczne ścieżki",
+    "subtitle": "Krok po kroku + error paths",
+    "crit": true,
+    "questions": [
+      {
+        "id": "10.1.h",
+        "label": "10.1 LOGIN klienta — happy path",
+        "type": "textarea"
+      },
+      {
+        "id": "10.1.e",
+        "label": "10.1 LOGIN — error paths",
+        "type": "textarea"
+      },
+      {
+        "id": "10.2.h",
+        "label": "10.2 ZŁOŻENIE NOWEGO ZLECENIA — happy path",
+        "type": "textarea"
+      },
+      {
+        "id": "10.2.e",
+        "label": "10.2 ZŁOŻENIE ZLECENIA — error paths",
+        "type": "textarea"
+      },
+      {
+        "id": "10.3.h",
+        "label": "10.3 WYSTAWIENIE FAKTURY (Wfirma) — happy path",
+        "type": "textarea"
+      },
+      {
+        "id": "10.3.e",
+        "label": "10.3 FAKTURA — error paths (Wfirma 500, token wygasł, NIP błędny)",
+        "type": "textarea"
+      },
+      {
+        "id": "10.4.h",
+        "label": "10.4 PRZYJĘCIE REKLAMACJI — happy path",
+        "type": "textarea"
+      },
+      {
+        "id": "10.4.e",
+        "label": "10.4 REKLAMACJA — error paths",
+        "type": "textarea"
+      },
+      {
+        "id": "10.5.h",
+        "label": "10.5 WYSŁANIE SMS — happy path",
+        "type": "textarea"
+      },
+      {
+        "id": "10.5.e",
+        "label": "10.5 SMS — error paths",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "mentalmodel",
+    "icon": "🧠",
+    "title": "Twój mental model",
+    "subtitle": "Jak Ty widzisz świat motron.pl — definicje + trudności",
+    "questions": [
+      {
+        "id": "M.1",
+        "label": "Czym dla Ciebie JEST sterownik? (Twoja własna definicja, nie z wikipedii)",
+        "type": "textarea",
+        "hint": "Krótko, w 2-3 zdaniach. Może być nieformalnie. Co masz w głowie gdy mówisz „sterownik\"."
+      },
+      {
+        "id": "M.2",
+        "label": "Czym dla Ciebie JEST numer sterownika? Co on znaczy / czym się różni od samego sterownika?",
+        "type": "textarea",
+        "hint": "Numer fabryczny, OEM, OE, hardware, software — jak Ty to rozróżniasz?"
+      },
+      {
+        "id": "M.3",
+        "label": "Czym dla Ciebie JEST rodzaj sterownika? Jak go określasz / klasyfikujesz?",
+        "type": "textarea",
+        "hint": "np. po producencie? po funkcji (ECU/ABS/itd)? po marce auta? po generacji?"
+      },
+      {
+        "id": "M.4",
+        "label": "Co sprawia Ci NAJWIĘKSZĄ trudność w pracy z naszym CRM?",
+        "type": "textarea",
+        "hint": "Wymień konkretnie. Co Cię irytuje / co zawsze trwa za długo / co psuje codzienną pracę."
+      },
+      {
+        "id": "M.5",
+        "label": "Co sprawia Ci NAJWIĘKSZĄ trudność w obsłudze klientów (nie technicznie, ludzko)?",
+        "type": "textarea",
+        "hint": "np. klient nie wie jaki ma sterownik / klient się denerwuje / klient pomija ważne info."
+      },
+      {
+        "id": "M.6",
+        "label": "Z czego w naszym CRM jesteś najbardziej DUMNY? (co Twoim zdaniem działa pięknie)",
+        "type": "textarea",
+        "hint": "Pochwal swoją robotę. To jest też ważna info dla AI co utrzymać."
+      },
+      {
+        "id": "M.7",
+        "label": "Co najbardziej Ci się NIE PODOBA w naszym CRM? (co byś najchętniej spalił)",
+        "type": "textarea",
+        "hint": "Bądź szczery. Nikt nie ma za to pretensji."
+      },
+      {
+        "id": "M.8",
+        "label": "Jakimi 3 słowami opisałbyś naszą bazę danych?",
+        "type": "text",
+        "hint": "Subiektywnie, swoimi słowami. Np. „rozpędzona machina\", „chaotyczna\", „solidna\", „przeciążona\", „nietknięta od 5 lat\" — pomaga AI zrozumieć stan emocjonalny."
+      }
+    ]
+  },
+  {
+    "id": "pomysly",
+    "icon": "💡",
+    "title": "Pomysły Krystiana",
+    "subtitle": "Twoja opinia techniczna",
+    "questions": [
+      {
+        "id": "11.1",
+        "label": "Autocomplete adresu (Google Places lub GUS)",
+        "type": "textarea"
+      },
+      {
+        "id": "11.2",
+        "label": "Multi-step formularz zamówienia (kafelki marka → model)",
+        "type": "textarea"
+      },
+      {
+        "id": "11.3",
+        "label": "Dynamic intake form per liść drzewa usług",
+        "type": "textarea"
+      },
+      {
+        "id": "11.4",
+        "label": "Family/wariant w drzewie sprzętu (MK61 → 3 modele)",
+        "type": "textarea"
+      },
+      {
+        "id": "11.5",
+        "label": "OCR ze zdjęć błędów DTC",
+        "type": "textarea"
+      },
+      {
+        "id": "11.6",
+        "label": "Co byś OD SIEBIE dodał albo zrobił inaczej?",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "plany",
+    "icon": "🗺",
+    "title": "Twoje plany na CRM",
+    "subtitle": "Co planujesz, co Cię irytuje",
+    "questions": [
+      {
+        "id": "12.0",
+        "label": "Lista zadań które masz teraz „na biurku\" (gotowe / w toku / planowane)",
+        "type": "textarea"
+      },
+      {
+        "id": "12.1",
+        "label": "Co planowałeś rozwijać przed pomysłem Krystiana z miniMOTRON?",
+        "type": "textarea"
+      },
+      {
+        "id": "12.2",
+        "label": "Czy CRM ma jakieś ograniczenia skali które już są blisko?",
+        "type": "textarea"
+      },
+      {
+        "id": "12.3",
+        "label": "Migracja na inny stack — była rozważana? Jaki?",
+        "type": "textarea"
+      },
+      {
+        "id": "12.4",
+        "label": "Co byś zrobił gdybyś dostał wolną rękę (i czas) na refactor?",
+        "type": "textarea"
+      },
+      {
+        "id": "12.5",
+        "label": "Czego brakuje w CRM żeby Twoja praca była łatwiejsza?",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "claude",
+    "icon": "🤖",
+    "title": "Pytania od Claude",
+    "subtitle": "Konkretne techniczne",
+    "questions": [
+      {
+        "id": "C.1",
+        "label": "Jak działa idempotency webhooks?",
+        "type": "textarea"
+      },
+      {
+        "id": "C.2",
+        "label": "Retry strategy dla Wfirma API?",
+        "type": "textarea"
+      },
+      {
+        "id": "C.3",
+        "label": "Czy jest distributed lock (Redis RedLock)?",
+        "type": "textarea"
+      },
+      {
+        "id": "C.4",
+        "label": "Environment variables — local dev = production?",
+        "type": "textarea"
+      },
+      {
+        "id": "C.5",
+        "label": "Czy są feature flags?",
+        "type": "textarea"
+      },
+      {
+        "id": "C.6",
+        "label": "Najprostszy sposób żeby Claude dodał nowy endpoint",
+        "type": "textarea"
+      },
+      {
+        "id": "C.7",
+        "label": "Najprostszy sposób żeby Claude dodał nową kolumnę do tabeli",
+        "type": "textarea"
+      },
+      {
+        "id": "C.8",
+        "label": "Czy są testy automatyczne? Coverage?",
+        "type": "textarea"
+      },
+      {
+        "id": "C.9",
+        "label": "Jak Claude może uruchomić local dev (Docker / vagrant)?",
+        "type": "textarea"
+      },
+      {
+        "id": "C.10",
+        "label": "Czy dasz Claude SSH key z limited access do staging?",
+        "type": "radio",
+        "options": [
+          "Tak, łatwo",
+          "Tak ale po setupie staging",
+          "NIE — nie chcę dawać AI dostępu",
+          "Inne (opisz w 12.5)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "zyczenia",
+    "icon": "✨",
+    "title": "Życzenia",
+    "subtitle": "Twoje preferencje współpracy",
+    "questions": [
+      {
+        "id": "Z.1",
+        "label": "Co byś chciał żeby Claude robił często (rzeczy nudne ale konieczne)?",
+        "type": "textarea"
+      },
+      {
+        "id": "Z.2",
+        "label": "Co Claude ma NIE robić bez Twojego ✓?",
+        "type": "textarea"
+      },
+      {
+        "id": "Z.3",
+        "label": "Jak chcesz dostawać raporty od Claude?",
+        "type": "radio",
+        "options": [
+          "Po każdym zadaniu",
+          "Dziennie summary",
+          "Co ważne (sam Claude decyduje)",
+          "Tylko gdy coś się sypie"
+        ]
+      },
+      {
+        "id": "Z.4",
+        "label": "Twój preferowany kanał komunikacji",
+        "type": "radio",
+        "options": [
+          "Slack",
+          "Email",
+          "GitHub issue",
+          "Discord",
+          "Inny"
+        ]
+      },
+      {
+        "id": "Z.5",
+        "label": "Jeśli Claude coś rozjebie — jak Cię szybko o tym powiadomić?",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "zycie",
+    "icon": "🌅",
+    "title": "Życie poza CRM",
+    "subtitle": "Luźniejsze, ludzkie. Pomińcie jeśli nie chcecie — ale dla Krystivana świetnie wiedzieć ✨",
+    "questions": [
+      {
+        "id": "L.1",
+        "label": "Po 2 latach od uruchomienia nowej wersji CRM — jakim wymarzonym samochodem chciałbyś jeździć?",
+        "type": "text",
+        "hint": "Konkretny model. Marzenia bez ograniczeń budżetowych."
+      },
+      {
+        "id": "L.2a",
+        "label": "Co Ci się NAJBARDZIEJ podoba w Redzie?",
+        "type": "textarea",
+        "hint": "Konkretne miejsce, klimat, ludzie, restauracje."
+      },
+      {
+        "id": "L.2b",
+        "label": "Czego Ci NAJBARDZIEJ brakuje w Redzie?",
+        "type": "textarea",
+        "hint": "Co byś dodał gdybyś mógł."
+      },
+      {
+        "id": "L.3",
+        "label": "Gdyby motron.pl miał x10 klientów, jak chciałbyś żeby zmieniła się Twoja praca?",
+        "type": "textarea",
+        "hint": "Mniej kodu więcej zarządzania? Inny zespół? Praca zdalna 100%?"
+      },
+      {
+        "id": "L.4",
+        "label": "Gdybyś dostał miesiąc całkowicie wolnego (CRM się sam ogarnie) — co byś robił?",
+        "type": "textarea"
+      },
+      {
+        "id": "L.5",
+        "label": "Co Cię NAJBARDZIEJ cieszy w pracy z motron.pl ostatnio?",
+        "type": "textarea"
+      },
+      {
+        "id": "L.6",
+        "label": "Czego NAJBARDZIEJ żałujesz w pracy ostatniego roku?",
+        "type": "textarea",
+        "hint": "Bez konsekwencji. Krystian to przeczyta i mu to nie zaszkodzi w niczym."
+      },
+      {
+        "id": "L.7",
+        "label": "Trzy rzeczy ważne dla Ciebie POZA pracą (rodzina, hobby, pasja)",
+        "type": "textarea"
+      }
+    ]
+  },
+  {
+    "id": "freestyle",
+    "icon": "🎤",
+    "title": "Wolna wypowiedź",
+    "subtitle": "Cokolwiek jeszcze chcesz dodać — bez moich pytań prowadzących",
+    "questions": [
+      {
+        "id": "F.1",
+        "label": "O czym jeszcze powinienem wiedzieć? Cokolwiek — pomysły, obawy, rzeczy o których nie zapytałem, anegdoty, rant na cokolwiek.",
+        "type": "textarea",
+        "hint": "Pisz freestyle. To pole nie ma limitu — możesz wpisać 1 zdanie albo 5 stron. Cokolwiek Ci przyjdzie do głowy że Krystian / AI powinno wiedzieć a nie pasowało do żadnej innej sekcji."
+      },
+      {
+        "id": "F.2",
+        "label": "Czego mnie nie zapytałem a powinienem? Sformułuj pytanie + Twoja odpowiedź.",
+        "type": "textarea",
+        "hint": "Sytuacja: czytasz pytania, wiesz że jest coś istotnego o czym nikt nie pyta. Tu masz miejsce żeby to wyciągnąć."
+      },
+      {
+        "id": "F.3",
+        "label": "Co byś chciał powiedzieć Krystianowi prywatnie (nie do AI)?",
+        "type": "textarea",
+        "hint": "Krystian to przeczyta sam — nie idzie do AI. Cokolwiek: feedback, dziwna sytuacja, plan, rant."
+      }
+    ]
+  }
+]
