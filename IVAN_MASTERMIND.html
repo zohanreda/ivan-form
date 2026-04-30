@@ -709,12 +709,16 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   <input type="text" id="test-place-50" placeholder="Szukaj żółtej wstążki przy parking sklepu Lidl">
   <label style="font-size:11px;">50% — opis nagrody:</label>
   <input type="text" id="test-reward-50" placeholder="🎁 Bon na zakupy 100 zł">
+  <label style="font-size:11px;">50% — URL zdjęcia miejsca (opcjonalnie):</label>
+  <input type="text" id="test-image-50" placeholder="np. images/reward_50.jpg">
   <label style="font-size:11px;">100% — współrzędne GPS:</label>
   <input type="text" id="test-coords-100" placeholder="np. 54.6105, 18.3522">
   <label style="font-size:11px;">100% — opis miejsca:</label>
   <input type="text" id="test-place-100" placeholder="Szukaj zielonej wstążki przy ławce w parku">
   <label style="font-size:11px;">100% — opis nagrody:</label>
   <input type="text" id="test-reward-100" placeholder="🏆 Bon na masaż relaksacyjny">
+  <label style="font-size:11px;">100% — URL zdjęcia miejsca (opcjonalnie):</label>
+  <input type="text" id="test-image-100" placeholder="np. images/reward_100.jpg">
   <div class="btn-row">
     <button class="btn-test" onclick="saveRewardsOverride()">💾 Zapisz nagrody</button>
   </div>
@@ -969,6 +973,7 @@ const REWARDS_DEFAULT = {
     coords: '54.6080, 18.3500',
     place_description: 'Możesz pojechać sam, albo weź kogoś ze sobą żeby było ciekawiej.',
     reward_description: 'Co tam — niespodzianka. Nie spoilerując 😊',
+    image_url: '',
   },
   100: {
     title: 'GOTOWE! Sterownik naprawiony 🟢',
@@ -977,6 +982,7 @@ const REWARDS_DEFAULT = {
     coords: '54.6105, 18.3522',
     place_description: 'Tu też — możesz sam, albo weź kogoś. Idź, znajdź. Coś tam czeka.',
     reward_description: 'Niespodzianka. Idź zobacz.',
+    image_url: '',
   },
 };
 const REWARDS_OVERRIDE_KEY = 'ivan_rewards_override';
@@ -1280,11 +1286,19 @@ function showRewardModal(milestone, fromCelebration) {
   const r = REWARDS[milestone];
   let coordsBlock = '';
   if (!r.is_motivational && r.coords) {
+    const coordsClean = r.coords.replace(/\s/g, '');
+    const imageBlock = r.image_url
+      ? `<img src="${escapeHtml(r.image_url)}" alt="Zdjęcie miejsca" style="max-width:100%; border-radius:10px; margin: 1rem 0; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">`
+      : '';
     coordsBlock = `
-      <div class="coords">📍 ${escapeHtml(r.coords)}</div>
-      <div style="margin: 1rem 0;">
-        <a href="https://www.google.com/maps?q=${r.coords.replace(/\s/g, '')}" target="_blank" class="map-link">🗺 Otwórz w Google Maps</a>
+      <div class="coords" id="coords-${milestone}">📍 ${escapeHtml(r.coords)}</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin: 1rem 0;">
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${coordsClean}&travelmode=walking" target="_blank" class="map-link">🚶 Nawiguj pieszo</a>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${coordsClean}&travelmode=driving" target="_blank" class="map-link" style="background:#0a6dd6;">🚗 Nawiguj autem</a>
+        <a href="https://www.google.com/maps?q=${coordsClean}" target="_blank" class="map-link" style="background:#475569;">📍 Pokaż na mapie</a>
+        <button onclick="copyCoords('${coordsClean}')" class="map-link" style="background:#a855f7; border:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700;">📋 Skopiuj</button>
       </div>
+      ${imageBlock}
       <div class="reward-text"><strong>${escapeHtml(r.place_description || '')}</strong></div>
       <div class="reward-text" style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 10px; margin-top: 1rem;">${escapeHtml(r.reward_description || '')}</div>
     `;
@@ -1423,9 +1437,11 @@ function loadTestPanelFields() {
   f('test-coords-50', r[50].coords);
   f('test-place-50', r[50].place_description);
   f('test-reward-50', r[50].reward_description);
+  f('test-image-50', r[50].image_url);
   f('test-coords-100', r[100].coords);
   f('test-place-100', r[100].place_description);
   f('test-reward-100', r[100].reward_description);
+  f('test-image-100', r[100].image_url);
 }
 
 function saveRewardsOverride() {
@@ -1435,17 +1451,37 @@ function saveRewardsOverride() {
       coords: v('test-coords-50') || REWARDS_DEFAULT[50].coords,
       place_description: v('test-place-50') || REWARDS_DEFAULT[50].place_description,
       reward_description: v('test-reward-50') || REWARDS_DEFAULT[50].reward_description,
+      image_url: v('test-image-50'),
     },
     100: {
       coords: v('test-coords-100') || REWARDS_DEFAULT[100].coords,
       place_description: v('test-place-100') || REWARDS_DEFAULT[100].place_description,
       reward_description: v('test-reward-100') || REWARDS_DEFAULT[100].reward_description,
+      image_url: v('test-image-100'),
     },
   };
   localStorage.setItem(REWARDS_OVERRIDE_KEY, JSON.stringify(override));
   REWARDS = loadRewards();
   toast('💾 Nagrody zapisane! Otworzy się modal 50% żeby sprawdzić...');
   setTimeout(() => showRewardModal(50), 600);
+}
+
+function copyCoords(coords) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(coords)
+      .then(() => toast('📋 Skopiowano: ' + coords))
+      .catch(() => toast('Błąd kopiowania', true));
+  } else {
+    // Fallback dla starszych przeglądarek
+    const ta = document.createElement('textarea');
+    ta.value = coords;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); toast('📋 Skopiowano: ' + coords); }
+    catch { toast('Błąd kopiowania', true); }
+    document.body.removeChild(ta);
+  }
 }
 
 function simulateProgress(targetPct) {
