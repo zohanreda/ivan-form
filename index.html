@@ -220,10 +220,12 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 .q select { color: var(--text1); }
 .q select option { background: var(--bg2); color: var(--text1); }
 .q textarea {
-  min-height: 80px; max-height: 400px;
+  min-height: 0; max-height: 400px; height: auto;
   resize: vertical;  /* natywny narożnik w prawym dolnym, można rozciągnąć ręcznie */
-  line-height: 1.5; overflow-y: auto;
+  line-height: 1.5; overflow-y: hidden;
+  /* Startuje jako 1 linia. Auto-grow w JS rozszerza w trakcie pisania. */
 }
+.q textarea.q-skip-reason { min-height: 0; }
 /* Większy narożnik resize żeby był wyraźnie widoczny */
 .q textarea::-webkit-resizer {
   background: linear-gradient(135deg, transparent 50%, var(--accent) 50%);
@@ -1032,16 +1034,23 @@ function renderContent() {
     html += `</label>`;
     if (skipped) {
       // Pole na opcjonalny powód
-      html += `<textarea class="q-skip-reason" placeholder="(opcjonalnie) napisz dlaczego to pytanie jest bez sensu — możesz to też zostawić puste" oninput="setSkipReason('${q.id}', this.value)">${escapeHtml(getSkipReason(q.id))}</textarea>`;
+      html += `<textarea class="q-skip-reason" rows="1" placeholder="(opcjonalnie) napisz dlaczego to pytanie jest bez sensu — możesz to też zostawić puste" oninput="setSkipReason('${q.id}', this.value)">${escapeHtml(getSkipReason(q.id))}</textarea>`;
     } else {
       if (q.hint) html += `<div class="q-hint">💡 ${escapeHtml(q.hint)}</div>`;
       if (q.type === 'text') {
         html += `<input type="text" id="q-${q.id}" value="${escapeHtml(val || '')}" oninput="saveValue('${q.id}', this.value)">`;
       } else if (q.type === 'textarea') {
-        html += `<textarea id="q-${q.id}" oninput="saveValue('${q.id}', this.value)">${escapeHtml(val || '')}</textarea>`;
+        html += `<textarea id="q-${q.id}" rows="1" oninput="saveValue('${q.id}', this.value)">${escapeHtml(val || '')}</textarea>`;
       } else if (q.type === 'radio') {
+        // Auto-dodaj opcję "Inne (opisz)" do każdego radio jeśli nie ma już opcji "Inne"/"(opisz)"
+        const opts = q.options.slice();
+        const hasOther = opts.some(o => {
+          const lo = String(o).toLowerCase();
+          return lo.includes('(opisz)') || lo === 'inne' || lo.startsWith('inne ');
+        });
+        if (!hasOther) opts.push('Inne (opisz)');
         html += `<div class="q-radios">`;
-        q.options.forEach(opt => {
+        opts.forEach(opt => {
           const checked = val === opt ? 'checked' : '';
           html += `<label class="q-radio"><input type="radio" name="q-${q.id}" value="${escapeHtml(opt)}" ${checked} onchange="saveValue('${q.id}', this.value); toggleOtherField('${q.id}', this.value)">${escapeHtml(opt)}</label>`;
         });
@@ -1050,10 +1059,9 @@ function renderContent() {
         const otherKey = q.id + '__other';
         const otherVal = getValue(otherKey) || '';
         const isOtherSelected = val && (String(val).toLowerCase().includes('(opisz)') || String(val).toLowerCase() === 'inne' || String(val).toLowerCase().startsWith('inne '));
-        html += `<input type="text" id="q-${otherKey}" placeholder="Opisz „Inne"…"
-                  value="${escapeHtml(otherVal)}"
+        html += `<textarea id="q-${otherKey}" rows="1" placeholder="Opisz „Inne"…"
                   oninput="saveValue('${otherKey}', this.value)"
-                  style="margin-top:6px; ${isOtherSelected ? '' : 'display:none;'}">`;
+                  style="margin-top:6px; ${isOtherSelected ? '' : 'display:none;'}">${escapeHtml(otherVal)}</textarea>`;
       }
       // Załącznik per pytanie (tylko gdy nie skipped)
       html += `<div class="q-attach-row">`;
@@ -1083,8 +1091,14 @@ function switchTab(id) {
 function autoGrowTextarea(el) {
   if (!el || el.tagName !== 'TEXTAREA') return;
   el.style.height = 'auto';
-  const newHeight = Math.min(el.scrollHeight, 400);
-  el.style.height = newHeight + 'px';
+  const sh = el.scrollHeight;
+  if (sh > 400) {
+    el.style.height = '400px';
+    el.style.overflowY = 'auto';
+  } else {
+    el.style.height = sh + 'px';
+    el.style.overflowY = 'hidden';
+  }
 }
 
 function autoGrowAllTextareas() {
@@ -1665,7 +1679,11 @@ function toggleOtherField(qid, val) {
   if (!otherInput) return;
   const isOther = val && (String(val).toLowerCase().includes('(opisz)') || String(val).toLowerCase() === 'inne' || String(val).toLowerCase().startsWith('inne '));
   otherInput.style.display = isOther ? '' : 'none';
-  if (isOther) setTimeout(() => otherInput.focus(), 50);
+  if (isOther) {
+    // Auto-grow musi się policzyć po zdjęciu display:none (w hiddenie scrollHeight=0)
+    autoGrowTextarea(otherInput);
+    setTimeout(() => { otherInput.focus(); autoGrowTextarea(otherInput); }, 50);
+  }
 }
 
 // ═══════════════════════════════════════════════════════
