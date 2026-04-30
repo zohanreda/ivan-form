@@ -273,6 +273,29 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   margin-top: 6px; min-height: 0; height: auto; resize: vertical; line-height: 1.5;
 }
 
+/* FINISH BLOCK — pobierz JSON na dole każdej zakładki */
+.finish-block {
+  margin-top: 2rem; padding: 1.5rem; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(13, 131, 253, 0.08) 100%);
+  border: 2px solid #22c55e;
+  text-align: center;
+}
+[data-theme="dark"] .finish-block {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(13, 131, 253, 0.12) 100%);
+}
+.finish-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text1); }
+.finish-info { font-size: 0.9rem; color: var(--text2); margin-bottom: 1rem; line-height: 1.5; }
+.finish-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 0.8rem; }
+.btn-finish {
+  padding: 12px 22px; border-radius: 8px; font-size: 14px; font-weight: 700;
+  background: #22c55e; color: #fff; border: none; cursor: pointer; font-family: inherit;
+  transition: transform 0.1s, background 0.15s; box-shadow: 0 2px 6px rgba(34, 197, 94, 0.3);
+}
+.btn-finish:hover { background: #16a34a; transform: translateY(-1px); }
+.btn-finish.secondary { background: #475569; box-shadow: 0 2px 6px rgba(71, 85, 105, 0.3); }
+.btn-finish.secondary:hover { background: #334155; }
+.finish-hint { font-size: 0.8rem; color: var(--text3); font-style: italic; }
+
 /* BLOK ODPOWIEDZI KRYSTIANA */
 .answer-block.krystian-block {
   background: rgba(251, 191, 36, 0.08); border-left: 3px solid #fbbf24;
@@ -572,9 +595,9 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
     <br><br>
     <strong>1. ✏ Odpowiedz</strong> — wpisz swoją odpowiedź. Jeśli widzisz blok <em>„💬 Odpowiedź Krystiana"</em> — kliknij <strong>„✅ Potwierdzam"</strong> i nie musisz nic pisać. Jeśli chcesz — dopisz w polu obok własne uwagi techniczne.<br>
     <strong>2. 🚫 „bez sensu"</strong> — kliknij jeśli pytanie jest źle sformułowane / dziwne / nie pasuje. Możesz krótko napisać czemu (opcjonalnie).<br>
-    <strong>3. ❓ „nie do mnie"</strong> — kliknij jeśli to raczej pytanie do Krystiana (biznes, nie technika). Też możesz krótko uzasadnić.<br>
+    <strong>3. 👤 „do Krystiana"</strong> — kliknij jeśli to pytanie biznesowe / nie technika. Pole opisu jest opcjonalne — możesz zostawić puste.<br>
     <br>
-    <strong>⚠ Ważne dla „nie do mnie":</strong> nawet jeśli czujesz że pytanie jest bardziej do Krystiana — <strong>spróbuj na nie odpowiedzieć tak czy siak</strong>, choćby krótko, choćby tak jak Ty to widzisz. O to właśnie chodzi w tym brain dumpie — żeby było wiadomo co <em>Ty</em> masz w głowie, a co Krystian. Jak będzie różnica w naszych odpowiedziach na to samo pytanie, to dla AI cenniejsze niż sama odpowiedź.<br>
+    <strong>⚠ Ważne dla „do Krystiana":</strong> nawet jeśli czujesz że pytanie jest bardziej dla niego — <strong>spróbuj na nie odpowiedzieć tak czy siak</strong>, choćby krótko, choćby tak jak Ty to widzisz. O to właśnie chodzi w tym brain dumpie — żeby było wiadomo co <em>Ty</em> masz w głowie, a co Krystian. Różnica w naszych odpowiedziach na to samo pytanie często cenniejsza dla AI niż sama odpowiedź.<br>
     <br>
     Cokolwiek z tych trzech wybierzesz — pytanie się <strong>zalicza</strong> i progres idzie do przodu. Najgorsza opcja to zostawić pytanie puste i przeskoczyć — wtedy nie wiem czy zapomniałeś, czy masz problem, czy temat jest niejasny.<br>
     <br>
@@ -586,7 +609,9 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   <p style="background: linear-gradient(135deg, rgba(13,131,253,0.08) 0%, rgba(107,33,168,0.08) 100%); padding: 1rem; border-radius: 10px; border-left: 4px solid var(--accent);"><strong>🚀 Ivan, idziemy w to. Nareszcie nowy level.</strong></p>
   <div class="signature">— Krystian · PS. najważniejsze sekcje to <strong>9 (no-go zones)</strong> i <strong>10 (data flow)</strong>. Tam wpiszesz to czego AI ma nie tknąć i jak ma czytać bazę po kolei. Reszta to context.</div>
   <p class="warning-box" style="margin-top: 1.5rem;">
-    <strong>💾 Zapis działa sam.</strong> Wszystko co napiszesz zapisuje się od razu w Twojej przeglądarce, plus co 2 minuty leci dodatkowy auto-zapis (na dole strony zobaczysz „✓ auto-zapis"). <strong>Nie musisz nic klikać żeby zapisać.</strong> Jak skończysz — daj mi znać, dogadamy się jak Ci dane wyciągnąć (1 minuta roboty). Pracuj na jednym laptopie i nie czyść danych przeglądarki dla tej strony — to jedyna kopia.
+    <strong>💾 Jak działa zapis (ważne):</strong> wszystko co napiszesz zapisuje się <strong>tylko w Twojej przeglądarce</strong> (lokalnie u Ciebie). Auto-zapis przy każdym wpisanym znaku + co 2 min potwierdzenie na dole strony — ale to wszystko jest w pamięci Twojego Chrome'a, <strong>nigdzie indziej</strong>. Pracuj na jednym laptopie, nie czyść cache'a dla tej strony.<br>
+    <br>
+    <strong>📥 Co kilka godzin / pod koniec dnia — zjedź na sam dół formularza i kliknij „Pobierz JSON".</strong> To jest <strong>jedyny sposób żeby dane do mnie dotarły</strong>. Pobrany plik wyślij mi mailem (zohan.reda@gmail.com) albo wrzuć na nasz dysk. Nie przegap tego kroku — auto-zapis to backup tylko w Twoim Chrome, jak go wyczyścisz to wszystko przepada.
   </p>
 </div>
 
@@ -1113,14 +1138,14 @@ function renderContent() {
     html += `<span class="num">${q.id}</span>${escapeHtml(q.label)}`;
     html += `<span class="q-actions">`;
     html += `<button class="q-skip-btn" onclick="toggleSkip('${q.id}')" title="${skipped ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie ma dla mnie sensu'}">${skipped ? '↩ przywróć' : '🚫 bez sensu'}</button>`;
-    html += `<button class="q-nfm-btn" onclick="toggleNotForMe('${q.id}')" title="${notForMe ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie do mnie — raczej Krystian odpowie'}">${notForMe ? '↩ przywróć' : '❓ nie do mnie'}</button>`;
+    html += `<button class="q-nfm-btn" onclick="toggleNotForMe('${q.id}')" title="${notForMe ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie do Krystiana, nie technika'}">${notForMe ? '↩ przywróć' : '👤 do Krystiana'}</button>`;
     html += `</span>`;
     html += `</label>`;
     if (skipped) {
       // Pole na opcjonalny powód
       html += `<textarea class="q-skip-reason" rows="1" placeholder="(opcjonalnie) napisz dlaczego to pytanie jest bez sensu — możesz to też zostawić puste" oninput="setSkipReason('${q.id}', this.value)">${escapeHtml(getSkipReason(q.id))}</textarea>`;
     } else if (notForMe) {
-      html += `<textarea class="q-nfm-reason" rows="1" placeholder="(opcjonalnie) napisz czemu to pytanie jest do Krystiana — np. „to biznesowe, nie znam takich szczegółów"" oninput="setNotForMeReason('${q.id}', this.value)">${escapeHtml(getNotForMeReason(q.id))}</textarea>`;
+      html += `<textarea class="q-nfm-reason" rows="1" placeholder="(opcjonalnie) możesz krótko napisać dlaczego — albo zostawić puste i lecieć dalej" oninput="setNotForMeReason('${q.id}', this.value)">${escapeHtml(getNotForMeReason(q.id))}</textarea>`;
     } else {
       if (q.hint) html += `<div class="q-hint">💡 ${escapeHtml(q.hint)}</div>`;
       // BLOK ODPOWIEDZI KRYSTIANA + przycisk potwierdzenia (gdy istnieje prefill — z hardcoded lub z importu)
@@ -1170,6 +1195,23 @@ function renderContent() {
     }
     html += `</div>`;
   });
+  // BLOK „POBIERZ JSON" — zawsze na dole każdej zakładki, żeby Ivan mógł go zobaczyć w każdej chwili
+  const filled = totalFilled();
+  const total = totalQuestions();
+  const pct = Math.round(filled / total * 100);
+  html += `<div class="finish-block">
+    <div class="finish-title">📥 Pobierz dane i wyślij Krystianowi</div>
+    <div class="finish-info">
+      Wypełniono: <strong>${filled} / ${total}</strong> (${pct}%) · auto-zapis działa lokalnie w przeglądarce, ale <strong>Krystian dostanie dane tylko jak pobierzesz plik i mu go wyślesz</strong>.
+    </div>
+    <div class="finish-actions">
+      <button class="btn-finish" onclick="downloadJSON()">⬇ Pobierz JSON (do AI)</button>
+      <button class="btn-finish secondary" onclick="downloadFilled()">⬇ Pobierz Markdown (do podglądu)</button>
+    </div>
+    <div class="finish-hint">
+      Wyślij plik mailem na <strong>zohan.reda@gmail.com</strong> z tematem „Brain dump — &lt;Twoje imię&gt;". Możesz wracać i pobierać kolejne wersje w trakcie wypełniania (każda nadpisze poprzednią u Krystiana).
+    </div>
+  </div>`;
   main.innerHTML = html;
   // Pokaż istniejące załączniki dla wszystkich pytań
   sec.questions.forEach(q => renderAttachmentsList(q.id));
@@ -1639,6 +1681,72 @@ function importIvanAnswers(input) {
   };
   reader.readAsText(file);
   input.value = '';
+}
+
+// Generuje strukturalny JSON dla AI — pełna zawartość formularza w deterministycznym shapie.
+function generateStructuredJSON() {
+  const data = getStored();
+  const skipped = getSkipped();
+  const nfm = getNotForMe();
+  const confirmed = getConfirmed();
+  const allAttach = getAllAttachments();
+  const filled = totalFilled();
+  const total = totalQuestions();
+  const sectionsOut = SECTIONS.map(sec => ({
+    id: sec.id,
+    icon: sec.icon,
+    title: sec.title,
+    subtitle: sec.subtitle,
+    crit: !!sec.crit,
+    questions: sec.questions.map(q => {
+      const ivan_answer = (data[q.id] && String(data[q.id]).trim()) ? String(data[q.id]) : null;
+      const other = data[q.id + '__other'] || null;
+      let status;
+      if (q.id in skipped) status = 'skipped';
+      else if (q.id in nfm) status = 'directed_to_krystian';
+      else if (q.id in confirmed) status = 'confirmed_krystian_answer';
+      else if (ivan_answer) status = 'answered';
+      else status = 'empty';
+      const krystianPrefill = getEffectivePrefill(q) || null;
+      const attach = (allAttach[q.id] || []).map(a => ({ name: a.name, size_bytes: a.size, type: a.type }));
+      return {
+        id: q.id,
+        label: q.label,
+        type: q.type,
+        hint: q.hint || null,
+        krystian_prefill: krystianPrefill,
+        ivan_status: status,
+        ivan_answer: ivan_answer,
+        ivan_other_value: other,
+        ivan_skip_reason: skipped[q.id] || null,
+        ivan_to_krystian_reason: nfm[q.id] || null,
+        attachments: attach,
+      };
+    }),
+  }));
+  return {
+    meta: {
+      filled_at: new Date().toISOString(),
+      filled_count: filled,
+      total_count: total,
+      percentage: Math.round(filled / total * 100),
+      version: 'ivan_mastermind_v2',
+      attachments_total: Object.values(allAttach).reduce((acc, arr) => acc + arr.length, 0),
+    },
+    sections: sectionsOut,
+  };
+}
+
+function downloadJSON() {
+  const obj = generateStructuredJSON();
+  const json = JSON.stringify(obj, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.download = `ivan_brain_dump_${dateStr}.json`;
+  a.click();
+  toast(`📥 Pobrano JSON (${obj.meta.filled_count}/${obj.meta.total_count} pytań). Wyślij plik mailem na zohan.reda@gmail.com`);
 }
 
 function downloadFilled() {
