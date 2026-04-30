@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ivan — formularz dla Krystiana z motron.pl</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #0d83fd;
+  --accent2: #6b21a8;
+  --bg: #f5f7fa;
+  --bg2: #ffffff;
+  --bg3: #fafbfd;
+  --border: #e5edf5;
+  --text1: #1f2937;
+  --text2: #6b7280;
+  --text3: #9ca3af;
+  --green: #22c55e;
+  --red: #dc2626;
+  --orange: #f97316;
+  --yellow: #fbbf24;
+  --pcb: #14532d;
+  --pcb-light: #16a34a;
+  --shadow1: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow2: 0 2px 12px rgba(0,0,0,0.05);
+}
+[data-theme="dark"] {
+  --accent: #3b9bff;
+  --accent2: #a855f7;
+  --bg: #0f172a;
+  --bg2: #1e293b;
+  --bg3: #1a2332;
+  --border: #334155;
+  --text1: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --green: #4ade80;
+  --red: #f87171;
+  --orange: #fb923c;
+  --yellow: #fbbf24;
+  --pcb: #064e3b;
+  --pcb-light: #10b981;
+  --shadow1: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow2: 0 2px 12px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] body { color-scheme: dark; }
+[data-theme="dark"] .intro a { color: #60a5fa; }
+
+/* Language toggle — fixed top-right (przed theme) */
+.lang-toggle {
+  position: fixed; top: 16px; right: 130px; z-index: 250;
+  display: flex; align-items: center; gap: 2px;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+  padding: 4px 6px; border-radius: 50px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.08);
+}
+[data-theme="dark"] .lang-toggle { background: rgba(30,41,59,0.95); border-color: rgba(255,255,255,0.1); }
+.lang-flag {
+  cursor: pointer; padding: 4px 8px; border-radius: 50px;
+  font-size: 16px; opacity: 0.4; transition: opacity 0.2s, background 0.2s;
+  user-select: none; line-height: 1;
+}
+.lang-flag:hover { opacity: 0.8; }
+.lang-flag.active { opacity: 1; background: var(--accent); }
+
+/* Theme toggle — fixed top-right */
+.theme-toggle {
+  position: fixed; top: 16px; right: 16px; z-index: 250;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+  padding: 5px 8px; border-radius: 50px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.08);
+  cursor: pointer; user-select: none; font-size: 14px;
+  transition: background 0.3s, transform 0.15s;
+}
+
+/* Bonus joke modal */
+.joke-toast {
+  position: fixed; top: 80px; right: 20px; z-index: 200;
+  max-width: 340px; padding: 16px 20px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transform: translateX(380px); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 13px; line-height: 1.5;
+}
+.joke-toast.show { transform: translateX(0); }
+.joke-toast .joke-header { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.85; margin-bottom: 6px; font-weight: 700; }
+.joke-toast .joke-body { font-style: italic; }
+.joke-toast .joke-close { position: absolute; top: 6px; right: 10px; cursor: pointer; opacity: 0.7; font-size: 16px; }
+[data-theme="dark"] .theme-toggle { background: rgba(30,41,59,0.95); border-color: rgba(255,255,255,0.1); }
+.theme-toggle:hover { transform: translateY(-1px); }
+.theme-toggle .switch {
+  position: relative; width: 36px; height: 20px;
+  background: var(--text3); border-radius: 10px; transition: background 0.3s;
+}
+.theme-toggle .switch::before {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; background: #fff; border-radius: 50%;
+  transition: transform 0.3s, background 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+[data-theme="dark"] .theme-toggle .switch { background: var(--accent); }
+[data-theme="dark"] .theme-toggle .switch::before { transform: translateX(16px); background: #fde68a; }
+.theme-toggle .icon { font-size: 13px; opacity: 0.8; }
+.theme-toggle .icon.sun { opacity: 1; }
+[data-theme="dark"] .theme-toggle .icon.sun { opacity: 0.4; }
+[data-theme="dark"] .theme-toggle .icon.moon { opacity: 1; }
+.theme-toggle .icon.moon { opacity: 0.4; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Roboto', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text1);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+h1, h2, h3 { font-family: 'Nunito', sans-serif; font-weight: 700; letter-spacing: -0.5px; }
+canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #0d83fd 0%, #6b21a8 100%);
+  color: #fff;
+  padding: 2.5rem 1.5rem 2rem;
+}
+.header-inner { max-width: 1480px; margin: 0 auto; }
+.header h1 { font-size: 2rem; margin-bottom: 0.25rem; }
+.header .subtitle { font-size: 1.1rem; opacity: 0.95; }
+.header .from { margin-top: 1rem; font-size: 13px; opacity: 0.85; padding: 6px 12px; background: rgba(255,255,255,0.15); display: inline-block; border-radius: 6px; }
+
+/* Intro */
+.intro {
+  max-width: 1480px; margin: -1.5rem auto 2rem; padding: 1.5rem 2rem;
+  background: var(--bg2); border-radius: 14px; box-shadow: var(--shadow1);
+  font-size: 15px; line-height: 1.75;
+}
+.intro p { margin-bottom: 0.85rem; }
+.intro p:last-child { margin-bottom: 0; }
+.intro strong { color: var(--accent); }
+.intro .signature { margin-top: 1rem; font-style: italic; color: var(--text2); border-top: 1px solid var(--border); padding-top: 1rem; }
+
+/* Layout — 3 kolumny: tabs / content / animacja */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr 280px;
+  max-width: 1480px;
+  margin: 0 auto 100px;
+  gap: 1rem;
+  padding: 0 1.5rem;
+}
+@media (max-width: 1100px) { .app { grid-template-columns: 220px 1fr; } .anim-side { display: none; } }
+@media (max-width: 760px) { .app { grid-template-columns: 1fr; } .sidebar-tabs { display: none; } }
+
+/* Sidebar tabs */
+.sidebar-tabs {
+  background: var(--bg2); border-radius: 12px; padding: 0.75rem 0.5rem;
+  align-self: start; position: sticky; top: 1rem;
+  box-shadow: var(--shadow2);
+  max-height: calc(100vh - 2rem); overflow-y: auto;
+}
+.sidebar-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); padding: 6px 12px; font-weight: 700; }
+.tab-link {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px; border-radius: 8px; cursor: pointer;
+  font-size: 12px; color: var(--text1); text-decoration: none; border: none;
+  background: transparent; font-family: inherit; width: 100%; text-align: left;
+}
+.tab-link:hover { background: rgba(13,131,253,0.05); }
+.tab-link.active { background: var(--accent); color: #fff; font-weight: 600; }
+.tab-link .badge { margin-left: auto; font-size: 10px; padding: 1px 6px; border-radius: 10px; background: rgba(0,0,0,0.06); color: var(--text2); font-weight: 600; }
+.tab-link.active .badge { background: rgba(255,255,255,0.25); color: #fff; }
+.tab-link .badge.empty { background: #fee2e2; color: #991b1b; }
+.tab-link .badge.full { background: #dcfce7; color: #166534; }
+.tab-link.active .badge.empty, .tab-link.active .badge.full { background: rgba(255,255,255,0.3); color: #fff; }
+
+/* Main */
+.main { background: var(--bg2); border-radius: 12px; padding: 1.75rem 2rem; box-shadow: var(--shadow2); }
+.section { display: none; }
+.section.active { display: block; }
+.section-header { padding-bottom: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); }
+.section-header h2 { font-size: 1.6rem; color: var(--text1); margin-bottom: 0.25rem; }
+.section-header .subtitle { color: var(--text2); font-size: 14px; }
+.section-header.crit { border-bottom-color: var(--red); }
+.section-header.crit::after { content: "⭐ KRYTYCZNA SEKCJA"; display: inline-block; margin-left: 8px; font-size: 11px; padding: 3px 10px; border-radius: 12px; background: #fee2e2; color: #991b1b; font-weight: 700; vertical-align: middle; }
+
+/* Question */
+.q { margin-bottom: 1.75rem; }
+.q-label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 5px; color: var(--text1); }
+.q-label .num { color: var(--accent); font-family: ui-monospace, monospace; font-size: 12px; margin-right: 6px; }
+.q-hint { font-size: 12px; color: var(--text2); margin-bottom: 8px; font-style: italic; }
+.q input[type=text], .q input[type=number], .q input[type=email], .q input[type=url], .q textarea, .q select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+  background: var(--bg3); color: var(--text1); caret-color: var(--accent);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  -webkit-text-fill-color: var(--text1);  /* fix dla niektórych Chrome zachowań z autofill */
+}
+.q input::placeholder, .q textarea::placeholder { color: var(--text3); opacity: 1; }
+.q input:focus, .q textarea:focus, .q select:focus {
+  outline: none; border-color: var(--accent);
+  background: var(--bg2); color: var(--text1);
+  -webkit-text-fill-color: var(--text1);
+  box-shadow: 0 0 0 3px rgba(13,131,253,0.15);
+}
+.q select { color: var(--text1); }
+.q select option { background: var(--bg2); color: var(--text1); }
+.q textarea {
+  min-height: 80px; max-height: 400px;
+  resize: vertical;  /* natywny narożnik w prawym dolnym, można rozciągnąć ręcznie */
+  line-height: 1.5; overflow-y: auto;
+}
+/* Większy narożnik resize żeby był wyraźnie widoczny */
+.q textarea::-webkit-resizer {
+  background: linear-gradient(135deg, transparent 50%, var(--accent) 50%);
+  border-radius: 0 0 8px 0;
+}
+.q-radios { display: flex; flex-wrap: wrap; gap: 8px; }
+.q-radio {
+  display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  background: var(--bg3); font-size: 13px;
+}
+.q-radio:hover { border-color: var(--accent); background: #fff; }
+.q-radio input { margin: 0; }
+
+/* Skip pytania ("bez sensu") */
+.q.skipped { opacity: 0.55; }
+.q.skipped .q-label { text-decoration: line-through; color: var(--text2); }
+.q.skipped .q-hint { display: none; }
+.q-skip-btn {
+  cursor: pointer; padding: 2px 8px; margin-left: 8px;
+  border-radius: 12px; font-size: 10px; font-weight: 700;
+  background: transparent; color: var(--text3); border: 1px solid var(--border);
+  letter-spacing: 0.5px; transition: all 0.15s; font-family: inherit;
+}
+.q-skip-btn:hover { color: var(--red); border-color: var(--red); background: rgba(220,38,38,0.05); }
+.q.skipped .q-skip-btn { color: var(--accent); border-color: var(--accent); background: rgba(13,131,253,0.08); }
+.q.skipped .q-skip-btn:hover { color: var(--accent); background: rgba(13,131,253,0.15); }
+.q-skip-reason {
+  width: 100%; padding: 8px 12px; border: 1px dashed var(--border); border-radius: 8px;
+  font-size: 12px; font-style: italic; font-family: inherit;
+  background: var(--bg3); color: var(--text2); min-height: 50px; resize: vertical;
+}
+.q-skip-reason:focus { outline: none; border-color: var(--accent); border-style: solid; color: var(--text1); }
+
+/* Załączniki per pytanie (📎) */
+.q-attach-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.q-attach-btn {
+  cursor: pointer; padding: 4px 10px; border-radius: 6px; font-size: 11px;
+  background: var(--bg3); color: var(--text2); border: 1px dashed var(--border);
+  transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px;
+}
+.q-attach-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--bg2); }
+.q-attach-input { display: none; }
+.q-attach-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.q-attach-item {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 8px; border-radius: 12px; font-size: 11px;
+  background: rgba(13,131,253,0.1); color: var(--accent);
+  border: 1px solid rgba(13,131,253,0.25);
+}
+.q-attach-item .rm { cursor: pointer; opacity: 0.6; padding: 0 2px; }
+.q-attach-item .rm:hover { opacity: 1; color: var(--red); }
+
+/* ANIMACJA STEROWNIKA */
+.anim-side {
+  align-self: start; position: sticky; top: 1rem;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.anim-card {
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  border-radius: 12px; padding: 1rem; color: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.anim-card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; margin-bottom: 8px; font-weight: 700; }
+.pcb-wrap {
+  background: var(--pcb);
+  border-radius: 10px;
+  padding: 14px;
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+}
+.pcb-wrap::before, .pcb-wrap::after {
+  content: ''; position: absolute; width: 6px; height: 6px;
+  background: radial-gradient(circle, #fbbf24 0%, #d97706 100%); border-radius: 50%;
+}
+.pcb-wrap::before { top: 6px; left: 6px; box-shadow: calc(100% - 12px) 0 0 0 #fbbf24, 0 calc(100% - 12px) 0 0 #fbbf24, calc(100% - 12px) calc(100% - 12px) 0 0 #fbbf24; }
+
+.pcb-svg { width: 100%; height: 100%; display: block; }
+.pcb-comp { opacity: 0.08; transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: center; transform-box: fill-box; }
+.pcb-comp.installed { opacity: 1; animation: install 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes install {
+  0% { opacity: 0; transform: translateY(-30px) scale(0.4) rotate(15deg); }
+  60% { opacity: 1; transform: translateY(2px) scale(1.05) rotate(-3deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+.pcb-led { fill: #475569; }
+.pcb-led.installed { fill: var(--green); animation: ledPulse 1.5s ease-in-out infinite; filter: drop-shadow(0 0 6px var(--green)); }
+@keyframes ledPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+.progress-card {
+  background: var(--bg2); border-radius: 12px; padding: 1rem;
+  box-shadow: var(--shadow2);
+}
+.progress-num { font-family: 'Nunito'; font-size: 2.4rem; font-weight: 800; color: var(--accent); line-height: 1; }
+.progress-num .pct { font-size: 1.4rem; color: var(--text2); }
+.progress-bar { height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden; margin-top: 8px; }
+.progress-fill { height: 100%; background: linear-gradient(to right, var(--accent), var(--green)); transition: width 0.4s ease; border-radius: 5px; box-shadow: 0 0 8px rgba(13,131,253,0.3); }
+.progress-text { font-size: 12px; color: var(--text2); margin-top: 8px; line-height: 1.4; }
+.progress-text strong { color: var(--text1); }
+
+/* Milestone widget */
+.milestones { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.milestone {
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+  border-radius: 8px; font-size: 12px; transition: all 0.3s;
+  background: var(--bg); color: var(--text2); border: 1px solid transparent;
+}
+.milestone.unlocked {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #78350f; font-weight: 700;
+  box-shadow: 0 4px 14px rgba(251,191,36,0.5);
+  cursor: pointer; border-color: #f59e0b;
+  animation: milestoneGlow 2s ease-in-out infinite;
+}
+.milestone.unlocked::after {
+  content: 'KLIK ABY ODEBRAĆ →'; display: block;
+  font-size: 9px; letter-spacing: 1.5px; opacity: 0.85; margin-left: auto;
+}
+.milestone-icon { font-size: 20px; }
+.milestone.unlocked .milestone-icon { animation: bounce 1.6s infinite; }
+@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } 60% { transform: translateY(-3px); } }
+@keyframes milestoneGlow {
+  0%, 100% { box-shadow: 0 4px 14px rgba(251,191,36,0.5); }
+  50% { box-shadow: 0 6px 22px rgba(251,191,36,0.85); }
+}
+
+/* Footer */
+.footer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 12px 1.5rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+.footer-inner { max-width: 1480px; margin: 0 auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.footer-info { flex: 1; font-size: 13px; color: var(--text2); }
+.footer-info strong { color: var(--accent); font-weight: 700; }
+.btn {
+  padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  transition: transform 0.1s, box-shadow 0.15s;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+.btn-save { background: var(--bg); color: var(--text1); border: 1px solid var(--border); }
+.btn-download { background: #ede9fe; color: var(--accent2); border: 1px solid #ddd6fe; }
+.btn-submit { background: var(--accent); color: #fff; }
+.btn-submit.glow { animation: btnGlow 1.6s ease-in-out infinite; }
+@keyframes btnGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(13,131,253,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(13,131,253,0); }
+}
+
+/* Toast */
+.toast {
+  position: fixed; top: 20px; right: 20px;
+  padding: 12px 18px; background: var(--green); color: #fff;
+  border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  font-size: 13px;
+}
+.toast.show { opacity: 1; }
+.toast.error { background: var(--red); }
+
+/* Modal */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 300; padding: 1rem; }
+.modal-bg.show { display: flex; }
+.modal {
+  background: var(--bg2); border-radius: 14px; padding: 2rem;
+  max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3); color: var(--text1);
+}
+.modal h2 { margin-bottom: 1rem; }
+.modal pre {
+  background: var(--bg); padding: 1rem; border-radius: 8px;
+  font-size: 11px; line-height: 1.5; max-height: 50vh; overflow: auto;
+  font-family: ui-monospace, 'SF Mono', monospace; white-space: pre-wrap; word-break: break-word;
+}
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1rem; flex-wrap: wrap; }
+
+/* MILESTONE MODAL specjalny */
+.modal.reward {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  text-align: center; padding: 3rem 2rem;
+}
+.modal.reward .badge {
+  display: inline-block; padding: 6px 16px; background: rgba(0,0,0,0.1); border-radius: 20px;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: #78350f;
+  margin-bottom: 1rem;
+}
+.modal.reward h2 { font-size: 2.2rem; color: #78350f; }
+.modal.reward .reward-emoji { font-size: 5rem; margin: 1rem 0; display: block; line-height: 1; }
+.modal.reward .reward-text { font-size: 16px; color: #78350f; line-height: 1.7; margin: 1rem 0; }
+.modal.reward .coords {
+  background: #fff; padding: 1rem 1.5rem; border-radius: 10px; margin: 1.5rem 0;
+  display: inline-block; font-family: ui-monospace, monospace; font-size: 18px;
+  border: 2px dashed #d97706; color: #92400e; font-weight: 700;
+}
+.modal.reward .map-link {
+  display: inline-block; margin-top: 1rem; padding: 12px 24px;
+  background: var(--accent); color: #fff; text-decoration: none; border-radius: 8px;
+  font-weight: 700; font-size: 14px;
+}
+.modal.reward .map-link:hover { background: #0a6dd6; }
+.modal.reward .signature { margin-top: 1.5rem; color: #78350f; font-style: italic; opacity: 0.9; }
+.modal-close { background: var(--bg); border: 1px solid var(--border); }
+
+/* 🧪 PANEL TESTOWY (tymczasowy — TODO usunąć przed wysłaniem Ivanowi) */
+.test-panel-btn {
+  position: fixed; bottom: 80px; left: 16px; z-index: 250;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff; border: none; padding: 10px 16px; border-radius: 50px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(245,158,11,0.4); display: flex; align-items: center; gap: 6px;
+}
+.test-panel-btn:hover { transform: translateY(-2px); }
+.test-panel {
+  position: fixed; bottom: 130px; left: 16px; z-index: 251;
+  width: 380px; max-height: calc(100vh - 200px); overflow: hidden;
+  background: var(--bg2); border: 2px solid #f59e0b; border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  display: none; flex-direction: column;
+}
+.test-panel.show { display: flex; }
+.test-panel-drag {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff; padding: 10px 14px; cursor: move; user-select: none;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 700;
+}
+.test-panel-drag .drag-icon { letter-spacing: 2px; opacity: 0.8; font-size: 16px; }
+.test-panel-drag .close-x {
+  cursor: pointer; padding: 0 6px; font-size: 18px; opacity: 0.9;
+  border-radius: 4px; transition: background 0.15s;
+}
+.test-panel-drag .close-x:hover { background: rgba(255,255,255,0.2); }
+.test-panel-body { padding: 1rem; overflow-y: auto; flex: 1; }
+.test-panel h3 { font-size: 14px; margin-bottom: 8px; color: #d97706; display: none; }  /* zastąpione drag headerem */
+.test-panel h4 { font-size: 12px; margin: 12px 0 4px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
+.test-panel input { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 11px; background: var(--bg3); color: var(--text1); margin-bottom: 4px; }
+.test-panel .btn-row { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.test-panel .btn-test {
+  padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer;
+  font-size: 11px; font-weight: 600; flex: 1; min-width: 100px;
+  background: var(--accent); color: #fff;
+}
+.test-panel .btn-test.warn { background: #f59e0b; }
+.test-panel .btn-test.danger { background: var(--red); }
+.test-panel .btn-test:hover { opacity: 0.85; }
+.test-panel .helper { font-size: 10px; color: var(--text3); font-style: italic; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- PR Krystian: usunięty przełącznik języka (opcja A — PL only).
+     Bonus żarty zostają mix PL/RU/UA jako akcent szacunku do korzeni Iwana. -->
+
+<div class="theme-toggle" onclick="toggleTheme()" title="Przełącz dzień / noc">
+  <span class="icon sun">☀</span>
+  <div class="switch"></div>
+  <span class="icon moon">🌙</span>
+</div>
+
+<div class="joke-toast" id="joke-toast">
+  <div class="joke-close" onclick="document.getElementById('joke-toast').classList.remove('show')">✕</div>
+  <div class="joke-header" id="joke-header">🎭 Pauza na kawał</div>
+  <div class="joke-body" id="joke-body"></div>
+</div>
+
+<div class="header">
+  <div class="header-inner">
+    <h1 style="font-family: 'Nunito', sans-serif; letter-spacing: -1px;">
+      <span style="color: #fbbf24;">Kryst</span><span>Ivan</span>
+      <span style="font-size: 0.55em; opacity: 0.85; font-weight: 600; letter-spacing: 4px; margin-left: 8px;">TECH BRAIN ROOTS</span>
+    </h1>
+    <div class="subtitle" style="text-transform: uppercase; letter-spacing: 3px; font-size: 13px; opacity: 0.85; font-weight: 700; margin-top: 6px;">
+      Connection Stage · Brain dump init.
+    </div>
+    <div class="from">From: Krystian → Ivan · motron.pl architecture sync</div>
+  </div>
+</div>
+
+<div class="intro">
+  <p><strong>Ivan, przemyślałem sobie to trochę.</strong></p>
+  <p>Pamiętasz jak mówiłem że <em>„ja pogmeram, a Ty potem sprawdzisz czy czegoś za mocno nie rozpierdoliłem"</em>? No więc — pomyślałem że może jest sposób żeby <strong>raz wcześniej określić pewne rzeczy</strong>. Żebym jak najmniej narozrabiał w Motronie i żebyś Ty miał mniej do prostowania po mnie.</p>
+  <p>Plus na tym naszym <strong>nowym levelu współpracy</strong> (z AI w grze) — fajnie byłoby żebym zmieniając Motrona robił to <strong>w Twoją myśl architektoniczną</strong>. Nie po swojemu. Bo Ty wiesz dlaczego coś jest tak a nie inaczej, a ja widzę tylko efekt na ekranie.</p>
+  <p>Stąd ten formularz. Siedziałem nad nim dwa dni. Pytania pod Ciebie — opowiedz mi (i AI z którą pracuję) jak co działa, czego nie ruszać, jak baza musi być odpytywana po kolei. To są te rzeczy o których gadaliśmy na klatce — w głowie masz, ale nigdzie nie zapisane.</p>
+  <p>Wypełnij jak masz chwilę — partiami, nie musisz na raz. Auto-zapis działa, możesz zamknąć i wrócić jutro.</p>
+  <p>Pisałem to po polsku — wiem że dasz radę, gadamy tak na codzień. Ale jak będzie Ci łatwiej odpowiedzieć po <strong>rosyjsku albo ukraińsku</strong> w którymś trudniejszym pytaniu — śmiało. Sobie potem przetłumaczę. Co 6 pytań dostaniesz też mały kawał — czasem PL, czasem RU, czasem UA. Żeby nie było nudno 😉</p>
+  <p style="background: #fef3c7; padding: 12px 16px; border-left: 4px solid #f59e0b; border-radius: 6px; font-size: 13px;">
+    <strong>⚠ Ważne: gdzie są Twoje dane.</strong> Wszystko co tu wpiszesz zapisuje się <strong>TYLKO w Twojej przeglądarce</strong> (localStorage). Nigdzie nie leci automatycznie. Żebym ja to dostał — musisz na końcu kliknąć <strong>„📤 Prześlij Krystianowi"</strong> (skopiuje treść do schowka, wklejasz mi w mail) albo <strong>„⬇ Pobierz"</strong> (ściągasz plik .md i wysyłasz). Załączniki — kliknij każdy i pobierze się, wyślij osobno. <strong>Jeśli wyczyścisz przeglądarkę albo otworzysz plik z innego kompa — dane przepadną.</strong> Pracuj na jednym laptopie i pobierz progress co kilka godzin dla pewności.
+  </p>
+  <p>Po prawej zobaczysz jak <strong>składa się sterownik ABS</strong> — z każdą Twoją odpowiedzią dolatuje kolejny element. Jak wypełnisz wszystko, dioda zaświeci zielono. Naprawione 🟢</p>
+  <p>Po drodze są też <strong>niespodzianki</strong> 😉 — nie powiem co. Wypełnij i zobacz.</p>
+  <p>BTW — ja też wypełniam swój formularz, z innymi pytaniami. Potem połączymy oba i zrobi się z tego <strong>Krystivan</strong> 😄 — taki wspólny brain dump dla AI. Ty techniczny, ja biznesowy.</p>
+  <p style="background: linear-gradient(135deg, rgba(13,131,253,0.08) 0%, rgba(107,33,168,0.08) 100%); padding: 1rem; border-radius: 10px; border-left: 4px solid var(--accent);"><strong>🚀 Ivan, idziemy w to. Nareszcie nowy level.</strong></p>
+  <div class="signature">— Krystian · PS. najważniejsze sekcje to <strong>9 (no-go zones)</strong> i <strong>10 (data flow)</strong>. Tam wpiszesz to czego AI ma nie tknąć i jak ma czytać bazę po kolei. Reszta to context.</div>
+</div>
+
+<div class="app">
+  <nav class="sidebar-tabs" id="tabs">
+    <div class="sidebar-title">Sekcje</div>
+  </nav>
+
+  <main class="main" id="content"></main>
+
+  <aside class="anim-side">
+    <div class="anim-card">
+      <div class="anim-card-title">🔧 Sterownik ABS w naprawie</div>
+      <div class="pcb-wrap">
+        <svg class="pcb-svg" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ścieżki PCB (zawsze widoczne) -->
+          <g stroke="#22c55e" stroke-width="0.6" fill="none" opacity="0.4">
+            <path d="M20 30 L80 30 L80 60 L120 60 L120 30 L180 30"/>
+            <path d="M20 80 L60 80 L60 100 L100 100 L100 80 L180 80"/>
+            <path d="M20 130 L40 130 L40 150 L80 150 L80 130 L180 130"/>
+            <path d="M20 180 L60 180 L60 200 L120 200 L120 180 L180 180"/>
+            <path d="M100 30 L100 230"/>
+            <path d="M50 30 L50 230"/>
+            <path d="M150 30 L150 230"/>
+          </g>
+          <!-- Komponenty (40 sztuk — opacity 0.08 → 1 przy „install") -->
+          <!-- Rezystory (poziome paski) -->
+          <g class="pcb-comp" data-i="0"><rect x="10" y="25" width="22" height="6" fill="#92400e" rx="1"/><rect x="14" y="27" width="3" height="2" fill="#000"/><rect x="20" y="27" width="3" height="2" fill="#fbbf24"/></g>
+          <g class="pcb-comp" data-i="1"><rect x="42" y="25" width="22" height="6" fill="#92400e" rx="1"/><rect x="46" y="27" width="3" height="2" fill="#dc2626"/><rect x="52" y="27" width="3" height="2" fill="#dc2626"/></g>
+          <g class="pcb-comp" data-i="2"><rect x="135" y="25" width="22" height="6" fill="#92400e" rx="1"/><rect x="139" y="27" width="3" height="2" fill="#0d83fd"/></g>
+          <g class="pcb-comp" data-i="3"><rect x="165" y="25" width="22" height="6" fill="#92400e" rx="1"/></g>
+          <g class="pcb-comp" data-i="4"><rect x="10" y="75" width="22" height="6" fill="#92400e" rx="1"/></g>
+          <g class="pcb-comp" data-i="5"><rect x="135" y="75" width="22" height="6" fill="#92400e" rx="1"/></g>
+          <g class="pcb-comp" data-i="6"><rect x="135" y="125" width="22" height="6" fill="#92400e" rx="1"/></g>
+          <g class="pcb-comp" data-i="7"><rect x="10" y="175" width="22" height="6" fill="#92400e" rx="1"/></g>
+          <!-- Kondensatory cylindryczne -->
+          <g class="pcb-comp" data-i="8"><circle cx="40" cy="50" r="6" fill="#1e3a8a"/><circle cx="40" cy="50" r="3" fill="#3b82f6"/></g>
+          <g class="pcb-comp" data-i="9"><circle cx="170" cy="50" r="6" fill="#1e3a8a"/><circle cx="170" cy="50" r="3" fill="#3b82f6"/></g>
+          <g class="pcb-comp" data-i="10"><circle cx="40" cy="160" r="6" fill="#1e3a8a"/><circle cx="40" cy="160" r="3" fill="#3b82f6"/></g>
+          <g class="pcb-comp" data-i="11"><circle cx="160" cy="160" r="6" fill="#1e3a8a"/><circle cx="160" cy="160" r="3" fill="#3b82f6"/></g>
+          <!-- Małe kondensatory ceramiczne -->
+          <g class="pcb-comp" data-i="12"><rect x="55" y="46" width="6" height="8" fill="#fbbf24" rx="1"/></g>
+          <g class="pcb-comp" data-i="13"><rect x="125" y="46" width="6" height="8" fill="#fbbf24" rx="1"/></g>
+          <g class="pcb-comp" data-i="14"><rect x="125" y="96" width="6" height="8" fill="#fbbf24" rx="1"/></g>
+          <g class="pcb-comp" data-i="15"><rect x="55" y="146" width="6" height="8" fill="#fbbf24" rx="1"/></g>
+          <g class="pcb-comp" data-i="16"><rect x="125" y="196" width="6" height="8" fill="#fbbf24" rx="1"/></g>
+          <!-- Główny układ scalony (microcontroller) -->
+          <g class="pcb-comp" data-i="17">
+            <rect x="70" y="105" width="60" height="50" fill="#1f2937" rx="2"/>
+            <rect x="74" y="109" width="52" height="42" fill="#374151" rx="1"/>
+            <text x="100" y="132" font-family="monospace" font-size="6" fill="#9ca3af" text-anchor="middle">ATE-MK61</text>
+            <text x="100" y="142" font-family="monospace" font-size="5" fill="#9ca3af" text-anchor="middle">v2.1</text>
+            <!-- Piny IC -->
+            <g fill="#9ca3af">
+              <rect x="68" y="110" width="2" height="3"/><rect x="68" y="116" width="2" height="3"/>
+              <rect x="68" y="122" width="2" height="3"/><rect x="68" y="128" width="2" height="3"/>
+              <rect x="68" y="134" width="2" height="3"/><rect x="68" y="140" width="2" height="3"/>
+              <rect x="68" y="146" width="2" height="3"/>
+              <rect x="130" y="110" width="2" height="3"/><rect x="130" y="116" width="2" height="3"/>
+              <rect x="130" y="122" width="2" height="3"/><rect x="130" y="128" width="2" height="3"/>
+              <rect x="130" y="134" width="2" height="3"/><rect x="130" y="140" width="2" height="3"/>
+              <rect x="130" y="146" width="2" height="3"/>
+            </g>
+          </g>
+          <!-- Pomocniczy chip -->
+          <g class="pcb-comp" data-i="18">
+            <rect x="10" y="105" width="30" height="22" fill="#1f2937" rx="1"/>
+            <text x="25" y="119" font-family="monospace" font-size="4" fill="#9ca3af" text-anchor="middle">EEPROM</text>
+          </g>
+          <g class="pcb-comp" data-i="19">
+            <rect x="160" y="105" width="30" height="22" fill="#1f2937" rx="1"/>
+            <text x="175" y="119" font-family="monospace" font-size="4" fill="#9ca3af" text-anchor="middle">DRV</text>
+          </g>
+          <!-- Diody (małe) -->
+          <g class="pcb-comp" data-i="20"><rect x="35" y="200" width="10" height="4" fill="#000" rx="1"/><rect x="44" y="201" width="2" height="2" fill="#9ca3af"/></g>
+          <g class="pcb-comp" data-i="21"><rect x="55" y="200" width="10" height="4" fill="#000" rx="1"/></g>
+          <g class="pcb-comp" data-i="22"><rect x="135" y="200" width="10" height="4" fill="#000" rx="1"/></g>
+          <g class="pcb-comp" data-i="23"><rect x="155" y="200" width="10" height="4" fill="#000" rx="1"/></g>
+          <!-- Kwarc -->
+          <g class="pcb-comp" data-i="24">
+            <rect x="55" y="80" width="22" height="10" fill="#9ca3af" rx="2"/>
+            <rect x="58" y="83" width="16" height="4" fill="#475569"/>
+          </g>
+          <!-- Tranzystory -->
+          <g class="pcb-comp" data-i="25"><circle cx="155" cy="170" r="4" fill="#1f2937"/><line x1="155" y1="170" x2="155" y2="178" stroke="#1f2937" stroke-width="1"/><line x1="151" y1="170" x2="148" y2="178" stroke="#1f2937" stroke-width="1"/><line x1="159" y1="170" x2="162" y2="178" stroke="#1f2937" stroke-width="1"/></g>
+          <g class="pcb-comp" data-i="26"><circle cx="45" cy="220" r="4" fill="#1f2937"/></g>
+          <g class="pcb-comp" data-i="27"><circle cx="155" cy="220" r="4" fill="#1f2937"/></g>
+          <!-- Złącze wtyczki -->
+          <g class="pcb-comp" data-i="28">
+            <rect x="20" y="232" width="160" height="14" fill="#fbbf24" rx="2"/>
+            <g fill="#92400e">
+              <rect x="25" y="236" width="2" height="6"/><rect x="33" y="236" width="2" height="6"/>
+              <rect x="41" y="236" width="2" height="6"/><rect x="49" y="236" width="2" height="6"/>
+              <rect x="57" y="236" width="2" height="6"/><rect x="65" y="236" width="2" height="6"/>
+              <rect x="73" y="236" width="2" height="6"/><rect x="81" y="236" width="2" height="6"/>
+              <rect x="89" y="236" width="2" height="6"/><rect x="97" y="236" width="2" height="6"/>
+              <rect x="105" y="236" width="2" height="6"/><rect x="113" y="236" width="2" height="6"/>
+              <rect x="121" y="236" width="2" height="6"/><rect x="129" y="236" width="2" height="6"/>
+              <rect x="137" y="236" width="2" height="6"/><rect x="145" y="236" width="2" height="6"/>
+              <rect x="153" y="236" width="2" height="6"/><rect x="161" y="236" width="2" height="6"/>
+              <rect x="169" y="236" width="2" height="6"/><rect x="177" y="236" width="2" height="6"/>
+            </g>
+          </g>
+          <!-- Czujnik temperatury -->
+          <g class="pcb-comp" data-i="29"><rect x="10" y="220" width="14" height="6" fill="#1f2937" rx="1"/></g>
+          <!-- Cewki -->
+          <g class="pcb-comp" data-i="30"><rect x="80" y="170" width="12" height="12" fill="#374151" rx="2"/><circle cx="86" cy="176" r="3" fill="#1f2937"/></g>
+          <g class="pcb-comp" data-i="31"><rect x="100" y="170" width="12" height="12" fill="#374151" rx="2"/><circle cx="106" cy="176" r="3" fill="#1f2937"/></g>
+          <!-- Złącza grzebieniowe -->
+          <g class="pcb-comp" data-i="32"><rect x="80" y="80" width="20" height="4" fill="#9ca3af"/></g>
+          <g class="pcb-comp" data-i="33"><rect x="105" y="80" width="20" height="4" fill="#9ca3af"/></g>
+          <!-- Małe SMD elementy -->
+          <g class="pcb-comp" data-i="34"><rect x="48" y="105" width="3" height="2" fill="#000"/><rect x="48" y="115" width="3" height="2" fill="#000"/></g>
+          <g class="pcb-comp" data-i="35"><rect x="148" y="105" width="3" height="2" fill="#000"/><rect x="148" y="115" width="3" height="2" fill="#000"/></g>
+          <!-- Dioda zenera -->
+          <g class="pcb-comp" data-i="36"><polygon points="35,180 41,184 35,188" fill="#fbbf24"/></g>
+          <g class="pcb-comp" data-i="37"><polygon points="160,180 166,184 160,188" fill="#fbbf24"/></g>
+          <!-- Bezpiecznik -->
+          <g class="pcb-comp" data-i="38">
+            <rect x="118" y="62" width="20" height="6" fill="#9ca3af" rx="1"/>
+            <line x1="120" y1="65" x2="136" y2="65" stroke="#000" stroke-width="0.5"/>
+          </g>
+          <!-- Status LED (świeci się przy 100%!) -->
+          <g class="pcb-comp" data-i="39">
+            <circle class="pcb-led" cx="100" cy="65" r="5"/>
+            <circle cx="100" cy="65" r="3" fill="#fff" opacity="0.3"/>
+          </g>
+        </svg>
+      </div>
+      <div style="text-align: center; margin-top: 10px; font-size: 11px; color: #9ca3af;">
+        <span id="components-count">0</span> / 40 komponentów wlutowanych
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="progress-num"><span id="progress-percent">0</span><span class="pct">%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-fill" style="width:0%"></div></div>
+      <div class="progress-text">
+        <strong id="answered-count">0</strong> z <span id="total-count">0</span> odpowiedzi
+      </div>
+      <div class="milestones" id="milestones">
+        <div class="milestone" id="milestone-50" onclick="if(this.classList.contains('unlocked')) showRewardModal(50)">
+          <span class="milestone-icon">🎁</span>
+          <span><strong>50%</strong> · pierwszy bonus</span>
+        </div>
+        <div class="milestone" id="milestone-100" onclick="if(this.classList.contains('unlocked')) showRewardModal(100)">
+          <span class="milestone-icon">🏆</span>
+          <span><strong>100%</strong> · drugi bonus</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-info">
+      Postęp: <strong id="footer-count">0</strong> odpowiedzi · auto-zapis działa <span id="autosave-info" style="color: var(--text3); margin-left: 8px;"></span>
+    </div>
+    <button class="btn btn-save" onclick="manualSave()">💾 Zapisz</button>
+    <button class="btn btn-download" onclick="downloadFilled()">⬇ Pobierz</button>
+    <button class="btn btn-submit" id="submit-btn" onclick="showSubmitModal()">📤 Prześlij Krystianowi</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this) closeModal()">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 🧪 PANEL TESTOWY (TODO: usunąć przed wysłaniem Ivanowi — zmień DEV_MODE = false) -->
+<button class="test-panel-btn" onclick="document.getElementById('test-panel').classList.toggle('show')">🧪 TEST</button>
+<div class="test-panel" id="test-panel">
+  <div class="test-panel-drag" id="test-panel-drag">
+    <span><span class="drag-icon">⋮⋮</span> 🧪 Panel testowy (przeciągnij za ten pasek)</span>
+    <span class="close-x" onclick="document.getElementById('test-panel').classList.remove('show')">✕</span>
+  </div>
+  <div class="test-panel-body">
+  <h3>🧪 Panel testowy (tylko dla Krystiana)</h3>
+
+  <h4>📍 Edytor nagród (zapisuje się od razu)</h4>
+  <label style="font-size:11px;">50% — współrzędne GPS:</label>
+  <input type="text" id="test-coords-50" placeholder="np. 54.6080, 18.3500">
+  <label style="font-size:11px;">50% — opis miejsca:</label>
+  <input type="text" id="test-place-50" placeholder="Szukaj żółtej wstążki przy parking sklepu Lidl">
+  <label style="font-size:11px;">50% — opis nagrody:</label>
+  <input type="text" id="test-reward-50" placeholder="🎁 Bon na zakupy 100 zł">
+  <label style="font-size:11px;">100% — współrzędne GPS:</label>
+  <input type="text" id="test-coords-100" placeholder="np. 54.6105, 18.3522">
+  <label style="font-size:11px;">100% — opis miejsca:</label>
+  <input type="text" id="test-place-100" placeholder="Szukaj zielonej wstążki przy ławce w parku">
+  <label style="font-size:11px;">100% — opis nagrody:</label>
+  <input type="text" id="test-reward-100" placeholder="🏆 Bon na masaż relaksacyjny">
+  <div class="btn-row">
+    <button class="btn-test" onclick="saveRewardsOverride()">💾 Zapisz nagrody</button>
+  </div>
+  <div class="helper">Zapisuje w przeglądarce. Krystian wyedytuje też plik HTML jeśli ma być wysyłany ostatecznie.</div>
+
+  <h4>🎮 Symulatory progress</h4>
+  <div class="btn-row">
+    <button class="btn-test" onclick="simulateProgress(0.49)">→ 49%</button>
+    <button class="btn-test warn" onclick="simulateProgress(0.50)">→ 50% 🎁 (z confetti)</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn-test" onclick="simulateProgress(0.99)">→ 99%</button>
+    <button class="btn-test warn" onclick="simulateProgress(1.0)">→ 100% 🏆 (z confetti)</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn-test danger" onclick="resetEverything()">🗑 Reset (wszystko)</button>
+  </div>
+  <div class="helper">Symulatory wstawiają fake data. Reset czyści też zapamiętane "zobaczone nagrody".</div>
+
+  <h4>⚙ Inne</h4>
+  <div class="btn-row">
+    <button class="btn-test" onclick="showRewardModal(50)">👁 Pokaż modal 50%</button>
+    <button class="btn-test" onclick="showRewardModal(100)">👁 Pokaż modal 100%</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn-test" onclick="fireConfetti(250, 'rain'); toast('🎉 Confetti rain test')">🎉 Confetti rain test</button>
+    <button class="btn-test" onclick="fireConfetti(150, 'burst'); toast('🎆 Confetti burst test')">🎆 Confetti burst test</button>
+  </div>
+  </div><!-- /test-panel-body -->
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// SEKCJE I PYTANIA
+// ═══════════════════════════════════════════════════════
+const SECTIONS = [
+  { id: 'wizytowka', icon: '📌', title: 'Wizytówka projektu', subtitle: 'Szybka informacja o motron.pl', questions: [
+    { id: '0.1', label: 'Co to jest motron.pl jednym zdaniem (z perspektywy systemu, nie biznesu)?', type: 'textarea' },
+    { id: '0.2', label: 'Ile linii kodu mniej-więcej?', type: 'text' },
+    { id: '0.3', label: 'Kiedy projekt powstał i ile razy był przepisywany od zera?', type: 'textarea' },
+    { id: '0.4', label: 'Aktualnie ile aktywnych klientów? Ile zleceń miesięcznie?', type: 'textarea' },
+    { id: '0.5', label: 'Peak load (najwięcej jednoczesnych użytkowników i kiedy)?', type: 'text' },
+  ]},
+  { id: 'stack', icon: '🛠', title: 'Stack technologiczny', subtitle: 'Czym napisany, jakie biblioteki', questions: [
+    { id: '1.1', label: 'Język główny + wersja', type: 'text', hint: 'np. PHP 8.2, Python 3.11, Node 20' },
+    { id: '1.2', label: 'Framework', type: 'text', hint: 'np. Laravel, Symfony, Flask, Express' },
+    { id: '1.3', label: 'Baza danych (typ + wersja)', type: 'text' },
+    { id: '1.4', label: 'ORM (jaki / żaden — raw SQL)', type: 'text' },
+    { id: '1.5', label: 'Frontend', type: 'text' },
+    { id: '1.6', label: 'Build pipeline', type: 'text' },
+    { id: '1.7', label: 'Wklej tu zawartość pliku z dependencies', type: 'textarea' },
+    { id: '1.8', label: 'Repo (gdzie kod, jakie branche)', type: 'textarea' },
+    { id: '1.9', label: 'KRYTYCZNE biblioteki (od których wszystko zależy)', type: 'textarea' },
+  ]},
+  { id: 'baza', icon: '🗄', title: 'Baza danych', subtitle: 'Jak zorganizowana, indeksy, transakcje', questions: [
+    { id: '2.1', label: 'Ile tabel mniej-więcej?', type: 'text' },
+    { id: '2.2', label: 'Top 5 największych tabel (po liczbie wierszy)', type: 'textarea' },
+    { id: '2.3', label: 'Jakie tabele mają indeksy NIE-PK (na których kolumnach)?', type: 'textarea' },
+    { id: '2.4', label: 'Czy są foreign keys (FK constraints) włączone?', type: 'radio', options: ['TAK wszędzie', 'TAK ale wybiórczo', 'NIE', 'Inne (opisz)'] },
+    { id: '2.5', label: 'Migracje — jaki system?', type: 'text' },
+    { id: '2.6', label: 'Backup — kto / kiedy / gdzie / czy testowane recovery?', type: 'textarea' },
+    { id: '2.7', label: 'Krytyczne ścieżki danych (które zapytania uruchamiają się najczęściej)', type: 'textarea' },
+    { id: '2.8', label: 'Slow query log — czy włączony? Top 3 najwolniejsze zapytania?', type: 'textarea' },
+    { id: '2.9', label: 'Transakcje — które operacje są w transakcjach?', type: 'textarea' },
+    { id: '2.10', label: 'Locking strategy', type: 'radio', options: ['Optymistyczny (version field)', 'Pesymistyczny (SELECT FOR UPDATE)', 'Brak', 'Inne (opisz)'] },
+    { id: '2.11', label: 'Cleanup starych danych — cron / procedury / nic?', type: 'textarea' },
+  ]},
+  { id: 'arch', icon: '🏗', title: 'Architektura', subtitle: 'Workers, queue, cache, sesje', questions: [
+    { id: '3.1', label: 'Monolith czy microservices?', type: 'radio', options: ['Monolith', 'Microservices', 'Hybrid', 'Inne (opisz)'] },
+    { id: '3.2', label: 'Jakie usługi działają w tle (workers / cron / queue)?', type: 'textarea' },
+    { id: '3.3', label: 'Jaki queue jest używany?', type: 'text', hint: 'np. Redis, RabbitMQ, database queue, Sidekiq, lub brak' },
+    { id: '3.4', label: 'Jaki cache jest używany?', type: 'text', hint: 'np. Redis, Memcached, file cache, lub brak' },
+    { id: '3.5', label: 'Co jest cache-owane i jak długo?', type: 'textarea' },
+    { id: '3.6', label: 'Upload plików — gdzie? Walidacja?', type: 'textarea' },
+    { id: '3.7', label: 'Sesje użytkownika — gdzie?', type: 'text' },
+    { id: '3.8', label: 'Rate limiting — jest? Wartości?', type: 'textarea' },
+  ]},
+  { id: 'sec', icon: '🔒', title: 'Bezpieczeństwo', subtitle: 'Hasła, RODO, audyt', questions: [
+    { id: '4.1', label: 'Hasła — jak hashowane?', type: 'radio', options: ['bcrypt', 'argon2', 'SHA256', 'MD5', 'Inne (opisz)'] },
+    { id: '4.2', label: '2FA — jest? Jakim mechanizmem?', type: 'text' },
+    { id: '4.3', label: 'CSRF protection?', type: 'radio', options: ['Globalne', 'Per-form', 'Brak', 'Inne (opisz)'] },
+    { id: '4.4', label: 'XSS protection — auto-escape czy ręcznie?', type: 'textarea' },
+    { id: '4.5', label: 'SQL injection — wszystkie zapytania przez ORM lub prepared statements? Czy są gdzieś raw queries z konkatenacją stringów?', type: 'textarea', hint: 'Jeśli tak — w których plikach/funkcjach? To są typowe miny dla AI.' },
+    { id: '4.6', label: 'Audit log — kto co kiedy zmodyfikował?', type: 'textarea' },
+    { id: '4.7', label: 'Login attempts — limit, lockout, alerty?', type: 'textarea' },
+    { id: '4.8', label: 'API keys / secrets — gdzie?', type: 'text' },
+    { id: '4.9', label: 'HTTPS — wszędzie? HSTS?', type: 'textarea' },
+    { id: '4.10', label: 'RODO — co konkretnie zrobione?', type: 'textarea' },
+    { id: '4.11', label: 'Kto ma dostęp do production database? Lista osób + role.', type: 'textarea' },
+  ]},
+  { id: 'integr', icon: '🔌', title: 'Integracje', subtitle: 'Wfirma, Posnet, SMS, email', questions: [
+    { id: '5.1', label: 'Wfirma (faktury) — status', type: 'textarea', hint: 'Status / API key / retry / co przy timeout' },
+    { id: '5.2', label: 'Posnet (drukarki fiskalne)', type: 'textarea' },
+    { id: '5.3', label: 'Elzab (drukarki fiskalne, alternatywa) — status', type: 'textarea', hint: 'Działa? Mockowane? Nie używamy?' },
+    { id: '5.4', label: 'InPost (etykiety przesyłek) — status', type: 'textarea', hint: 'Działa? Co przy timeout?' },
+    { id: '5.5', label: 'SMS Gateway — jaki dostawca?', type: 'text', hint: 'np. SMSAPI, Twilio, brak — i jaki ich status' },
+    { id: '5.6', label: 'Email (SMTP) — jaki dostawca?', type: 'text', hint: 'Gmail Workspace / Sendgrid / Mailgun / własny serwer' },
+    { id: '5.7', label: 'Google OAuth (logowanie) — jest?', type: 'text', hint: 'TAK/NIE; jeśli tak — jakie scopy' },
+    { id: '5.8', label: 'Google Places API (autocomplete adresów) — jest?', type: 'text', hint: 'TAK/NIE' },
+    { id: '5.9', label: 'GUS BIR / REGON (weryfikacja NIP) — jest?', type: 'text', hint: 'TAK/NIE' },
+    { id: '5.10', label: 'Allegro API (sprzedaż używanego) — jest?', type: 'text', hint: 'TAK/NIE' },
+    { id: '5.11', label: 'Inne integracje których nie wymieniłem', type: 'textarea', hint: 'Wymień co działa + jaki jest ich status' },
+    { id: '5.12', label: 'Webhooks przychodzące — kto wysyła? Walidacja signature? Idempotentne?', type: 'textarea' },
+  ]},
+  { id: 'perf', icon: '⚡', title: 'Performance', subtitle: 'Czasy, monitoring, error tracking', questions: [
+    { id: '6.1', label: 'Average response time / (homepage)', type: 'text' },
+    { id: '6.2', label: 'Average response time strony zleceń klienta', type: 'text' },
+    { id: '6.3', label: 'Najwolniejsza strona w aplikacji', type: 'textarea' },
+    { id: '6.4', label: 'Największe obciążenie miesiąca: kiedy / czemu', type: 'textarea' },
+    { id: '6.5', label: 'Monitoring (UptimeRobot / Sentry / Datadog)?', type: 'text' },
+    { id: '6.6', label: 'Error tracking — gdzie lecą wyjątki?', type: 'text' },
+  ]},
+  { id: 'devops', icon: '🚀', title: 'Deployment', subtitle: 'Hosting, CI/CD, deploy procedure', questions: [
+    { id: '7.1', label: 'Hosting — dostawca + tier', type: 'text' },
+    { id: '7.2', label: 'OS + wersja', type: 'text' },
+    { id: '7.3', label: 'Web server', type: 'text' },
+    { id: '7.4', label: 'WSGI / FPM / process manager', type: 'text' },
+    { id: '7.5', label: 'Deploy procedure — krok po kroku', type: 'textarea' },
+    { id: '7.6', label: 'CI/CD?', type: 'text' },
+    { id: '7.7', label: 'Rollback — jak wycofujesz wersję?', type: 'textarea' },
+    { id: '7.8', label: 'Branche w git — strategia', type: 'text' },
+    { id: '7.9', label: 'Environment variables — gdzie?', type: 'text' },
+    { id: '7.10', label: 'Logi aplikacji — gdzie? Rotacja?', type: 'textarea' },
+  ]},
+  { id: 'bugi', icon: '🐛', title: 'Bugi historyczne', subtitle: 'Top 3 katastrofy i lekcje', questions: [
+    { id: '8.1.1', label: 'Top bug #1 — co się stało, co naprawiło', type: 'textarea', hint: 'Najgorszy/najtrudniejszy bug w historii projektu. Krótko: co padło, jaka diagnoza, jak naprawione, co wprowadzono żeby się nie powtórzył.' },
+    { id: '8.1.2', label: 'Top bug #2 — co się stało, co naprawiło', type: 'textarea' },
+    { id: '8.1.3', label: 'Top bug #3 — co się stało, co naprawiło', type: 'textarea' },
+    { id: '8.2', label: 'Czy był kiedyś incydent z utratą danych?', type: 'textarea' },
+    { id: '8.3', label: 'Czy był kiedyś leak danych (RODO)?', type: 'textarea' },
+    { id: '8.4', label: 'Czy był kiedyś DDoS / spam attack?', type: 'textarea' },
+    { id: '8.5', label: 'Najgorsza decyzja techniczna której teraz żałujesz', type: 'textarea' },
+  ]},
+  { id: 'safety', icon: '🛡', title: 'Production safety + RODO', subtitle: 'Wrażliwe dane, deploy procedury, co kiedy klient akurat pisze a my podmieniamy kod', crit: true, questions: [
+    { id: 'P.1', label: 'Które TABELE / KOLUMNY zawierają dane wrażliwe (PESEL, NIP, adres, telefon, email, hasła, dane karty, IP)?', type: 'textarea', hint: 'Wymień konkretnie. To te miejsca gdzie AI nie wolno robić export, screenshot, log.' },
+    { id: 'P.2', label: 'Czy dane wrażliwe są szyfrowane at-rest? Jeżeli nie — czemu i co chciałbyś zmienić?', type: 'textarea', hint: 'Hasła pewnie tak (bcrypt), ale czy NIP/email/telefon też? Czy DB sama szyfruje?' },
+    { id: 'P.3', label: 'Local dev i staging — jak się dostajesz do realistic data? Production dump anonimizowany? Fake data? Seed skrypty?', type: 'textarea', hint: 'Czy AI pracując na staging dotyka realnych nazwisk klientów? Co możemy a czego nie.' },
+    { id: 'P.4', label: 'RODO „right to access" (art. 15) — kto może wyeksportować wszystkie dane jednego klienta i jak?', type: 'textarea', hint: 'Procedura. Czy jest endpoint? Czy ręcznie z DB?' },
+    { id: 'P.5', label: 'RODO „right to be forgotten" (art. 17) — jak realizujemy usunięcie konta? CASCADE delete czy soft-delete?', type: 'textarea', hint: 'Co się dzieje z fakturami klienta (które trzeba trzymać 5 lat dla skarbówki)? Konflikt RODO vs prawo podatkowe — jak rozwiązany?' },
+    { id: 'P.6', label: 'Deploy na production — kiedy odpalamy? Tylko w nocy? Jaki dokładnie downtime window?', type: 'textarea', hint: 'np. „tylko 2:00-4:00 wt/czw, bo to godziny najmniejszego ruchu". Albo „kiedy chcemy".' },
+    { id: 'P.7', label: '🚨 KRYTYCZNE: co robimy gdy klient AKURAT wypełnia formularz / tworzy zlecenie / pisze notatkę a my robimy deploy?', type: 'textarea', hint: 'Jak chronimy jego dane od utraty? Czy klient widzi „rzucenie" formularza? Czy mamy graceful degradation?' },
+    { id: 'P.8', label: 'Migracje bazy danych — kiedy odpalamy, jak długo trwa przerwa, czy są skrypty rollback, w jakiej kolejności wobec deploy kodu?', type: 'textarea', hint: 'Najpierw migration, potem code? Czy odwrotnie? Co gdy migration się sypie w połowie?' },
+    { id: 'P.9', label: 'Mamy blue-green deploy / rolling restart / canary release? Czy zwykły shutdown 30 sek z 502?', type: 'radio', options: ['Blue-green (zero downtime)', 'Rolling restart', 'Canary release', 'Zwykły shutdown z chwilowym 502', 'Inne (opisz w 9.6)'] },
+    { id: 'P.10', label: '🤖 PROCEDURA dla AI: w jaki sposób Claude ma się Ciebie zapytać PRZED zmianą na produkcji? (kanał komunikacji, format, jak długo czeka na odpowiedź)', type: 'textarea', hint: 'np. „Slack DM, format: »chcę zrobić X bo Y, ryzyko Z«, czekam minimum 1h". To MUSI być jasne, inaczej AI kombinuje i może zepsuć.' },
+    { id: 'P.11', label: 'Procedura HOT ROLLBACK — co robimy gdy deploy się popsuł i trzeba w 5 min cofnąć?', type: 'textarea', hint: 'Krok po kroku. Kto ma uprawnienia. Skąd wziąć poprzednią wersję.' },
+    { id: 'P.12', label: 'Jakie operacje są ABSOLUTNIE TYLKO RĘCZNE (AI nawet z pozwoleniem nie może)? np. DROP TABLE, DELETE bez WHERE, GRANT na tabelach finansowych', type: 'textarea', hint: 'Lista jak najdłuższa. To są CZERWONE LINIE. Im więcej tu wpiszesz, tym mniej AI Cię zaskoczy.' },
+  ]},
+  { id: 'backup', icon: '🔄', title: 'Backup + współpraca + adresy serwerów', subtitle: 'Workflow Krystian/Ivan/AI, adresy staging/prod, backupy bazy i kodu, plan recovery', crit: true, questions: [
+    { id: 'W.1', label: 'Jak będzie wyglądać workflow Krystian / Ivan / AI? (jak wprowadzamy zmiany do kodu)', type: 'radio', options: ['Git PR — AI tworzy branch, Ivan reviewuje, Krystian merge', 'AI proponuje plan tekstowo, Krystian implementuje sam', 'AI commituje na feature branch, Ivan review przed merge na main', 'AI commituje wprost na main po Krystianowym ✓ na Slacku', 'Inne (opisz)'] },
+    { id: 'W.2', label: 'Adres serwera TESTOWEGO (URL staging)', type: 'text', hint: 'np. https://staging.motron.pl albo brak — opisz jak wygląda środowisko testowe' },
+    { id: 'W.3', label: 'Adres PRODUCTION (główny URL motron.pl)', type: 'text', hint: 'np. https://motron.pl + lista subdomain jeśli są' },
+    { id: 'W.4', label: 'Zabezpieczenia bazy danych — co chroni przed dostępem zewnętrznym? (firewall, IP whitelist, VPN, MFA na DB user, hash hasła DB, etc.)', type: 'textarea', hint: 'Wymień co MASZ. Plus co byś chciał mieć a nie ma jeszcze.' },
+    { id: 'W.5', label: 'Czego ABSOLUTNIE UNIKAĆ żeby nie zepsuć zabezpieczeń bazy? (operacje, kwerendy, zmiany w pg_hba/my.cnf, GRANT/REVOKE)', type: 'textarea', hint: 'AI musi wiedzieć żeby tego nie próbować. Im więcej tu wpiszesz, tym mniej Cię zaskoczę.' },
+    { id: 'W.6', label: 'Backupy bazy danych — jak często są robione?', type: 'radio', options: ['Co godzinę (incremental)', 'Co 6 godzin', 'Codziennie w nocy', 'Raz w tygodniu', 'Nie ma backupów albo nie wiem', 'Inne (opisz)'] },
+    { id: 'W.7', label: 'Backupy bazy — GDZIE są zapisywane?', type: 'radio', options: ['Ten sam serwer (lokalnie)', 'Inny serwer w tej samej serwerowni (hot-storage)', 'Cloud (S3 / Backblaze / GCS)', 'External HDD odpinany', 'W kilku miejscach jednocześnie', 'Inne (opisz)'] },
+    { id: 'W.8', label: 'Backup KODU — gdzie poza GitHubem? (na wypadek gdyby GitHub padł lub konto skradzione)', type: 'radio', options: ['Nigdzie — tylko GitHub', 'Pendrive (jak często aktualizowany)', 'External HDD', 'Cloud (Dropbox / GDrive / OneDrive)', 'Drugi git remote (GitLab / własny serwer)', 'Inne (opisz)'] },
+    { id: 'W.9', label: 'Czy są okresowe TESTY RECOVERY? (czy backup faktycznie działa — odtworzenie testowe)', type: 'radio', options: ['TAK — testowane regularnie', 'TAK — ale dawno', 'NIE — nigdy nie testowane', 'Nie wiem', 'Inne (opisz)'] },
+    { id: 'W.10', label: 'Plan disaster recovery — co robimy gdy serwer DB pada W ŚRODKU DNIA roboczego?', type: 'textarea', hint: 'Krok po kroku. Kto pierwszy widzi alert. Kto reaguje. Ile czasu ma na restore. Czy jest checklist?' },
+  ]},
+  { id: 'nogo', icon: '🚨', title: 'No-go zones — to o czym gadaliśmy na klatce', subtitle: 'Ivan, wpisz tu wszystko czego mam NIE ruszać żebyś nie musiał potem fixować. Pamiętasz te rozmowy „nie dotykaj X bo się sypnie cała Y" — tu właśnie to opisz. Im więcej tu napiszesz, tym mniej Twojej pracy i krzyczenia później.', crit: true, questions: [
+    { id: '9.1', label: 'Pliki — które są krytyczne, działają jak chcesz, ale ktoś je łatwo rozjebie', type: 'textarea', hint: 'np. „lib/wfirma.php — moja własna obsługa retry, nie tykać; każda zmiana = upadek faktur"' },
+    { id: '9.2', label: 'Tabele bazy — te w których są rzeczy historyczne / RODO / zamknięte rozliczenia', type: 'textarea', hint: 'np. „faktury_2018_2023 — frozen, audyt skarbowy może chcieć"' },
+    { id: '9.3', label: 'Funkcje / klasy — masz takie świetnie napisane, którymi nikt nie powinien dłubać?', type: 'textarea' },
+    { id: '9.4', label: 'Cron jobs — które działają jak zegarek, ale każda zmiana wybuchu', type: 'textarea' },
+    { id: '9.5', label: 'Integracje — to o czym rozmawialiśmy „działa od 5 lat, klienci mają zaufanie, nie ruszamy"', type: 'textarea', hint: 'np. „kod do Wfirma — pisałem w piątek wieczorem 3 lata temu, cuda, nie tykać; jak coś trzeba — tylko ze mną"' },
+    { id: '9.6', label: 'Inne (config nginx, parę nagłówków HTTP, jakieś .htaccess hacki które tylko Ty znasz)', type: 'textarea' },
+    { id: '9.7', label: 'STRUKTURA odpytywania bazy danych — które ścieżki MUSZĄ iść po kolei (jedno zapytanie → odpowiedź → kolejne; jak nie ma rekordu → zwracamy → nie próbujemy dalej)', type: 'textarea', hint: 'TO JEST KRYTYCZNE. AI często pisze „wszystko naraz, błędy później" — Ty wiesz że tak się nie da. Wpisz konkretnie: „przy logowaniu MUSI być najpierw X, potem Y, jak X zwróci null → STOP, nie idź do Y"' },
+  ]},
+  { id: 'dataflow', icon: '🔀', title: 'Data flow — krytyczne ścieżki', subtitle: 'Krok po kroku + error paths', crit: true, questions: [
+    { id: '10.1.h', label: '10.1 LOGIN klienta — happy path', type: 'textarea' },
+    { id: '10.1.e', label: '10.1 LOGIN — error paths', type: 'textarea' },
+    { id: '10.2.h', label: '10.2 ZŁOŻENIE NOWEGO ZLECENIA — happy path', type: 'textarea' },
+    { id: '10.2.e', label: '10.2 ZŁOŻENIE ZLECENIA — error paths', type: 'textarea' },
+    { id: '10.3.h', label: '10.3 WYSTAWIENIE FAKTURY (Wfirma) — happy path', type: 'textarea' },
+    { id: '10.3.e', label: '10.3 FAKTURA — error paths (Wfirma 500, token wygasł, NIP błędny)', type: 'textarea' },
+    { id: '10.4.h', label: '10.4 PRZYJĘCIE REKLAMACJI — happy path', type: 'textarea' },
+    { id: '10.4.e', label: '10.4 REKLAMACJA — error paths', type: 'textarea' },
+    { id: '10.5.h', label: '10.5 WYSŁANIE SMS — happy path', type: 'textarea' },
+    { id: '10.5.e', label: '10.5 SMS — error paths', type: 'textarea' },
+  ]},
+  { id: 'mentalmodel', icon: '🧠', title: 'Twój mental model', subtitle: 'Jak Ty widzisz świat motron.pl — definicje + trudności', questions: [
+    { id: 'M.1', label: 'Czym dla Ciebie JEST sterownik? (Twoja własna definicja, nie z wikipedii)', type: 'textarea', hint: 'Krótko, w 2-3 zdaniach. Może być nieformalnie. Co masz w głowie gdy mówisz „sterownik".' },
+    { id: 'M.2', label: 'Czym dla Ciebie JEST numer sterownika? Co on znaczy / czym się różni od samego sterownika?', type: 'textarea', hint: 'Numer fabryczny, OEM, OE, hardware, software — jak Ty to rozróżniasz?' },
+    { id: 'M.3', label: 'Czym dla Ciebie JEST rodzaj sterownika? Jak go określasz / klasyfikujesz?', type: 'textarea', hint: 'np. po producencie? po funkcji (ECU/ABS/itd)? po marce auta? po generacji?' },
+    { id: 'M.4', label: 'Co sprawia Ci NAJWIĘKSZĄ trudność w pracy z naszym CRM?', type: 'textarea', hint: 'Wymień konkretnie. Co Cię irytuje / co zawsze trwa za długo / co psuje codzienną pracę.' },
+    { id: 'M.5', label: 'Co sprawia Ci NAJWIĘKSZĄ trudność w obsłudze klientów (nie technicznie, ludzko)?', type: 'textarea', hint: 'np. klient nie wie jaki ma sterownik / klient się denerwuje / klient pomija ważne info.' },
+    { id: 'M.6', label: 'Z czego w naszym CRM jesteś najbardziej DUMNY? (co Twoim zdaniem działa pięknie)', type: 'textarea', hint: 'Pochwal swoją robotę. To jest też ważna info dla AI co utrzymać.' },
+    { id: 'M.7', label: 'Co najbardziej Ci się NIE PODOBA w naszym CRM? (co byś najchętniej spalił)', type: 'textarea', hint: 'Bądź szczery. Nikt nie ma za to pretensji.' },
+    { id: 'M.8', label: 'Jakimi 3 słowami opisałbyś naszą bazę danych?', type: 'text', hint: 'Subiektywnie, swoimi słowami. Np. „rozpędzona machina", „chaotyczna", „solidna", „przeciążona", „nietknięta od 5 lat" — pomaga AI zrozumieć stan emocjonalny.' },
+  ]},
+  { id: 'pomysly', icon: '💡', title: 'Pomysły Krystiana', subtitle: 'Twoja opinia techniczna', questions: [
+    { id: '11.1', label: 'Autocomplete adresu (Google Places lub GUS)', type: 'textarea' },
+    { id: '11.2', label: 'Multi-step formularz zamówienia (kafelki marka → model)', type: 'textarea' },
+    { id: '11.3', label: 'Dynamic intake form per liść drzewa usług', type: 'textarea' },
+    { id: '11.4', label: 'Family/wariant w drzewie sprzętu (MK61 → 3 modele)', type: 'textarea' },
+    { id: '11.5', label: 'OCR ze zdjęć błędów DTC', type: 'textarea' },
+    { id: '11.6', label: 'Co byś OD SIEBIE dodał albo zrobił inaczej?', type: 'textarea' },
+  ]},
+  { id: 'plany', icon: '🗺', title: 'Twoje plany na CRM', subtitle: 'Co planujesz, co Cię irytuje', questions: [
+    { id: '12.0', label: 'Lista zadań które masz teraz „na biurku" (gotowe / w toku / planowane)', type: 'textarea' },
+    { id: '12.1', label: 'Co planowałeś rozwijać przed pomysłem Krystiana z miniMOTRON?', type: 'textarea' },
+    { id: '12.2', label: 'Czy CRM ma jakieś ograniczenia skali które już są blisko?', type: 'textarea' },
+    { id: '12.3', label: 'Migracja na inny stack — była rozważana? Jaki?', type: 'textarea' },
+    { id: '12.4', label: 'Co byś zrobił gdybyś dostał wolną rękę (i czas) na refactor?', type: 'textarea' },
+    { id: '12.5', label: 'Czego brakuje w CRM żeby Twoja praca była łatwiejsza?', type: 'textarea' },
+  ]},
+  { id: 'claude', icon: '🤖', title: 'Pytania od Claude', subtitle: 'Konkretne techniczne', questions: [
+    { id: 'C.1', label: 'Jak działa idempotency webhooks?', type: 'textarea' },
+    { id: 'C.2', label: 'Retry strategy dla Wfirma API?', type: 'textarea' },
+    { id: 'C.3', label: 'Czy jest distributed lock (Redis RedLock)?', type: 'textarea' },
+    { id: 'C.4', label: 'Environment variables — local dev = production?', type: 'textarea' },
+    { id: 'C.5', label: 'Czy są feature flags?', type: 'textarea' },
+    { id: 'C.6', label: 'Najprostszy sposób żeby Claude dodał nowy endpoint', type: 'textarea' },
+    { id: 'C.7', label: 'Najprostszy sposób żeby Claude dodał nową kolumnę do tabeli', type: 'textarea' },
+    { id: 'C.8', label: 'Czy są testy automatyczne? Coverage?', type: 'textarea' },
+    { id: 'C.9', label: 'Jak Claude może uruchomić local dev (Docker / vagrant)?', type: 'textarea' },
+    { id: 'C.10', label: 'Czy dasz Claude SSH key z limited access do staging?', type: 'radio', options: ['Tak, łatwo', 'Tak ale po setupie staging', 'NIE — nie chcę dawać AI dostępu', 'Inne (opisz w 12.5)'] },
+  ]},
+  { id: 'zyczenia', icon: '✨', title: 'Życzenia', subtitle: 'Twoje preferencje współpracy', questions: [
+    { id: 'Z.1', label: 'Co byś chciał żeby Claude robił często (rzeczy nudne ale konieczne)?', type: 'textarea' },
+    { id: 'Z.2', label: 'Co Claude ma NIE robić bez Twojego ✓?', type: 'textarea' },
+    { id: 'Z.3', label: 'Jak chcesz dostawać raporty od Claude?', type: 'radio', options: ['Po każdym zadaniu', 'Dziennie summary', 'Co ważne (sam Claude decyduje)', 'Tylko gdy coś się sypie'] },
+    { id: 'Z.4', label: 'Twój preferowany kanał komunikacji', type: 'radio', options: ['Slack', 'Email', 'GitHub issue', 'Discord', 'Inny'] },
+    { id: 'Z.5', label: 'Jeśli Claude coś rozjebie — jak Cię szybko o tym powiadomić?', type: 'textarea' },
+  ]},
+  { id: 'zycie', icon: '🌅', title: 'Życie poza CRM', subtitle: 'Luźniejsze, ludzkie. Pomińcie jeśli nie chcecie — ale dla Krystivana świetnie wiedzieć ✨', questions: [
+    { id: 'L.1', label: 'Po 2 latach od uruchomienia nowej wersji CRM — jakim wymarzonym samochodem chciałbyś jeździć?', type: 'text', hint: 'Konkretny model. Marzenia bez ograniczeń budżetowych.' },
+    { id: 'L.2a', label: 'Co Ci się NAJBARDZIEJ podoba w Redzie?', type: 'textarea', hint: 'Konkretne miejsce, klimat, ludzie, restauracje.' },
+    { id: 'L.2b', label: 'Czego Ci NAJBARDZIEJ brakuje w Redzie?', type: 'textarea', hint: 'Co byś dodał gdybyś mógł.' },
+    { id: 'L.3', label: 'Gdyby motron.pl miał x10 klientów, jak chciałbyś żeby zmieniła się Twoja praca?', type: 'textarea', hint: 'Mniej kodu więcej zarządzania? Inny zespół? Praca zdalna 100%?' },
+    { id: 'L.4', label: 'Gdybyś dostał miesiąc całkowicie wolnego (CRM się sam ogarnie) — co byś robił?', type: 'textarea' },
+    { id: 'L.5', label: 'Co Cię NAJBARDZIEJ cieszy w pracy z motron.pl ostatnio?', type: 'textarea' },
+    { id: 'L.6', label: 'Czego NAJBARDZIEJ żałujesz w pracy ostatniego roku?', type: 'textarea', hint: 'Bez konsekwencji. Krystian to przeczyta i mu to nie zaszkodzi w niczym.' },
+    { id: 'L.7', label: 'Trzy rzeczy ważne dla Ciebie POZA pracą (rodzina, hobby, pasja)', type: 'textarea' },
+  ]},
+];
+
+const STORAGE_KEY = 'ivan_mastermind_v2';
+const REWARD_50_KEY = 'ivan_reward_50_seen';
+const REWARD_100_KEY = 'ivan_reward_100_seen';
+let activeTab = SECTIONS[0].id;
+const TOTAL_COMPONENTS = 40;
+
+// 🎁 NAGRODY — 2 sztuki. Krystian nie spoileruje co Iwan tam znajdzie — niech będzie niespodzianką.
+// 50% = "spacerek, odpocznij od ekranu, z Kowalem coś dla Ciebie na mieście"
+// 100% = realna druga nagroda
+const REWARDS_DEFAULT = {
+  50: {
+    title: 'Czas na spacerek 🚶',
+    emoji: '☕',
+    text: 'Ivan, to teraz czas na spacerek. Przewietrz się, odpocznij od ekranu. Z Kowalem mam dla Ciebie na mieście coś fajnego — masz współrzędne. Wróć potem do reszty pytań.',
+    coords: '54.6080, 18.3500',
+    place_description: 'Możesz pojechać sam, albo weź kogoś ze sobą żeby było ciekawiej.',
+    reward_description: 'Co tam — niespodzianka. Nie spoilerując 😊',
+  },
+  100: {
+    title: 'GOTOWE! Sterownik naprawiony 🟢',
+    emoji: '🏆',
+    text: 'Ivan, dziękuję. Wypełniłeś wszystko. Drugi bonus, większy, zostawiłem w innym miejscu. Współrzędne:',
+    coords: '54.6105, 18.3522',
+    place_description: 'Tu też — możesz sam, albo weź kogoś. Idź, znajdź. Coś tam czeka.',
+    reward_description: 'Niespodzianka. Idź zobacz.',
+  },
+};
+const REWARDS_OVERRIDE_KEY = 'ivan_rewards_override';
+function loadRewards() {
+  try {
+    const override = JSON.parse(localStorage.getItem(REWARDS_OVERRIDE_KEY) || '{}');
+    return {
+      50: { ...REWARDS_DEFAULT[50], ...(override[50] || {}) },
+      100: { ...REWARDS_DEFAULT[100], ...(override[100] || {}) },
+    };
+  } catch { return REWARDS_DEFAULT; }
+}
+let REWARDS = loadRewards();
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function renderTabs() {
+  const nav = document.getElementById('tabs');
+  let html = '<div class="sidebar-title">Sekcje</div>';
+  SECTIONS.forEach(sec => {
+    const filled = countFilled(sec);
+    const total = sec.questions.length;
+    const cls = filled === total ? 'full' : (filled === 0 ? 'empty' : '');
+    const badge = filled === total ? `<span class="badge full">✓</span>` : `<span class="badge ${cls}">${filled}/${total}</span>`;
+    html += `<button class="tab-link ${sec.id === activeTab ? 'active' : ''}" onclick="switchTab('${sec.id}')">${sec.icon} ${sec.title}${badge}</button>`;
+  });
+  nav.innerHTML = html;
+}
+
+function renderContent() {
+  const main = document.getElementById('content');
+  const sec = SECTIONS.find(s => s.id === activeTab);
+  if (!sec) return;
+  let html = `
+    <div class="section-header ${sec.crit ? 'crit' : ''}">
+      <h2>${sec.icon} ${sec.title}</h2>
+      <div class="subtitle">${sec.subtitle}</div>
+    </div>
+  `;
+  sec.questions.forEach(q => {
+    const val = getValue(q.id);
+    const skipped = isSkipped(q.id);
+    html += `<div class="q ${skipped ? 'skipped' : ''}" data-qid="${q.id}">`;
+    html += `<label class="q-label"><span class="num">${q.id}</span>${escapeHtml(q.label)}`;
+    html += `<button class="q-skip-btn" onclick="toggleSkip('${q.id}')" title="${skipped ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie ma dla mnie sensu'}">${skipped ? '↩ przywróć' : '🚫 bez sensu'}</button>`;
+    html += `</label>`;
+    if (skipped) {
+      // Pole na opcjonalny powód
+      html += `<textarea class="q-skip-reason" placeholder="(opcjonalnie) napisz dlaczego to pytanie jest bez sensu — możesz to też zostawić puste" oninput="setSkipReason('${q.id}', this.value)">${escapeHtml(getSkipReason(q.id))}</textarea>`;
+    } else {
+      if (q.hint) html += `<div class="q-hint">💡 ${escapeHtml(q.hint)}</div>`;
+      if (q.type === 'text') {
+        html += `<input type="text" id="q-${q.id}" value="${escapeHtml(val || '')}" oninput="saveValue('${q.id}', this.value)">`;
+      } else if (q.type === 'textarea') {
+        html += `<textarea id="q-${q.id}" oninput="saveValue('${q.id}', this.value)">${escapeHtml(val || '')}</textarea>`;
+      } else if (q.type === 'radio') {
+        html += `<div class="q-radios">`;
+        q.options.forEach(opt => {
+          const checked = val === opt ? 'checked' : '';
+          html += `<label class="q-radio"><input type="radio" name="q-${q.id}" value="${escapeHtml(opt)}" ${checked} onchange="saveValue('${q.id}', this.value); toggleOtherField('${q.id}', this.value)">${escapeHtml(opt)}</label>`;
+        });
+        html += `</div>`;
+        // Pole "Inne (opisz)" — pokazuje się gdy wybrana opcja zawiera "(opisz)" lub "Inne"
+        const otherKey = q.id + '__other';
+        const otherVal = getValue(otherKey) || '';
+        const isOtherSelected = val && (String(val).toLowerCase().includes('(opisz)') || String(val).toLowerCase() === 'inne' || String(val).toLowerCase().startsWith('inne '));
+        html += `<input type="text" id="q-${otherKey}" placeholder="Opisz „Inne"…"
+                  value="${escapeHtml(otherVal)}"
+                  oninput="saveValue('${otherKey}', this.value)"
+                  style="margin-top:6px; ${isOtherSelected ? '' : 'display:none;'}">`;
+      }
+      // Załącznik per pytanie (tylko gdy nie skipped)
+      html += `<div class="q-attach-row">`;
+      html += `<label class="q-attach-btn" for="attach-${q.id}">📎 Załącz plik / zdjęcie</label>`;
+      html += `<input type="file" id="attach-${q.id}" class="q-attach-input" multiple onchange="handleFileAttach('${q.id}', this)">`;
+      html += `<div class="q-attach-list" id="attach-list-${q.id}"></div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  });
+  main.innerHTML = html;
+  // Pokaż istniejące załączniki dla wszystkich pytań
+  sec.questions.forEach(q => renderAttachmentsList(q.id));
+}
+
+function switchTab(id) {
+  activeTab = id;
+  renderTabs();
+  renderContent();
+  autoGrowAllTextareas();  // PR Krystian — pre-fill content musi też mieć rozwiniętą wysokość
+  // Nie scrollujemy do góry przy zmianie zakładki — user zostaje gdzie był.
+}
+
+// ═══════════════════════════════════════════════════════
+// 📏 AUTO-GROW TEXTAREA — okno rośnie do max 400px, potem scroll
+// ═══════════════════════════════════════════════════════
+function autoGrowTextarea(el) {
+  if (!el || el.tagName !== 'TEXTAREA') return;
+  el.style.height = 'auto';
+  const newHeight = Math.min(el.scrollHeight, 400);
+  el.style.height = newHeight + 'px';
+}
+
+function autoGrowAllTextareas() {
+  document.querySelectorAll('.q textarea').forEach(autoGrowTextarea);
+}
+
+// Globalny listener — łapie input na każdej dynamicznie wygenerowanej textarea
+document.addEventListener('input', (e) => {
+  if (e.target.tagName === 'TEXTAREA' && e.target.closest('.q')) {
+    autoGrowTextarea(e.target);
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════
+function getStored() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+function getValue(qid) { return getStored()[qid]; }
+function saveValue(qid, val) {
+  const data = getStored();
+  if (val) data[qid] = val;
+  else delete data[qid];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  updateProgress();
+  showAutoSaveTick();
+}
+
+function countFilled(sec) {
+  const data = getStored();
+  const skipped = getSkipped();
+  return sec.questions.filter(q =>
+    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped)
+  ).length;
+}
+function totalQuestions() { return SECTIONS.reduce((acc, s) => acc + s.questions.length, 0); }
+function totalFilled() {
+  const data = getStored();
+  const skipped = getSkipped();
+  return SECTIONS.reduce((acc, s) => acc + s.questions.filter(q =>
+    (data[q.id] && String(data[q.id]).trim()) || (q.id in skipped)
+  ).length, 0);
+}
+
+function updateProgress() {
+  const total = totalQuestions();
+  const filled = totalFilled();
+  const pct = Math.round(filled / total * 100);
+
+  document.getElementById('answered-count').textContent = filled;
+  document.getElementById('footer-count').textContent = filled;
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('progress-percent').textContent = pct;
+  document.getElementById('bar-fill').style.width = pct + '%';
+
+  // Komponenty sterownika
+  const componentsToShow = Math.round(filled / total * TOTAL_COMPONENTS);
+  document.getElementById('components-count').textContent = componentsToShow;
+  document.querySelectorAll('.pcb-comp').forEach((el, idx) => {
+    if (idx < componentsToShow) {
+      if (!el.classList.contains('installed')) {
+        el.classList.add('installed');
+      }
+    } else {
+      el.classList.remove('installed');
+    }
+  });
+  // LED świeci się tylko przy 100%
+  const led = document.querySelector('.pcb-led');
+  if (led) led.classList.toggle('installed', pct >= 100);
+
+  // Milestones
+  if (pct >= 50) {
+    const m50 = document.getElementById('milestone-50');
+    if (!m50.classList.contains('unlocked')) {
+      m50.classList.add('unlocked');
+      if (!localStorage.getItem(REWARD_50_KEY)) {
+        localStorage.setItem(REWARD_50_KEY, '1');
+        celebrateAndShowReward(50);
+      }
+    }
+  }
+  if (pct >= 100) {
+    const m100 = document.getElementById('milestone-100');
+    if (!m100.classList.contains('unlocked')) {
+      m100.classList.add('unlocked');
+      document.getElementById('submit-btn').classList.add('glow');
+      if (!localStorage.getItem(REWARD_100_KEY)) {
+        localStorage.setItem(REWARD_100_KEY, '1');
+        celebrateAndShowReward(100);
+      }
+    }
+  }
+
+  renderTabs();
+}
+
+let saveTimer = null;
+function showAutoSaveTick() {
+  const info = document.getElementById('autosave-info');
+  if (!info) return;
+  info.textContent = '✓ zapisano';
+  info.style.color = 'var(--green)';
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    info.textContent = '';
+  }, 1500);
+}
+
+function manualSave() { toast('💾 Zapisano! Możesz zamknąć i wrócić później — dane są w pamięci przeglądarki.'); }
+
+// ═══════════════════════════════════════════════════════
+// CONFETTI 🎉
+// ═══════════════════════════════════════════════════════
+const confettiCanvas = document.getElementById('confetti');
+const cctx = confettiCanvas.getContext('2d');
+let particles = [];
+function resizeCanvas() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function fireConfetti(count = 150, mode = 'rain') {
+  const colors = ['#0d83fd', '#22c55e', '#fbbf24', '#dc2626', '#a855f7', '#f97316', '#ec4899', '#10b981'];
+  const wasEmpty = particles.length === 0;
+  for (let i = 0; i < count; i++) {
+    if (mode === 'rain') {
+      // Deszcz konfetti z góry — szeroki, gęsty, opadający
+      particles.push({
+        x: Math.random() * window.innerWidth,
+        y: -20 - Math.random() * 200,
+        vx: (Math.random() - 0.5) * 4,
+        vy: 2 + Math.random() * 3,
+        size: 7 + Math.random() * 8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * 360,
+        vrot: (Math.random() - 0.5) * 14,
+        life: 0,
+        maxLife: 200 + Math.random() * 150,
+      });
+    } else {
+      // Burst — wystrzał ze środka
+      particles.push({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        vx: (Math.random() - 0.5) * 14,
+        vy: (Math.random() - 0.7) * 14,
+        size: 6 + Math.random() * 6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * 360,
+        vrot: (Math.random() - 0.5) * 12,
+        life: 0,
+        maxLife: 100 + Math.random() * 60,
+      });
+    }
+  }
+  if (wasEmpty) requestAnimationFrame(animateConfetti);
+}
+
+function animateConfetti() {
+  cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  particles = particles.filter(p => p.life < p.maxLife && p.y < window.innerHeight + 50);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.08;  // mniejsza grawitacja → dłuższy lot
+    p.vx *= 0.99;  // tłumienie horyzontalne
+    p.rot += p.vrot;
+    p.life++;
+    cctx.save();
+    cctx.translate(p.x, p.y);
+    cctx.rotate(p.rot * Math.PI / 180);
+    cctx.fillStyle = p.color;
+    cctx.globalAlpha = Math.max(0.2, 1 - (p.life / p.maxLife));
+    cctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+    cctx.restore();
+  });
+  if (particles.length > 0) requestAnimationFrame(animateConfetti);
+  else cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+}
+
+function celebrateAndShowReward(milestone) {
+  // Deszcz z góry — wizualnie bardziej widoczny
+  fireConfetti(milestone === 100 ? 400 : 250, 'rain');
+  setTimeout(() => showRewardModal(milestone, true), 1200);
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL — REWARDS i SUBMIT
+// ═══════════════════════════════════════════════════════
+function showRewardModal(milestone, fromCelebration) {
+  // Gdy klikamy z menu (nie z initial unlock) — też confetti, mniejszy
+  if (!fromCelebration) {
+    fireConfetti(milestone === 100 ? 200 : 130, 'rain');
+  }
+  const r = REWARDS[milestone];
+  let coordsBlock = '';
+  if (!r.is_motivational && r.coords) {
+    coordsBlock = `
+      <div class="coords">📍 ${escapeHtml(r.coords)}</div>
+      <div style="margin: 1rem 0;">
+        <a href="https://www.google.com/maps?q=${r.coords.replace(/\s/g, '')}" target="_blank" class="map-link">🗺 Otwórz w Google Maps</a>
+      </div>
+      <div class="reward-text"><strong>${escapeHtml(r.place_description || '')}</strong></div>
+      <div class="reward-text" style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 10px; margin-top: 1rem;">${escapeHtml(r.reward_description || '')}</div>
+    `;
+  }
+  const badge = r.is_motivational
+    ? '🔥 50% — POŁOWA DROGI · keep going'
+    : (milestone === 100 ? '🏆 100% — META · Czas po nagrodę' : '🎁 BONUS');
+  const html = `
+    <div class="badge">${badge}</div>
+    <h2>${r.title}</h2>
+    <span class="reward-emoji">${r.emoji}</span>
+    <div class="reward-text">${escapeHtml(r.text)}</div>
+    ${coordsBlock}
+    <div class="signature">— Krystian</div>
+    <div class="modal-actions">
+      <button class="btn modal-close" onclick="closeModal()">${r.is_motivational ? 'Wracam do roboty' : 'Zamknij i wróć do formularza'}</button>
+    </div>
+  `;
+  const m = document.getElementById('modal-content');
+  m.className = 'modal reward';
+  m.innerHTML = html;
+  document.getElementById('modal-bg').classList.add('show');
+}
+
+function generateMarkdown() {
+  const data = getStored();
+  const allAttach = getAllAttachments();
+  const totalAttach = Object.values(allAttach).reduce((acc, arr) => acc + arr.length, 0);
+  let md = `# Brain dump od Ivana — wypełniony ${new Date().toLocaleString('pl-PL')}\n\n`;
+  md += `**Postęp:** ${totalFilled()} / ${totalQuestions()} odpowiedzi`;
+  if (totalAttach > 0) md += ` · **${totalAttach}** załącznik${totalAttach === 1 ? '' : (totalAttach < 5 ? 'i' : 'ów')}`;
+  md += `.\n\n---\n\n`;
+  const skippedAll = getSkipped();
+  SECTIONS.forEach(sec => {
+    md += `## ${sec.icon} ${sec.title}\n\n`;
+    sec.questions.forEach(q => {
+      md += `**${q.id}** ${q.label}\n\n`;
+      if (q.id in skippedAll) {
+        const reason = skippedAll[q.id];
+        md += `🚫 _Iwan oznaczył to pytanie jako BEZ SENSU_${reason ? ` — powód: "${reason}"` : ''}\n\n`;
+      } else {
+        const val = data[q.id];
+        const otherVal = data[q.id + '__other'];
+        if (val && String(val).trim()) {
+          let text = String(val);
+          if (otherVal && String(otherVal).trim() &&
+              (val.toLowerCase().includes('(opisz)') || val.toLowerCase() === 'inne' || val.toLowerCase().startsWith('inne '))) {
+            text += ` — ${otherVal}`;
+          }
+          md += `> ${text.split('\n').join('\n> ')}\n\n`;
+        } else md += `_(brak odpowiedzi)_\n\n`;
+      }
+      const attach = allAttach[q.id] || [];
+      if (attach.length > 0) {
+        md += `📎 Załączniki: ` + attach.map(a => `\`${a.name}\` (${Math.round(a.size / 1024)} KB)`).join(', ') + `\n\n`;
+      }
+    });
+    md += `---\n\n`;
+  });
+  if (totalAttach > 0) {
+    md += `\n## 📎 UWAGA — załączniki\n\nIvan dodał ${totalAttach} plik${totalAttach === 1 ? '' : 'i/ów'} bezpośrednio w formularzu (zapisane w jego przeglądarce). Treść plików NIE jest w tym Markdown — Ivan musi je wysłać osobno (najprostsze: kliknąć każdy załącznik w formularzu → pobierze się → wyślij mailem).\n`;
+  }
+  return md;
+}
+
+function downloadFilled() {
+  const md = generateMarkdown();
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `ivan_brain_dump_${new Date().toISOString().slice(0,10)}.md`;
+  a.click();
+  toast('⬇ Pobrano plik');
+}
+
+function showSubmitModal() {
+  const md = generateMarkdown();
+  const html = `
+    <h2>📤 Prześlij Krystianowi</h2>
+    <p style="margin-bottom: 12px; color: var(--text2); font-size: 14px;">
+      Skopiuj tekst poniżej i wyślij Krystianowi mailem (<a href="mailto:zohan.reda@gmail.com">zohan.reda@gmail.com</a>) albo wklej w Slack/wiadomość. Krystian zobaczy wypełniony brain dump i przekaże dalej Claude'owi.
+    </p>
+    <pre id="submit-content">${escapeHtml(md)}</pre>
+    <div class="modal-actions">
+      <button class="btn modal-close" onclick="closeModal()">Zamknij</button>
+      <button class="btn btn-download" onclick="copyToClipboard()">📋 Skopiuj do schowka</button>
+      <a class="btn btn-submit" href="mailto:zohan.reda@gmail.com?subject=Brain%20dump%20od%20Ivana%20%E2%80%94%20motron.pl%20CRM&body=${encodeURIComponent('Krystian, oto moje odpowiedzi (skopiuj treść z formularza):\n\n')}" style="text-decoration: none; display: inline-block;">📧 Otwórz w mailu</a>
+    </div>
+  `;
+  const m = document.getElementById('modal-content');
+  m.className = 'modal';
+  m.innerHTML = html;
+  document.getElementById('modal-bg').classList.add('show');
+}
+
+function closeModal() { document.getElementById('modal-bg').classList.remove('show'); }
+
+function copyToClipboard() {
+  const md = generateMarkdown();
+  navigator.clipboard.writeText(md).then(() => toast('📋 Skopiowano do schowka — wklej Krystianowi')).catch(() => toast('Błąd kopiowania', true));
+}
+
+function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function toast(msg, isError) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.toggle('error', !!isError);
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+// ═══════════════════════════════════════════════════════
+// THEME TOGGLE
+// ═══════════════════════════════════════════════════════
+const THEME_KEY = 'ivan_theme';
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem(THEME_KEY, theme);
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(cur === 'light' ? 'dark' : 'light');
+}
+// Init theme: localStorage > system preference > light
+const savedTheme = localStorage.getItem(THEME_KEY);
+const sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+applyTheme(savedTheme || (sysDark ? 'dark' : 'light'));
+
+// ═══════════════════════════════════════════════════════
+// 🧪 PANEL TESTOWY — funkcje (TODO: usunąć przed wysłaniem Ivanowi)
+// ═══════════════════════════════════════════════════════
+function loadTestPanelFields() {
+  const r = REWARDS;
+  const f = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  f('test-coords-50', r[50].coords);
+  f('test-place-50', r[50].place_description);
+  f('test-reward-50', r[50].reward_description);
+  f('test-coords-100', r[100].coords);
+  f('test-place-100', r[100].place_description);
+  f('test-reward-100', r[100].reward_description);
+}
+
+function saveRewardsOverride() {
+  const v = (id) => (document.getElementById(id).value || '').trim();
+  const override = {
+    50: {
+      coords: v('test-coords-50') || REWARDS_DEFAULT[50].coords,
+      place_description: v('test-place-50') || REWARDS_DEFAULT[50].place_description,
+      reward_description: v('test-reward-50') || REWARDS_DEFAULT[50].reward_description,
+    },
+    100: {
+      coords: v('test-coords-100') || REWARDS_DEFAULT[100].coords,
+      place_description: v('test-place-100') || REWARDS_DEFAULT[100].place_description,
+      reward_description: v('test-reward-100') || REWARDS_DEFAULT[100].reward_description,
+    },
+  };
+  localStorage.setItem(REWARDS_OVERRIDE_KEY, JSON.stringify(override));
+  REWARDS = loadRewards();
+  toast('💾 Nagrody zapisane! Otworzy się modal 50% żeby sprawdzić...');
+  setTimeout(() => showRewardModal(50), 600);
+}
+
+function simulateProgress(targetPct) {
+  const total = totalQuestions();
+  const targetCount = Math.round(targetPct * total);
+  const allQids = SECTIONS.flatMap(s => s.questions.map(q => q.id));
+  const data = {};
+  for (let i = 0; i < Math.min(targetCount, allQids.length); i++) {
+    data[allQids[i]] = '[TEST FILL]';
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  // Reset reward + motivation seen markers gdy zaczynamy od zera (żeby toasty/modal mogły znów wskoczyć)
+  if (targetPct < 0.5) localStorage.removeItem(REWARD_50_KEY);
+  if (targetPct < 1.0) localStorage.removeItem(REWARD_100_KEY);
+  if (targetPct < 0.25) localStorage.removeItem(MOTIVATION_25_KEY);
+  if (targetPct < 0.75) localStorage.removeItem(MOTIVATION_75_KEY);
+  // Reset visual flags
+  document.getElementById('milestone-50').classList.toggle('unlocked', targetPct >= 0.5);
+  document.getElementById('milestone-100').classList.toggle('unlocked', targetPct >= 1.0);
+  document.getElementById('submit-btn').classList.toggle('glow', targetPct >= 1.0);
+  // Update tracker dla joke-trigger (żeby joke nie wystrzelił od razu po simulate)
+  lastFilledForJoke = totalFilled();
+  renderContent();
+  updateProgress();
+  // Wyraźny feedback co dalej
+  const filled = totalFilled();
+  let hint = '';
+  if (targetPct < 0.5) {
+    const need = Math.ceil(0.5 * total) - filled;
+    hint = ` · ${need} pytań do progu 50% (wpisz coś w ${need} pól żeby przekroczyć)`;
+  } else if (targetPct < 1.0) {
+    const need = total - filled;
+    hint = ` · ${need} pytań do 100%`;
+  }
+  toast(`🎮 Symulacja: ${filled}/${total} wypełnione (${Math.round(targetPct * 100)}%)${hint}`);
+}
+
+function resetEverything() {
+  if (!confirm('Reset WSZYSTKO? Wyczyści: odpowiedzi, załączniki, oznaczenie zobaczonych nagród, override nagród. Theme zostanie.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(REWARD_50_KEY);
+  localStorage.removeItem(REWARD_100_KEY);
+  localStorage.removeItem(REWARDS_OVERRIDE_KEY);
+  localStorage.removeItem(ATTACHMENTS_KEY);
+  localStorage.removeItem(MOTIVATION_25_KEY);
+  localStorage.removeItem(MOTIVATION_75_KEY);
+  localStorage.removeItem(SKIPPED_KEY);
+  REWARDS = loadRewards();
+  document.getElementById('milestone-50').classList.remove('unlocked');
+  document.getElementById('milestone-100').classList.remove('unlocked');
+  document.getElementById('submit-btn').classList.remove('glow');
+  renderContent();
+  updateProgress();
+  loadTestPanelFields();
+  toast('🗑 Reset wykonany');
+}
+
+// ═══════════════════════════════════════════════════════
+// 🌐 LANGUAGE TOGGLE — i18n dla UI labels (pytania zostają PL na MVP)
+// ═══════════════════════════════════════════════════════
+const LANG_KEY = 'ivan_lang';
+const I18N = {
+  pl: {
+    sectionsLabel: 'Sekcje',
+    save: '💾 Zapisz', download: '⬇ Pobierz', submit: '📤 Prześlij Krystianowi',
+    progress: 'Postęp',
+    answers: 'odpowiedzi', autosave: 'auto-zapis działa', saved: '✓ zapisano',
+    addCustomDtc: '➕ Dodaj kolejny błąd',
+    submitTitle: '📤 Prześlij Krystianowi',
+    submitDesc: 'Skopiuj poniższy tekst i wyślij Krystianowi mailem albo wklej w Slack.',
+    copyClipboard: '📋 Skopiuj do schowka', closeBtn: 'Zamknij', openMail: '📧 Otwórz w mailu',
+    mileSection: 'POŁOWA DROGI',
+    okButton: 'Zamknij i wróć do formularza',
+  },
+  en: {
+    sectionsLabel: 'Sections',
+    save: '💾 Save', download: '⬇ Download', submit: '📤 Send to Krystian',
+    progress: 'Progress',
+    answers: 'answers', autosave: 'auto-save active', saved: '✓ saved',
+    addCustomDtc: '➕ Add another error',
+    submitTitle: '📤 Send to Krystian',
+    submitDesc: 'Copy the text below and email Krystian or paste in Slack.',
+    copyClipboard: '📋 Copy to clipboard', closeBtn: 'Close', openMail: '📧 Open in mail',
+    mileSection: 'HALFWAY',
+    okButton: 'Close and back to form',
+  },
+  ru: {
+    sectionsLabel: 'Разделы',
+    save: '💾 Сохранить', download: '⬇ Скачать', submit: '📤 Отправить Кристиану',
+    progress: 'Прогресс',
+    answers: 'ответов', autosave: 'автосохранение работает', saved: '✓ сохранено',
+    addCustomDtc: '➕ Добавить ещё ошибку',
+    submitTitle: '📤 Отправить Кристиану',
+    submitDesc: 'Скопируй текст ниже и отправь Кристиану.',
+    copyClipboard: '📋 Скопировать', closeBtn: 'Закрыть', openMail: '📧 Открыть в почте',
+    mileSection: 'ПОЛПУТИ',
+    okButton: 'Закрыть и вернуться к форме',
+  },
+  uk: {
+    sectionsLabel: 'Розділи',
+    save: '💾 Зберегти', download: '⬇ Завантажити', submit: '📤 Надіслати Кристіану',
+    progress: 'Прогрес',
+    answers: 'відповідей', autosave: 'автозбереження працює', saved: '✓ збережено',
+    addCustomDtc: '➕ Додати ще помилку',
+    submitTitle: '📤 Надіслати Кристіану',
+    submitDesc: 'Скопіюй текст нижче і надішли Кристіану.',
+    copyClipboard: '📋 Скопіювати', closeBtn: 'Закрити', openMail: '📧 Відкрити у пошті',
+    mileSection: 'ПІВ ШЛЯХУ',
+    okButton: 'Закрити та повернутись',
+  },
+};
+let currentLang = localStorage.getItem(LANG_KEY) || 'pl';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem(LANG_KEY, lang);
+  document.querySelectorAll('.lang-flag').forEach(f => f.classList.toggle('active', f.dataset.lang === lang));
+  // Update labels in UI
+  const t = I18N[lang];
+  const update = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val; };
+  update('.sidebar-title', t.sectionsLabel);
+  update('.btn-save', t.save);
+  update('.btn-download', t.download);
+  // Submit btn (id-owy)
+  const sb = document.getElementById('submit-btn'); if (sb) sb.textContent = t.submit;
+}
+
+// Init język
+setLang(currentLang);
+
+// ═══════════════════════════════════════════════════════
+// 🎭 BONUS ŻARTY — co 6 odpowiedzi pop-up z kawałem
+// ═══════════════════════════════════════════════════════
+const JOKES = [
+  { lang: 'pl', text: 'Programista wchodzi do baru. Bar zwraca exception.' },
+  { lang: 'pl', text: 'Są tylko 10 typów ludzi: ci co rozumieją binarny i ci co nie.' },
+  { lang: 'pl', text: 'Dwa zapytania SQL wchodzą do baru. Jedno mówi: „mogę dołączyć?"' },
+  { lang: 'pl', text: 'Czemu programiści mylą Halloween z Bożym Narodzeniem? Bo Oct 31 == Dec 25.' },
+  { lang: 'pl', text: 'To nie bug, to feature.' },
+  { lang: 'ru', text: 'Программист — это машина для превращения кофе в код.' },
+  { lang: 'ru', text: 'Не баг, а фича!' },
+  { lang: 'ru', text: 'В мире 10 типов людей: те, кто понимает binary, и те, кто нет.' },
+  { lang: 'ru', text: 'Зачем программисту два монитора? Один для кода, второй для Stack Overflow.' },
+  { lang: 'ru', text: 'Лучший способ ускорить компьютер — это бросить его из окна.' },
+  { lang: 'uk', text: 'У програміста запитують: скільки часу займе ця задача? — 2 години. (через 2 тижні): майже готово.' },
+  { lang: 'uk', text: 'Чому програмісти ходять у походи без компасу? Бо мають GPS у голові — Git Push Sync.' },
+];
+const JOKE_HEADERS = { pl: '🎭 Pauza na kawał', en: '🎭 Joke break', ru: '🎭 Пауза на шутку', uk: '🎭 Пауза на жарт' };
+let jokesShownCount = 0;
+let lastFilledForJoke = 0;
+
+function maybeShowJoke(filledCount) {
+  // Co 6 nowych odpowiedzi
+  if (filledCount > 0 && filledCount % 6 === 0 && filledCount > lastFilledForJoke) {
+    lastFilledForJoke = filledCount;
+    const joke = JOKES[Math.floor(Math.random() * JOKES.length)];
+    document.getElementById('joke-header').textContent = JOKE_HEADERS[currentLang] || JOKE_HEADERS.pl;
+    document.getElementById('joke-body').textContent = joke.text;
+    const t = document.getElementById('joke-toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 6000);
+  }
+}
+
+// Hook do updateProgress — joke + motywacje
+const _origUpdateProgress = updateProgress;
+window.updateProgress = function() {
+  _origUpdateProgress();
+  const filled = totalFilled();
+  const pct = Math.round(filled / totalQuestions() * 100);
+  maybeShowJoke(filled);
+  maybeShowMotivation(pct);
+};
+updateProgress = window.updateProgress;
+
+// ═══════════════════════════════════════════════════════
+// 🔘 RADIO — opcja "Inne (opisz)" pokazuje pole tekstowe
+// ═══════════════════════════════════════════════════════
+function toggleOtherField(qid, val) {
+  const otherInput = document.getElementById('q-' + qid + '__other');
+  if (!otherInput) return;
+  const isOther = val && (String(val).toLowerCase().includes('(opisz)') || String(val).toLowerCase() === 'inne' || String(val).toLowerCase().startsWith('inne '));
+  otherInput.style.display = isOther ? '' : 'none';
+  if (isOther) setTimeout(() => otherInput.focus(), 50);
+}
+
+// ═══════════════════════════════════════════════════════
+// 🚫 SKIP — pytanie "nie ma dla mnie sensu" (liczy się jako wypełnione)
+// ═══════════════════════════════════════════════════════
+const SKIPPED_KEY = 'ivan_skipped_v1';
+function getSkipped() {
+  try { return JSON.parse(localStorage.getItem(SKIPPED_KEY) || '{}'); } catch { return {}; }
+}
+function isSkipped(qid) {
+  return qid in getSkipped();
+}
+function getSkipReason(qid) {
+  return getSkipped()[qid] || '';
+}
+function toggleSkip(qid) {
+  const data = getSkipped();
+  if (qid in data) delete data[qid];
+  else data[qid] = '';
+  localStorage.setItem(SKIPPED_KEY, JSON.stringify(data));
+  renderContent();
+  autoGrowAllTextareas();
+  updateProgress();
+}
+function setSkipReason(qid, reason) {
+  const data = getSkipped();
+  data[qid] = (reason || '').slice(0, 500);
+  localStorage.setItem(SKIPPED_KEY, JSON.stringify(data));
+  // Nie wywołujemy updateProgress — reason zmiana nie zmienia liczby wypełnionych
+}
+
+// ═══════════════════════════════════════════════════════
+// 📎 ZAŁĄCZNIKI per pytanie — Base64 w localStorage (limit 500KB/plik)
+// ═══════════════════════════════════════════════════════
+const ATTACHMENTS_KEY = 'ivan_attachments_v1';
+const MAX_FILE_SIZE = 500 * 1024;  // 500 KB
+
+function getAllAttachments() {
+  try { return JSON.parse(localStorage.getItem(ATTACHMENTS_KEY) || '{}'); } catch { return {}; }
+}
+function getAttachments(qid) {
+  return getAllAttachments()[qid] || [];
+}
+function saveAllAttachments(all) {
+  try {
+    localStorage.setItem(ATTACHMENTS_KEY, JSON.stringify(all));
+    return true;
+  } catch (e) {
+    toast('⚠ Brak miejsca w pamięci przeglądarki — usuń stare załączniki', true);
+    return false;
+  }
+}
+
+function handleFileAttach(qid, input) {
+  const files = Array.from(input.files || []);
+  if (!files.length) return;
+  const all = getAllAttachments();
+  const existing = all[qid] || [];
+  let added = 0, skipped = 0;
+  let processed = 0;
+  files.forEach(file => {
+    if (file.size > MAX_FILE_SIZE) {
+      skipped++;
+      processed++;
+      if (processed === files.length) finalize();
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      existing.push({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        data: e.target.result,  // data:URL Base64
+        added: new Date().toISOString(),
+      });
+      added++;
+      processed++;
+      if (processed === files.length) finalize();
+    };
+    reader.readAsDataURL(file);
+  });
+  function finalize() {
+    all[qid] = existing;
+    if (saveAllAttachments(all)) {
+      renderAttachmentsList(qid);
+      let msg = `📎 Dodano ${added} plik${added === 1 ? '' : 'i'}`;
+      if (skipped > 0) msg += ` · ${skipped} za duży/duże (>500KB) — wyślij Krystianowi mailem osobno`;
+      toast(msg);
+    }
+    input.value = '';  // reset żeby ten sam plik mógł być znowu dodany
+  }
+}
+
+function removeAttachment(qid, index) {
+  const all = getAllAttachments();
+  if (!all[qid]) return;
+  all[qid].splice(index, 1);
+  if (all[qid].length === 0) delete all[qid];
+  saveAllAttachments(all);
+  renderAttachmentsList(qid);
+}
+
+function renderAttachmentsList(qid) {
+  const list = document.getElementById('attach-list-' + qid);
+  if (!list) return;
+  const items = getAttachments(qid);
+  if (!items.length) { list.innerHTML = ''; return; }
+  list.innerHTML = items.map((a, i) => {
+    const sizeKB = Math.round(a.size / 1024);
+    const isImage = (a.type || '').startsWith('image/');
+    const icon = isImage ? '🖼' : '📄';
+    return `<a href="${a.data}" download="${escapeHtml(a.name)}" class="q-attach-item" title="Kliknij aby pobrać">
+      ${icon} ${escapeHtml(a.name)} (${sizeKB} KB)
+      <span class="rm" onclick="event.preventDefault(); event.stopPropagation(); removeAttachment('${qid}', ${i})">✕</span>
+    </a>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// 🔥 TOASTY MOTYWACYJNE przy 25% i 75%
+// ═══════════════════════════════════════════════════════
+const MOTIVATION_25_KEY = 'ivan_motivation_25_seen';
+const MOTIVATION_75_KEY = 'ivan_motivation_75_seen';
+const MOTIVATIONS = {
+  25: ['🔥 Już 1/4! Trzymaj tempo', '🚀 25% — dobry start, dalej', '💪 Ćwierć drogi za sobą'],
+  75: ['⚡ 75% — meta blisko, dokończ i odbieraj główną nagrodę', '🎯 3/4 done — finisz blisko', '🏁 Tylko 1/4 do końca'],
+};
+
+function maybeShowMotivation(pct) {
+  if (pct >= 25 && pct < 50 && !localStorage.getItem(MOTIVATION_25_KEY)) {
+    localStorage.setItem(MOTIVATION_25_KEY, '1');
+    const msgs = MOTIVATIONS[25];
+    toast(msgs[Math.floor(Math.random() * msgs.length)]);
+  }
+  if (pct >= 75 && pct < 100 && !localStorage.getItem(MOTIVATION_75_KEY)) {
+    localStorage.setItem(MOTIVATION_75_KEY, '1');
+    const msgs = MOTIVATIONS[75];
+    toast(msgs[Math.floor(Math.random() * msgs.length)]);
+  }
+  // Reset gdy progress spadnie poniżej (np. po reset)
+  if (pct < 25) localStorage.removeItem(MOTIVATION_25_KEY);
+  if (pct < 75) localStorage.removeItem(MOTIVATION_75_KEY);
+}
+
+// ═══════════════════════════════════════════════════════
+// 🖱 PANEL TESTOWY — DRAGGABLE
+// ═══════════════════════════════════════════════════════
+(function() {
+  const panel = document.getElementById('test-panel');
+  const drag = document.getElementById('test-panel-drag');
+  if (!panel || !drag) return;
+  // Restore pozycji z localStorage
+  const POS_KEY = 'ivan_test_panel_pos';
+  try {
+    const saved = JSON.parse(localStorage.getItem(POS_KEY) || 'null');
+    if (saved) {
+      panel.style.left = saved.left + 'px';
+      panel.style.top = saved.top + 'px';
+      panel.style.bottom = 'auto';
+    }
+  } catch {}
+  let isDragging = false, offsetX = 0, offsetY = 0;
+  drag.addEventListener('mousedown', (e) => {
+    if (e.target.classList.contains('close-x')) return;  // klik X — nie drag
+    isDragging = true;
+    const rect = panel.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    panel.style.bottom = 'auto';
+    panel.style.transition = 'none';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    let newLeft = e.clientX - offsetX;
+    let newTop = e.clientY - offsetY;
+    // Clamp do viewport (panel nie wypadnie)
+    const maxLeft = window.innerWidth - panel.offsetWidth;
+    const maxTop = window.innerHeight - 50;  // zostaw 50px na drag handle
+    newLeft = Math.max(0, Math.min(maxLeft, newLeft));
+    newTop = Math.max(0, Math.min(maxTop, newTop));
+    panel.style.left = newLeft + 'px';
+    panel.style.top = newTop + 'px';
+  });
+  document.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    document.body.style.userSelect = '';
+    // Persist
+    localStorage.setItem(POS_KEY, JSON.stringify({
+      left: parseInt(panel.style.left) || 16,
+      top: parseInt(panel.style.top) || (window.innerHeight - panel.offsetHeight - 130),
+    }));
+  });
+})();
+
+// ═══════════════════════════════════════════════════════
+// INIT — render wszystkiego po załadowaniu DOM
+// ═══════════════════════════════════════════════════════
+renderTabs();
+renderContent();
+autoGrowAllTextareas();  // pre-fill content z localStorage musi mieć rozwiniętą wysokość
+updateProgress();
+loadTestPanelFields();
+lastFilledForJoke = totalFilled();  // żeby przy pierwszym ładowaniu nie wystrzeliwał joke
+</script>
+</body>
+</html>
