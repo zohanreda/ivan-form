@@ -243,6 +243,15 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 /* Skip pytania ("bez sensu") */
 .q.skipped { opacity: 0.55; }
 .q.skipped .q-label { text-decoration: line-through; color: var(--text2); }
+.q.prefilled { border-left: 3px solid #fbbf24; padding-left: 12px; background: rgba(251, 191, 36, 0.04); border-radius: 6px; }
+[data-theme="dark"] .q.prefilled { background: rgba(251, 191, 36, 0.08); }
+.prefill-badge {
+  display: inline-block; margin-left: 10px; padding: 2px 8px; border-radius: 12px;
+  background: rgba(251, 191, 36, 0.18); color: #b45309; border: 1px solid rgba(251, 191, 36, 0.4);
+  font-size: 11px; font-weight: 600; vertical-align: middle;
+}
+[data-theme="dark"] .prefill-badge { background: rgba(251, 191, 36, 0.18); color: #fcd34d; border-color: rgba(251, 191, 36, 0.5); }
+.q.prefilled.skipped { border-left: 3px solid var(--text3); background: transparent; }
 .q.skipped .q-hint { display: none; }
 .q-skip-btn {
   cursor: pointer; padding: 2px 8px; margin-left: 8px;
@@ -811,19 +820,23 @@ const SECTIONS = [
     { id: '4.10', label: 'RODO — co konkretnie zrobione?', type: 'textarea' },
     { id: '4.11', label: 'Kto ma dostęp do production database? Lista osób + role.', type: 'textarea' },
   ]},
-  { id: 'integr', icon: '🔌', title: 'Integracje', subtitle: 'Wfirma, Posnet, SMS, email', questions: [
-    { id: '5.1', label: 'Wfirma (faktury) — status', type: 'textarea', hint: 'Status / API key / retry / co przy timeout' },
-    { id: '5.2', label: 'Posnet (drukarki fiskalne)', type: 'textarea' },
-    { id: '5.3', label: 'Elzab (drukarki fiskalne, alternatywa) — status', type: 'textarea', hint: 'Działa? Mockowane? Nie używamy?' },
-    { id: '5.4', label: 'InPost (etykiety przesyłek) — status', type: 'textarea', hint: 'Działa? Co przy timeout?' },
-    { id: '5.5', label: 'SMS Gateway — jaki dostawca?', type: 'text', hint: 'np. SMSAPI, Twilio, brak — i jaki ich status' },
-    { id: '5.6', label: 'Email (SMTP) — jaki dostawca?', type: 'text', hint: 'Gmail Workspace / Sendgrid / Mailgun / własny serwer' },
-    { id: '5.7', label: 'Google OAuth (logowanie) — jest?', type: 'text', hint: 'TAK/NIE; jeśli tak — jakie scopy' },
-    { id: '5.8', label: 'Google Places API (autocomplete adresów) — jest?', type: 'text', hint: 'TAK/NIE' },
-    { id: '5.9', label: 'GUS BIR / REGON (weryfikacja NIP) — jest?', type: 'text', hint: 'TAK/NIE' },
-    { id: '5.10', label: 'Allegro API (sprzedaż używanego) — jest?', type: 'text', hint: 'TAK/NIE' },
-    { id: '5.11', label: 'Inne integracje których nie wymieniłem', type: 'textarea', hint: 'Wymień co działa + jaki jest ich status' },
-    { id: '5.12', label: 'Webhooks przychodzące — kto wysyła? Walidacja signature? Idempotentne?', type: 'textarea' },
+  { id: 'integr', icon: '🔌', title: 'Integracje', subtitle: 'Kuriery, faktury, fiskal, SMS, email — co mamy i jak działa', questions: [
+    { id: '5.faktury', label: 'Faktury — system + szczegóły techniczne', type: 'textarea',
+      prefill: 'Wfirma',
+      hint: 'Krystian wpisał system. Ty: gdzie API key, retry przy 5xx, co przy timeout, czy mamy idempotency key, jakie statusy invoice trackujemy' },
+    { id: '5.kuriery', label: 'Kuriery / przesyłki — których używamy + status każdego', type: 'textarea',
+      prefill: 'EPK (Pocztex), InPost, DPD',
+      hint: 'Krystian wpisał których używamy. Ty: jak każdy działa, gdzie generujemy etykietę, co przy błędzie API, czy webhooki tracking są walidowane (signature)' },
+    { id: '5.fiskal', label: 'Drukarki fiskalne — model(e) + status', type: 'textarea',
+      prefill: 'Posnet',
+      hint: 'Krystian wpisał. Ty: jak działa? Mockowane czy hardware? Alternatywy (Elzab) używamy? Co gdy drukarka nie odpowiada?' },
+    { id: '5.sms', label: 'SMS — dostawca + status', type: 'text', hint: 'np. SMSAPI / Twilio / brak. Jeśli mamy — co się dzieje przy fail (kolejka? retry? cisza?)' },
+    { id: '5.email', label: 'Email (SMTP) — dostawca + status', type: 'text',
+      prefill: 'Gmail Workspace (motron.pl)',
+      hint: 'Krystian wpisał. Ty: czy klasyczne SMTP czy API Gmail? Limity? Bounce handling?' },
+    { id: '5.oauth', label: 'OAuth / SSO — co mamy + scopy', type: 'textarea', hint: 'Google OAuth, Facebook, SSO firmowe? Jakie scopy żądamy? Refresh token gdzie?' },
+    { id: '5.api_zewnetrzne', label: 'Inne API zewnętrzne — wymień + status', type: 'textarea', hint: 'Google Places, GUS BIR/REGON, Allegro, dowolne API których nie wymieniłem' },
+    { id: '5.webhooks', label: 'Webhooks PRZYCHODZĄCE — kto wysyła, walidacja signature, idempotentność', type: 'textarea' },
   ]},
   { id: 'perf', icon: '⚡', title: 'Performance', subtitle: 'Czasy, monitoring, error tracking', questions: [
     { id: '6.1', label: 'Average response time / (homepage)', type: 'text' },
@@ -1028,8 +1041,10 @@ function renderContent() {
   sec.questions.forEach(q => {
     const val = getValue(q.id);
     const skipped = isSkipped(q.id);
-    html += `<div class="q ${skipped ? 'skipped' : ''}" data-qid="${q.id}">`;
+    const prefillUntouched = isPrefillUntouched(q);
+    html += `<div class="q ${skipped ? 'skipped' : ''} ${prefillUntouched ? 'prefilled' : ''}" data-qid="${q.id}">`;
     html += `<label class="q-label"><span class="num">${q.id}</span>${escapeHtml(q.label)}`;
+    if (prefillUntouched) html += `<span class="prefill-badge" title="Krystian już wpisał — sprawdź, popraw lub zostaw">✏ Krystian wpisał — sprawdź / popraw / zostaw</span>`;
     html += `<button class="q-skip-btn" onclick="toggleSkip('${q.id}')" title="${skipped ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie ma dla mnie sensu'}">${skipped ? '↩ przywróć' : '🚫 bez sensu'}</button>`;
     html += `</label>`;
     if (skipped) {
@@ -1114,6 +1129,14 @@ document.addEventListener('input', (e) => {
   if (e.target.tagName === 'TEXTAREA' && e.target.closest('.q')) {
     autoGrowTextarea(e.target);
   }
+  // Ivan dotknął prefilled — zdejmij badge "Krystian wpisał" od razu (inline,
+  // bez re-renderu całej zakładki).
+  const qDiv = e.target.closest && e.target.closest('.q.prefilled');
+  if (qDiv) {
+    qDiv.classList.remove('prefilled');
+    const badge = qDiv.querySelector('.prefill-badge');
+    if (badge) badge.remove();
+  }
 });
 
 // ═══════════════════════════════════════════════════════
@@ -1130,6 +1153,28 @@ function saveValue(qid, val) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   updateProgress();
   showAutoSaveTick();
+}
+
+// ═══════════════════════════════════════════════════════
+// 📝 PREFILL — Krystian wpisuje co wie z biznesu, Ivan poprawia/dopisuje techniczne szczegóły
+// Po edycji przez Ivana — badge "✏ pre-fill" znika (val !== prefill).
+// ═══════════════════════════════════════════════════════
+function applyPrefills() {
+  // Wpisuje prefilly do localStorage tylko jeśli pytanie jest puste (idempotentne).
+  const data = getStored();
+  let changed = false;
+  SECTIONS.forEach(sec => sec.questions.forEach(q => {
+    if (q.prefill && !(q.id in data)) {
+      data[q.id] = q.prefill;
+      changed = true;
+    }
+  }));
+  if (changed) localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function isPrefillUntouched(q) {
+  if (!q.prefill) return false;
+  const v = getValue(q.id);
+  return v === q.prefill;
 }
 
 function countFilled(sec) {
@@ -1550,6 +1595,7 @@ function resetEverything() {
   localStorage.removeItem(SKIPPED_KEY);
   // REWARDS_OVERRIDE_KEY celowo NIE usuwamy — Krystian skonfigurował, ma zostać
   REWARDS = loadRewards();
+  applyPrefills();  // po resecie prefilly Krystiana wracają (idempotentnie)
   document.getElementById('milestone-50').classList.remove('unlocked');
   document.getElementById('milestone-100').classList.remove('unlocked');
   document.getElementById('submit-btn').classList.remove('glow');
@@ -1891,6 +1937,7 @@ function maybeShowMotivation(pct) {
 // ═══════════════════════════════════════════════════════
 // INIT — render wszystkiego po załadowaniu DOM
 // ═══════════════════════════════════════════════════════
+applyPrefills();  // Krystian wpisał co wie z biznesu — wlej do localStorage (idempotentnie)
 renderTabs();
 renderContent();
 autoGrowAllTextareas();  // pre-fill content z localStorage musi mieć rozwiniętą wysokość
