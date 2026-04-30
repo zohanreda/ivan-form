@@ -2036,24 +2036,32 @@ function maybeShowMotivation(pct) {
 
 // ═══════════════════════════════════════════════════════
 // 🧪 PANEL TESTOWY — odpalanie tylko dla Krystiana
+// Skrót: Ctrl+T (Cmd+T na Mac) toggle panel.
+// Uwaga: Ctrl+T to też domyślny "nowa karta" w przeglądarce — dlatego preventDefault.
+// W Chrome niektóre Ctrl+ skróty są zarezerwowane; jak nie zadziała Ctrl+T,
+// zadziała hash URL (#krystian) albo Ctrl+Shift+T.
 // ═══════════════════════════════════════════════════════
-function showTestPanelButton() {
+function showTestPanel() {
   const btn = document.getElementById('test-panel-btn');
-  if (btn) { btn.style.display = ''; toast('🧪 Panel testowy odblokowany'); }
+  const panel = document.getElementById('test-panel');
+  if (btn) btn.style.display = '';
+  if (panel) panel.classList.toggle('show');
+  toast('🧪 Panel testowy');
 }
-// Sposób 1: URL hash #krystian (lub starsza nazwa #test)
-if (location.hash === '#krystian' || location.hash === '#test') showTestPanelButton();
-// Sposób 2: 3× K pod rząd (na desktopie)
-let _kSeq = 0;
+// Sposób 1: URL hash #krystian
+if (location.hash === '#krystian' || location.hash === '#test') {
+  const btn = document.getElementById('test-panel-btn');
+  if (btn) btn.style.display = '';
+}
+// Sposób 2: Ctrl+T / Cmd+T / Ctrl+Shift+T
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'K' || e.key === 'k') {
-    _kSeq++;
-    if (_kSeq >= 3) { showTestPanelButton(); _kSeq = 0; }
-    setTimeout(() => { _kSeq = 0; }, 1500);
-  } else {
-    _kSeq = 0;
+  const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+  if (isCtrlOrCmd && (e.key === 't' || e.key === 'T')) {
+    e.preventDefault();
+    e.stopPropagation();
+    showTestPanel();
   }
-});
+}, true);
 
 // ═══════════════════════════════════════════════════════
 // INIT — render wszystkiego po załadowaniu DOM
