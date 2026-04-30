@@ -202,6 +202,16 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 .q { margin-bottom: 1.75rem; }
 .q-label { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; font-weight: 600; font-size: 14px; margin-bottom: 5px; color: var(--text1); }
 .q-label > .num { flex-shrink: 0; }
+.q-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  font-size: 13px; font-weight: 800; flex-shrink: 0;
+  background: var(--bg3); color: var(--text3); border: 1.5px solid var(--border);
+  transition: all 0.2s;
+}
+.q-check.on { background: #22c55e; color: #fff; border-color: #16a34a; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18); }
+.q.answered { background: rgba(34, 197, 94, 0.025); }
+[data-theme="dark"] .q.answered { background: rgba(34, 197, 94, 0.04); }
 .q-label .num { color: var(--accent); font-family: ui-monospace, monospace; font-size: 12px; margin-right: 6px; }
 .q-hint { font-size: 12px; color: var(--text2); margin-bottom: 8px; font-style: italic; }
 .q input[type=text], .q input[type=number], .q input[type=email], .q input[type=url], .q textarea, .q select {
@@ -566,7 +576,9 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
     <br>
     <strong>⚠ Ważne dla „nie do mnie":</strong> nawet jeśli czujesz że pytanie jest bardziej do Krystiana — <strong>spróbuj na nie odpowiedzieć tak czy siak</strong>, choćby krótko, choćby tak jak Ty to widzisz. O to właśnie chodzi w tym brain dumpie — żeby było wiadomo co <em>Ty</em> masz w głowie, a co Krystian. Jak będzie różnica w naszych odpowiedziach na to samo pytanie, to dla AI cenniejsze niż sama odpowiedź.<br>
     <br>
-    Cokolwiek z tych trzech wybierzesz — pytanie się <strong>zalicza</strong> i progres idzie do przodu. Najgorsza opcja to zostawić pytanie puste i przeskoczyć — wtedy nie wiem czy zapomniałeś, czy masz problem, czy temat jest niejasny.
+    Cokolwiek z tych trzech wybierzesz — pytanie się <strong>zalicza</strong> i progres idzie do przodu. Najgorsza opcja to zostawić pytanie puste i przeskoczyć — wtedy nie wiem czy zapomniałeś, czy masz problem, czy temat jest niejasny.<br>
+    <br>
+    <strong>👀 Jak rozpoznasz że pytanie jest załatwione:</strong> obok pytania pojawi się <span style="display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:#22c55e; color:#fff; font-size:11px; font-weight:800;">✓</span> zielony ptaszek. Po lewej stronie w zakładkach każda sekcja ma licznik (np. „5/8") — jak cała sekcja zrobiona, dostaje ptaszek <span style="background:#dcfce7; color:#166534; padding:1px 6px; border-radius:10px; font-size:11px; font-weight:700;">✓</span>. Tak zobaczysz co zostało.
   </div>
   <p>Po prawej zobaczysz jak <strong>składa się sterownik ABS</strong> — z każdą Twoją odpowiedzią dolatuje kolejny element. Jak wypełnisz wszystko, dioda zaświeci zielono. Naprawione 🟢</p>
   <p>Po drodze są też <strong>niespodzianki</strong> 😉 — nie powiem co. Wypełnij i zobacz.</p>
@@ -574,7 +586,7 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
   <p style="background: linear-gradient(135deg, rgba(13,131,253,0.08) 0%, rgba(107,33,168,0.08) 100%); padding: 1rem; border-radius: 10px; border-left: 4px solid var(--accent);"><strong>🚀 Ivan, idziemy w to. Nareszcie nowy level.</strong></p>
   <div class="signature">— Krystian · PS. najważniejsze sekcje to <strong>9 (no-go zones)</strong> i <strong>10 (data flow)</strong>. Tam wpiszesz to czego AI ma nie tknąć i jak ma czytać bazę po kolei. Reszta to context.</div>
   <p class="warning-box" style="margin-top: 1.5rem;">
-    <strong>⚠ Zanim zaczniesz — jak działa zapis.</strong> Wszystko co tu wpiszesz zapisuje się <strong>TYLKO w Twojej przeglądarce</strong> (localStorage). Nigdzie nie leci automatycznie. Żebym ja to dostał — musisz na końcu kliknąć <strong>„📤 Prześlij Krystianowi"</strong> (skopiuje treść do schowka, wklejasz mi w mail) albo <strong>„⬇ Pobierz"</strong> (ściągasz plik .md i wysyłasz). Załączniki — kliknij każdy i pobierze się, wyślij osobno. <strong>Jeśli wyczyścisz przeglądarkę albo otworzysz plik z innego kompa — dane przepadną.</strong> Pracuj na jednym laptopie i pobierz progress co kilka godzin dla pewności.
+    <strong>💾 Zapis działa sam.</strong> Wszystko co napiszesz zapisuje się od razu w Twojej przeglądarce, plus co 2 minuty leci dodatkowy auto-zapis (na dole strony zobaczysz „✓ auto-zapis"). <strong>Nie musisz nic klikać żeby zapisać.</strong> Jak skończysz — daj mi znać, dogadamy się jak Ci dane wyciągnąć (1 minuta roboty). Pracuj na jednym laptopie i nie czyść danych przeglądarki dla tej strony — to jedyna kopia.
   </p>
 </div>
 
@@ -732,11 +744,8 @@ canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9999
 <div class="footer">
   <div class="footer-inner">
     <div class="footer-info">
-      Postęp: <strong id="footer-count">0</strong> odpowiedzi · auto-zapis działa <span id="autosave-info" style="color: var(--text3); margin-left: 8px;"></span>
+      Postęp: <strong id="footer-count">0</strong> odpowiedzi · 💾 auto-zapis co 2 min <span id="autosave-info" style="color: var(--text3); margin-left: 8px;"></span>
     </div>
-    <button class="btn btn-save" onclick="manualSave()">💾 Zapisz</button>
-    <button class="btn btn-download" onclick="downloadFilled()">⬇ Pobierz</button>
-    <button class="btn btn-submit" id="submit-btn" onclick="showSubmitModal()">📤 Prześlij Krystianowi</button>
   </div>
 </div>
 
@@ -1097,8 +1106,11 @@ function renderContent() {
     const skipped = isSkipped(q.id);
     const notForMe = isNotForMe(q.id);
     const confirmed = isConfirmed(q.id);
-    html += `<div class="q ${skipped ? 'skipped' : ''} ${notForMe ? 'not-for-me' : ''} ${confirmed ? 'confirmed' : ''}" data-qid="${q.id}">`;
-    html += `<label class="q-label"><span class="num">${q.id}</span>${escapeHtml(q.label)}`;
+    const isAnswered = (val && String(val).trim()) || skipped || notForMe || confirmed;
+    html += `<div class="q ${skipped ? 'skipped' : ''} ${notForMe ? 'not-for-me' : ''} ${confirmed ? 'confirmed' : ''} ${isAnswered ? 'answered' : ''}" data-qid="${q.id}">`;
+    html += `<label class="q-label">`;
+    html += `<span class="q-check ${isAnswered ? 'on' : ''}" title="${isAnswered ? 'Załatwione' : 'Jeszcze nie załatwione — odpowiedz, kliknij „bez sensu" lub „nie do mnie"'}">${isAnswered ? '✓' : '○'}</span>`;
+    html += `<span class="num">${q.id}</span>${escapeHtml(q.label)}`;
     html += `<span class="q-actions">`;
     html += `<button class="q-skip-btn" onclick="toggleSkip('${q.id}')" title="${skipped ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie ma dla mnie sensu'}">${skipped ? '↩ przywróć' : '🚫 bez sensu'}</button>`;
     html += `<button class="q-nfm-btn" onclick="toggleNotForMe('${q.id}')" title="${notForMe ? 'Przywróć — odpowiem na to pytanie' : 'To pytanie nie do mnie — raczej Krystian odpowie'}">${notForMe ? '↩ przywróć' : '❓ nie do mnie'}</button>`;
@@ -1891,18 +1903,48 @@ setLang(currentLang);
 // 🎭 BONUS ŻARTY — co 6 odpowiedzi pop-up z kawałem
 // ═══════════════════════════════════════════════════════
 const JOKES = [
-  { lang: 'pl', text: 'Programista wchodzi do baru. Bar zwraca exception.' },
-  { lang: 'pl', text: 'Są tylko 10 typów ludzi: ci co rozumieją binarny i ci co nie.' },
-  { lang: 'pl', text: 'Dwa zapytania SQL wchodzą do baru. Jedno mówi: „mogę dołączyć?"' },
-  { lang: 'pl', text: 'Czemu programiści mylą Halloween z Bożym Narodzeniem? Bo Oct 31 == Dec 25.' },
-  { lang: 'pl', text: 'To nie bug, to feature.' },
-  { lang: 'ru', text: 'Программист — это машина для превращения кофе в код.' },
-  { lang: 'ru', text: 'Не баг, а фича!' },
-  { lang: 'ru', text: 'В мире 10 типов людей: те, кто понимает binary, и те, кто нет.' },
-  { lang: 'ru', text: 'Зачем программисту два монитора? Один для кода, второй для Stack Overflow.' },
-  { lang: 'ru', text: 'Лучший способ ускорить компьютер — это бросить его из окна.' },
-  { lang: 'uk', text: 'У програміста запитують: скільки часу займе ця задача? — 2 години. (через 2 тижні): майже готово.' },
-  { lang: 'uk', text: 'Чому програмісти ходять у походи без компасу? Бо мають GPS у голові — Git Push Sync.' },
+  // ───────── JASIU (PL) ─────────
+  { lang: 'pl', text: 'Pani nauczycielka pyta: — Jasiu, podaj trzy zwierzęta domowe. — Pies, kot i tata po wódce.' },
+  { lang: 'pl', text: 'Pani od łaciny: — Jasiu, jaka deklinacja jest „femina"? — Pierwsza, proszę pani. — A dlaczego pierwsza? — Bo zawsze chce być pierwsza.' },
+  { lang: 'pl', text: 'Mama do Jasia: — Jaśku, jak ci minął pierwszy dzień w szkole? — Pierwszy?! Czyli jutro mam tam wracać???' },
+  { lang: 'pl', text: 'Jasiu wraca ze szkoły: — Tato, dostałem szóstkę z biologii! — Brawo synu, za co? — Pani się pytała ile ma żołądków krowa, nikt nie wiedział, a ja powiedziałem że tyle samo co ja, bo wczoraj zjadłem 4 obiady.' },
+  { lang: 'pl', text: 'Pani: — Jasiu, czego najbardziej nie lubisz w szkole? — Dzwonka. — Tego na koniec lekcji? — Nie, tego na początku.' },
+
+  // ───────── PROGRAMISTYCZNE (z jajem, nie suche) ─────────
+  { lang: 'pl', text: 'Mama do syna programisty: — Synu, skoczysz do sklepu po chleb? — TAK. Mama po godzinie: — Co ty kurwa robisz?! — Dałaś mi tylko warunek, nie wywołałaś funkcji.' },
+  { lang: 'pl', text: 'Programowanie to 10% pisania kodu i 90% pytania samego siebie „kto to kurwa napisał?" — a potem „ach... to ja, 3 miesiące temu".' },
+  { lang: 'pl', text: 'Senior odchodzi z firmy, junior przejmuje jego kod. Po tygodniu junior składa wypowiedzenie. W liście napisał: „to nie wypowiedzenie, to Ctrl+Z całego życia".' },
+  { lang: 'pl', text: 'DevOps wchodzi do baru. Wychodzi. Wraca. Wychodzi. Wraca. Wychodzi. Bartender: — Co ty robisz? — Testuję czy bar działa stabilnie pod loadem.' },
+  { lang: 'pl', text: 'Klient: — Czy moglibyście to zrobić na wczoraj? Programista: — Tak. — Naprawdę?! — Najpierw zrobię wczoraj, a potem cofnę zegar.' },
+  { lang: 'pl', text: 'Klient: — Czy ten przycisk będzie działał? Programista: — Nie wiem, niech pan kliknie. Klient klika. Strona pada. Programista: — Widzi pan? Wszystko zgodne z dokumentacją.' },
+  { lang: 'pl', text: 'Lekarz: — Pana wyniki są fatalne. Pacjent: — Czy to coś poważnego? Lekarz: — Nie wiem, jestem programistą. Pomyliłem schowki.' },
+  { lang: 'pl', text: 'Spotyka się dwóch sysadminów: — Stary, wczoraj prawie spadłem z mostu. — Failover zadziałał? — Jaki kurwa failover, balustrada się oparła.' },
+  { lang: 'pl', text: 'Programista do żony: — Skarbie, kocham cię. Żona: — Naprawdę? — TRUE. — A bardzo? — Nie wiem, to boolean. Ile jeszcze będziesz drążyć?' },
+
+  // ───────── ŻYCIOWE / MAŁŻEŃSKIE (PL, lekko zboczone) ─────────
+  { lang: 'pl', text: 'Mąż do żony: — Kochanie, gdybym umarł, wzięłabyś sobie innego? — No, może. — A oddałabyś mu moje wędki? — Nie, on jest leworęczny.' },
+  { lang: 'pl', text: 'Babka do aptekarza: — Pan ma viagrę? — Mam. — Pół tabletki dla męża wystarczy. On tylko chce grzecznie postać przy kuchence.' },
+  { lang: 'pl', text: 'Pan w wieku 50 lat do lekarza: — Doktorze, jak długo będę żył? — A pan pije? — Nie. — Pali? — Nie. — Kobiety? — Też nie. — To po cholerę pan chce żyć dłużej?' },
+  { lang: 'pl', text: 'Pijak łapie się latarni: — Boże, jesteś? — Jestem. — A pomożesz mi tę latarnię ustabilizować? Strasznie się trzęsie.' },
+  { lang: 'pl', text: 'Wchodzi facet do biura matrymonialnego: — Szukam żony. — Jakiej? — Bogatej, młodej, ładnej. — A pan co oferuje? — Siebie. Mężczyzna patrzy na pani w oczy: — A pan ma rezerwowy plan B?' },
+  { lang: 'pl', text: 'Spotykają się dwaj kumple: — Co u ciebie? — Wczoraj przyłapałem żonę w łóżku z najlepszym przyjacielem. — I co? — Wyrzuciłem ją. A zaraz potem przyjaciela też. Nie lubię jak ktoś bez pukania.' },
+  { lang: 'pl', text: 'Dziadek opowiada wnukowi o swojej młodości: — Synek, ja w twoim wieku potrafiłem wypić butelkę wódki, zerwać dziewczynę, jeszcze biegać 10 km. Wnuk: — A teraz? — Teraz jak biegnę 10 metrów to dziewczyna mnie zrywa, a wódka pije sama.' },
+
+  // ───────── RU ─────────
+  { lang: 'ru', text: 'Жена программисту: — Купи батон, и если будут яйца — возьми десяток. Возвращается с десятью батонами. — Зачем 10?! — Так были яйца.' },
+  { lang: 'ru', text: 'Мужик идёт к врачу: — Доктор, у меня всё болит, всё падает, всё отказывает. — А вы программист? — Откуда вы знаете? — По симптомам — сервер старый.' },
+  { lang: 'ru', text: 'Заходит программист в бар. Бар возвращает 500 Internal Server Error. Идёт домой пить водку — там стек всегда работает.' },
+  { lang: 'ru', text: 'Учитель: — Что такое локальная переменная? Ученик: — Это та, которую мама не видит.' },
+  { lang: 'ru', text: 'Жена программисту: — Ты меня любишь? — TRUE. — А насколько сильно? — Это boolean, ты ещё долго будешь меня доставать?' },
+  { lang: 'ru', text: 'Поручик Ржевский на балу: — Сударыня, вы знаете толк в бухгалтерии? — Откуда такой странный вопрос? — Просто я с вами хочу свести... баланс.' },
+  { lang: 'ru', text: 'Сидит мужик в парикмахерской. Парикмахер: — Что-то вы лысеете. Хотите наше средство для роста волос? — А вам помогает? — Мне? Конечно нет, я им никогда не пользовался.' },
+
+  // ───────── UA ─────────
+  { lang: 'uk', text: 'Жінка чоловіку: — Якщо я помру, ти ще раз одружишся? — Та ну. — А спатимеш в нашому ліжку? — Так. — З нею?? — Так. — А моїми тапочками користуватиметься? — Ні, у неї ноги маленькі.' },
+  { lang: 'uk', text: 'Програміст у лікаря: — Доктор, у мене щось з пам\'яттю. — Давно це у вас? — Що „це"?' },
+  { lang: 'uk', text: 'Тато синові: — Сину, я в твої роки знав напам\'ять усю таблицю множення. — А я в твої знатиму всі паролі від твоїх акаунтів.' },
+  { lang: 'uk', text: 'Дружина чоловіку: — Купи мені iPhone! — А моєї зарплати вистачить? — Не зарплати, тебе вистачить її купити.' },
+  { lang: 'uk', text: 'Заходить мужик в бар і замовляє 10 шотів горілки. — Чому 10? — Один за здоров\'я, один за кохання, один за дружбу... — А решта 7? — За те що я програміст і відразу планую цикл for.' },
 ];
 const JOKE_HEADERS = { pl: '🎭 Pauza na kawał', en: '🎭 Joke break', ru: '🎭 Пауза на шутку', uk: '🎭 Пауза на жарт' };
 const JOKE_THRESHOLDS = [12, 24, 36, 48, 60, 72, 84, 96];  // co 12% (50 i 100 to nagrody, 25/75 motywacje)
